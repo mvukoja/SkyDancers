@@ -17,11 +17,16 @@ Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije 
 
 # Funkcijski zahtjevi
 > Navedite ključne zahtjeve Vašeg projekta.
-> FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora > 
+> FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora
+> 
 FR-2	Prilikom registracije, plesači se registriraju besplatno, a plesni direktori uz plaćanje godišnje članarine
+
 FR-3	Aplikacija omogućuje plaćanje članarine plesnim direktorima putem vanjskog servisa za plaćanje
+
 FR-4	Aplikacija omogućuje plesnim direktorima objavljivanje audicija, s detaljima poput vremena, lokacije, opisa posla, vrsta traženih plesača, broja otvorenih pozicija i plaće
+
 FR-5	Plesni direktori moraju moći pretraživati plesače koristeći filtre poput dobi, spola, vrste plesa.
+
 FR-6	Plesači moraju moći pretraživati dostupne audicije pomoću filtara kao što su vrijeme, plaća, lokacija i vrsta plesa.
 FR-7	Plesači moraju moći prijaviti se na odabrane audicije izravno putem aplikacije.
 FR-8	Plesači moraju moći kreirati javni profil s osnovnim podacima (ime, prezime, lokacija, dob, spol) te portifolio koji uključuje slike ili snimke nastupa
