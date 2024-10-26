@@ -1,11 +1,4 @@
-# Programsko inženjerstvo
-
-> Ime projekta u naslovu ima cilj opisati namjenu projekta te pomoći u podizanju početnog interesa za projekt prezentirajući osnovnu svrhu projekta.
-> Isključivo ovisi o Vama!
-> 
-> Naravno, nijedan predložak nije idealan za sve projekte jer su potrebe i ciljevi različiti. Ne bojte se naglasiti Vaš cilj u ovoj početnoj stranici projekta, podržat ćemo ga bez obzira usredotočili se Vi više na tenologiju ili marketing.
-> 
-> Zašto ovaj dokument? Samo manji dio timova je do sada propoznao potrebu (a i meni je lakše pratiti Vaš rad).  
+# SkyDancers
 
 # Opis projekta
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
@@ -16,9 +9,8 @@ Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije 
 > Dobro izrađen opis omogućuje vam da pokažete svoj rad drugim programerima, kao i potencijalnim poslodavcima. Ne samo da prvi dojam na stranici opisa često razlikuje dobar projekt od lošeg projekta već i predstavlja dobru praksu koju morate savladati.
 
 # Funkcijski zahtjevi
-> Navedite ključne zahtjeve Vašeg projekta.
-> FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora
-> 
+FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora
+ 
 FR-2	Prilikom registracije, plesači se registriraju besplatno, a plesni direktori uz plaćanje godišnje članarine
 
 FR-3	Aplikacija omogućuje plaćanje članarine plesnim direktorima putem vanjskog servisa za plaćanje
@@ -78,11 +70,31 @@ NR-5	Aplikacija mora podržavati hrvatski i engleski jezik
 
 
 # Tehnologije
+Front-end: React
 
-#Instalcija
+Back-end: Spring
+
+Baza podataka: PostgreSQL
+
+Autentifikacija: OAuth 2.0/Firebase Authentication
+
+Notifikacije i poruke: Firebase Cloud Messaging/FreeChat
+
+Deployment: 
+
+Plaćanje: 
+
 # Članovi tima 
-> Popis članova tima/linkovi/ glavni doprinos
->
+
+| Ime i prezime    |
+| -------- |
+| Barbara Glavina  | 
+| Katarina Bubalo | 
+| Fani Jurak | 
+| Luka Malešević | 
+| Antonio Šimić | 
+| Leonardo Klišanić |
+| Mario Vukoja | 
 
 # Kontribucije
 >Pravila ovise o organizaciji tima i su često izdvojena u CONTRIBUTING.md
