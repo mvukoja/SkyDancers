@@ -6,7 +6,7 @@ import hr.fer.skydancers.model.User;
 import hr.fer.skydancers.repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService{
 
 	private final UserRepository userRepository;
 

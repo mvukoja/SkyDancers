@@ -3,29 +3,48 @@ package hr.fer.skydancers.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import hr.fer.skydancers.enums.UserType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotEmpty;
+
 
 @Table("USERS")
 public class User {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@NotEmpty
 	private String name;
 
 	@NotEmpty
-	private String username;
+	private String surname;
+	
+	@NotEmpty
+	private String email;
+	
+	@NotEmpty
+	private String password;
+
+	private UserType type;
 
 	public User() {
 	}
+	
 
-	public User(Integer id, String name, String username) {
+	public User(Integer id, @NotEmpty String name, @NotEmpty String surname, @NotEmpty String email,
+			@NotEmpty String password, UserType type) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.username = username;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.type = type;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -43,12 +62,38 @@ public class User {
 		this.name = name;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public UserType getType() {
+		return type;
+	}
+
+	public void setType(UserType type) {
+		this.type = type;
+	}
+
+	
+	
 }
