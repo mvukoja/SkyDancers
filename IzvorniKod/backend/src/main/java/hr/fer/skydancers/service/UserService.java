@@ -2,11 +2,17 @@ package hr.fer.skydancers.service;
 
 import org.springframework.stereotype.Service;
 
-import hr.fer.skydancers.model.User;
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.UserRepository;
 
 @Service
-public class UserService{
+public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 
@@ -14,21 +20,31 @@ public class UserService{
 		this.userRepository = userRepository;
 	}
 
-	public Iterable<User> get() {
+	public Iterable<MyUser> get() {
 		return userRepository.findAll();
 	}
 
-	public User get(Integer id) {
+	public MyUser get(Integer id) {
 		return userRepository.findById(id).orElse(null);
 	}
 
-	public void put(User user) {
-		userRepository.save(user);
-
+	public MyUser put(MyUser user) {
+		return userRepository.save(user);
 	}
 
 	public void remove(Integer id) {
 		userRepository.deleteById(id);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<MyUser> user = userRepository.findByUsername(username);
+		if (user.isPresent()) {
+			MyUser userObj = user.get();
+			return User.builder().username(userObj.getUsername()).password(userObj.getPassword()).roles("USER").build();
+		} else {
+			throw new UsernameNotFoundException(username);
+		}
 	}
 
 }

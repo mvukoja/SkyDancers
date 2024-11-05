@@ -1,11 +1,17 @@
 package hr.fer.skydancers.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,29 +21,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import hr.fer.skydancers.model.User;
+import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.service.UserService;
+import hr.fer.skydancers.webtoken.JwtService;
+import hr.fer.skydancers.webtoken.LoginForm;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
-	private final UserService userService;
-
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
-
-	@GetMapping("/login")
-	public String login() {
-		return "login:";
-	}
+	@Autowired
+	private UserService userService;
 	
-	@GetMapping("/register")
-	public String signup() {
-		return "signup";
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private JwtService jwtService;
+	
+	@PostMapping("/authenticate")
+	public String authenticateAndGetToken(@RequestBody LoginForm loginForm) {
+		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.username(), loginForm.password()));
+		if(auth.isAuthenticated()) {
+			return jwtService.generateToken(userService.loadUserByUsername(loginForm.username()));
+		}
+		else {
+			throw new UsernameNotFoundException("Invalid credentials");
+		}
+	}
+
+	@PostMapping("/register")
+	public MyUser createUser(@RequestBody MyUser user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return userService.put(user);
 	}
 	
 	@GetMapping("/dashboard")
@@ -62,27 +83,21 @@ public class UserController {
 	}
 		
 	@GetMapping("")
-	public Iterable<User> get(){
+	public Iterable<MyUser> get(){
 		return userService.get();
 	}
 
 	@GetMapping("/{id}")
-	public User get(@PathVariable Integer id) {
-		User user = userService.get(id);
+	public MyUser get(@PathVariable Integer id) {
+		MyUser user = userService.get(id);
 		if (user == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		return user;
 	}
 
-	@PostMapping("")
-	public User create(@Valid @RequestBody User user) {
-		userService.put(user);
-		return user;
-	}
-
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
-		User user = userService.get(id);
+		MyUser user = userService.get(id);
 		if (user == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		userService.remove(id);

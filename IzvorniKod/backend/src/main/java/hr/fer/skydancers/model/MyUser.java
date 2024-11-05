@@ -1,21 +1,24 @@
 package hr.fer.skydancers.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
-
 import hr.fer.skydancers.enums.UserType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
-
-@Table("USERS")
-public class User {
+@Entity
+@Table(name = "users")
+public class MyUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotEmpty
+	private String username;
+	
 	@NotEmpty
 	private String name;
 
@@ -30,14 +33,14 @@ public class User {
 
 	private UserType type;
 
-	public User() {
+	public MyUser() {
 	}
 	
-
-	public User(Integer id, @NotEmpty String name, @NotEmpty String surname, @NotEmpty String email,
-			@NotEmpty String password, UserType type) {
+	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, @NotEmpty String surname,
+			@NotEmpty String email, @NotEmpty String password, UserType type) {
 		super();
 		this.id = id;
+		this.username = username;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -45,6 +48,14 @@ public class User {
 		this.type = type;
 	}
 
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public Integer getId() {
 		return id;

@@ -1,8 +1,14 @@
 package hr.fer.skydancers.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-import hr.fer.skydancers.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+import hr.fer.skydancers.model.MyUser;
+
+@Repository
+public interface UserRepository extends JpaRepository<MyUser, Integer> {
+	Optional<MyUser> findByEmail(String email);
+	Optional<MyUser> findByUsername(String username);
 }
