@@ -107,3 +107,10 @@
 .submit:hover:not(.gray) {
     background: #3c009d;
 }
+
+.oauth-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
