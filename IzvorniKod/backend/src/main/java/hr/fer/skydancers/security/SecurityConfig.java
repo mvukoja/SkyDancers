@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import hr.fer.skydancers.service.CustomOAuth2UserService;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
 
@@ -28,16 +29,19 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
+	@Autowired
+	private CustomOAuth2UserService customOAuth2UserService;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> {
 			authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
-			authorize.requestMatchers("/users/**").hasRole("USER");
+			authorize.requestMatchers("/users/**");
 			authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 			authorize.requestMatchers("/h2-console/**").permitAll();
 			authorize.anyRequest().authenticated();
 		}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
-				.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/home", true))
+				.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/home", true).userInfoEndpoint(user -> user.userService(customOAuth2UserService)))
 				.logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

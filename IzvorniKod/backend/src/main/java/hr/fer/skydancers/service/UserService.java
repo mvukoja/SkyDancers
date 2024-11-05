@@ -28,6 +28,10 @@ public class UserService implements UserDetailsService {
 		return userRepository.findById(id).orElse(null);
 	}
 
+	public Optional<MyUser> get(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
 	public MyUser put(MyUser user) {
 		return userRepository.save(user);
 	}

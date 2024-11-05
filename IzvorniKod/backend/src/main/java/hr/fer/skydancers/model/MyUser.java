@@ -18,26 +18,25 @@ public class MyUser {
 
 	@NotEmpty
 	private String username;
-	
+
 	@NotEmpty
 	private String name;
 
-	@NotEmpty
 	private String surname;
-	
-	@NotEmpty
+
 	private String email;
-	
-	@NotEmpty
+
 	private String password;
 
 	private UserType type;
 
+	private boolean oauth;
+
 	public MyUser() {
 	}
-	
-	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, @NotEmpty String surname,
-			@NotEmpty String email, @NotEmpty String password, UserType type) {
+
+	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
+			String password, UserType type, boolean oauth) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -46,8 +45,16 @@ public class MyUser {
 		this.email = email;
 		this.password = password;
 		this.type = type;
+		this.oauth = oauth;
 	}
 
+	public boolean isOauth() {
+		return oauth;
+	}
+
+	public void setOauth(boolean oauth) {
+		this.oauth = oauth;
+	}
 
 	public String getUsername() {
 		return username;
@@ -105,6 +112,4 @@ public class MyUser {
 		this.type = type;
 	}
 
-	
-	
 }
