@@ -1,11 +1,14 @@
-// Components/Homepage.js
 import React from 'react';
+import './Homepage.css';
 
-const Homepage = () => {
+const Homepage = ({ onLogout }) => {
   return (
-    <div>
-      <h1>Welcome to DancingPoint!</h1>
-      <p>This is your dashboard.</p>
+    <div className="homepage-container">
+      <header className="homepage-header">
+        <h1>Welcome to DancingPoint</h1>
+        <p>Your hub for dance auditions, connections, and opportunities!</p>
+        <button onClick={onLogout}>Logout</button>
+      </header>
     </div>
   );
 };

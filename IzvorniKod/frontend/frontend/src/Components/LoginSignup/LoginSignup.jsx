@@ -15,7 +15,6 @@ const LoginSignup = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("DANCER");
 
-  // Function to handle registration
   const handleRegister = async () => {
     const data = {
       username,
@@ -34,12 +33,13 @@ const LoginSignup = ({ onLogin }) => {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Registration failed");
-      const result = await response.json();
-      console.log("Registration successful:", result);
 
-      // Store JWT token if received and navigate to homepage
-      if (result.token) {
-        localStorage.setItem('jwtToken', result.token);
+      // Expect the response as plain text for the token
+      const token = await response.text();
+      console.log("Registration successful. Token received:", token);
+
+      if (token) {
+        localStorage.setItem('jwtToken', token);
         onLogin();
       } else {
         console.error("No token received after registration.");
@@ -49,7 +49,6 @@ const LoginSignup = ({ onLogin }) => {
     }
   };
 
-  // Function to handle login
   const handleLogin = async () => {
     const data = { username, password };
 
@@ -60,25 +59,28 @@ const LoginSignup = ({ onLogin }) => {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Login failed");
-      const result = await response.json();
-      localStorage.setItem('jwtToken', result.token);
-      console.log("Login successful:", result);
 
-      onLogin();
+      // Expect the response as plain text for the token
+      const token = await response.text();
+      console.log("Login successful. Token received:", token);
+
+      if (token) {
+        localStorage.setItem('jwtToken', token);
+        onLogin();
+      } else {
+        console.error("No token received after login.");
+      }
     } catch (error) {
       console.error("Error during login:", error);
     }
   };
 
-  // Toggle between registration and login forms
   const toggleRegistration = () => setIsRegistering(!isRegistering);
 
-  // Redirect to GitHub login
   const handleGitHubLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/github";
   };
 
-  // Handle Google login success
   const handleGoogleLoginSuccess = (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
     onLogin();
@@ -115,6 +117,15 @@ const LoginSignup = ({ onLogin }) => {
               onChange={(e) => setSurname(e.target.value)}
             />
           </>
+        )}
+        {!isRegistering && (
+          <InputField
+            icon={user_icon}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         )}
         <InputField
           icon={email_icon}
