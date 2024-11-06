@@ -24,7 +24,7 @@ const LoginSignup = ({ onLogin }) => {
       email,
       password,
       type,
-      oauth: "false",
+      oauth: "false"
     };
 
     try {
@@ -34,17 +34,11 @@ const LoginSignup = ({ onLogin }) => {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Registration failed");
-
       const result = await response.json();
       console.log("Registration successful:", result);
 
-      // Store the token if it's returned from backend and redirect to homepage
-      if (result.token) {
-        localStorage.setItem('jwtToken', result.token);
-        onLogin();
-      } else {
-        console.error("No token received upon registration");
-      }
+      // Automatically log in after registration
+      handleLoginAfterRegistration();
     } catch (error) {
       console.error("Error during registration:", error);
     }
@@ -61,7 +55,6 @@ const LoginSignup = ({ onLogin }) => {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Login failed");
-
       const result = await response.json();
       localStorage.setItem('jwtToken', result.token);
       console.log("Login successful:", result);
@@ -69,6 +62,27 @@ const LoginSignup = ({ onLogin }) => {
       onLogin();
     } catch (error) {
       console.error("Error during login:", error);
+    }
+  };
+
+  // Automatically log in after registration by calling login function
+  const handleLoginAfterRegistration = async () => {
+    const data = { username, password };
+
+    try {
+      const response = await fetch('http://localhost:8080/users/authenticate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Automatic login after registration failed");
+      const result = await response.json();
+      localStorage.setItem('jwtToken', result.token);
+      console.log("Automatic login successful:", result);
+
+      onLogin();
+    } catch (error) {
+      console.error("Error during automatic login:", error);
     }
   };
 
