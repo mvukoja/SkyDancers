@@ -9,12 +9,12 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import hr.fer.skydancers.service.CustomOAuth2UserService;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
@@ -31,10 +31,12 @@ public class SecurityConfig {
 	
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
-	
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> {
+		http.csrf(csrf -> csrf.disable())
+		 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+		.authorizeHttpRequests(authorize -> {
 			authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
 			authorize.requestMatchers("/users/**");
 			authorize.requestMatchers("/admin/**").hasRole("ADMIN");
