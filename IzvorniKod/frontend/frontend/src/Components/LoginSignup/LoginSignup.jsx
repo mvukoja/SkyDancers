@@ -24,7 +24,7 @@ const LoginSignup = ({ onLogin }) => {
       email,
       password,
       type,
-      oauth: "false"
+      oauth: "false",
     };
 
     try {
@@ -37,8 +37,13 @@ const LoginSignup = ({ onLogin }) => {
       const result = await response.json();
       console.log("Registration successful:", result);
 
-      // Automatically log in after registration
-      handleLoginAfterRegistration();
+      // Store JWT token if received and navigate to homepage
+      if (result.token) {
+        localStorage.setItem('jwtToken', result.token);
+        onLogin();
+      } else {
+        console.error("No token received after registration.");
+      }
     } catch (error) {
       console.error("Error during registration:", error);
     }
@@ -65,27 +70,6 @@ const LoginSignup = ({ onLogin }) => {
     }
   };
 
-  // Automatically log in after registration by calling login function
-  const handleLoginAfterRegistration = async () => {
-    const data = { username, password };
-
-    try {
-      const response = await fetch('http://localhost:8080/users/authenticate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Automatic login after registration failed");
-      const result = await response.json();
-      localStorage.setItem('jwtToken', result.token);
-      console.log("Automatic login successful:", result);
-
-      onLogin();
-    } catch (error) {
-      console.error("Error during automatic login:", error);
-    }
-  };
-
   // Toggle between registration and login forms
   const toggleRegistration = () => setIsRegistering(!isRegistering);
 
@@ -109,15 +93,49 @@ const LoginSignup = ({ onLogin }) => {
       <div className="inputs">
         {isRegistering && (
           <>
-            <InputField icon={user_icon} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-            <InputField icon={user_icon} type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
-            <InputField icon={user_icon} type="text" placeholder="Surname" onChange={(e) => setSurname(e.target.value)} />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Surname"
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
+            />
           </>
         )}
-        <InputField icon={email_icon} type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <InputField icon={password_icon} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <InputField
+          icon={email_icon}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <InputField
+          icon={password_icon}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {isRegistering && (
-          <select className="select" onChange={(e) => setType(e.target.value)}>
+          <select
+            className="select"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
             <option value="DANCER">Dancer</option>
             <option value="DIRECTOR">Director</option>
           </select>
