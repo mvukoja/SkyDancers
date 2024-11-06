@@ -15,7 +15,6 @@ const LoginSignup = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("DANCER");
 
-  // Function to handle registration
   const handleRegister = async () => {
     const data = {
       username,
@@ -35,22 +34,21 @@ const LoginSignup = ({ onLogin }) => {
       });
       if (!response.ok) throw new Error("Registration failed");
 
-      const result = await response.json();
-      console.log("Registration successful:", result);
+      // Expect the response as plain text for the token
+      const token = await response.text();
+      console.log("Registration successful. Token received:", token);
 
-      // Store the token if it's returned from backend and redirect to homepage
-      if (result.token) {
-        localStorage.setItem('jwtToken', result.token);
+      if (token) {
+        localStorage.setItem('jwtToken', token);
         onLogin();
       } else {
-        console.error("No token received upon registration");
+        console.error("No token received after registration.");
       }
     } catch (error) {
       console.error("Error during registration:", error);
     }
   };
 
-  // Function to handle login
   const handleLogin = async () => {
     const data = { username, password };
 
@@ -62,25 +60,27 @@ const LoginSignup = ({ onLogin }) => {
       });
       if (!response.ok) throw new Error("Login failed");
 
-      const result = await response.json();
-      localStorage.setItem('jwtToken', result.token);
-      console.log("Login successful:", result);
+      // Expect the response as plain text for the token
+      const token = await response.text();
+      console.log("Login successful. Token received:", token);
 
-      onLogin();
+      if (token) {
+        localStorage.setItem('jwtToken', token);
+        onLogin();
+      } else {
+        console.error("No token received after login.");
+      }
     } catch (error) {
       console.error("Error during login:", error);
     }
   };
 
-  // Toggle between registration and login forms
   const toggleRegistration = () => setIsRegistering(!isRegistering);
 
-  // Redirect to GitHub login
   const handleGitHubLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/github";
   };
 
-  // Handle Google login success
   const handleGoogleLoginSuccess = (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
     onLogin();
@@ -95,15 +95,58 @@ const LoginSignup = ({ onLogin }) => {
       <div className="inputs">
         {isRegistering && (
           <>
-            <InputField icon={user_icon} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-            <InputField icon={user_icon} type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
-            <InputField icon={user_icon} type="text" placeholder="Surname" onChange={(e) => setSurname(e.target.value)} />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <InputField
+              icon={user_icon}
+              type="text"
+              placeholder="Surname"
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
+            />
           </>
         )}
-        <InputField icon={email_icon} type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <InputField icon={password_icon} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        {!isRegistering && (
+          <InputField
+            icon={user_icon}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        )}
+        <InputField
+          icon={email_icon}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <InputField
+          icon={password_icon}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {isRegistering && (
-          <select className="select" onChange={(e) => setType(e.target.value)}>
+          <select
+            className="select"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
             <option value="DANCER">Dancer</option>
             <option value="DIRECTOR">Director</option>
           </select>

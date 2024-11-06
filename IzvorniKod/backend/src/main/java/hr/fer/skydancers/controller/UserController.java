@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin
 public class UserController {
 
 	@Autowired
@@ -60,6 +60,7 @@ public class UserController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userService.put(user);
 	}
+
 	
 	@GetMapping("/dashboard")
 	public String dashboard(Authentication auth, HttpServletRequest req, Model model) {

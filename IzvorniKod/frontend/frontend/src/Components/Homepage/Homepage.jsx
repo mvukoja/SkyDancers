@@ -6,6 +6,7 @@ const Homepage = ({ onLogout }) => {
     <div className="homepage-container">
       <header className="homepage-header">
         <h1>Welcome to DancingPoint</h1>
+     
         <p>Your hub for dance auditions, connections, and opportunities!</p>
         <button onClick={onLogout}>Logout</button> {/* Logout button */}
       </header>
@@ -13,5 +14,8 @@ const Homepage = ({ onLogout }) => {
     </div>
   );
 };
+import { Link } from 'react-router-dom';
+
+
 
 export default Homepage;
