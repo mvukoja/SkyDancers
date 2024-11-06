@@ -114,3 +114,89 @@
     margin-top: 20px;
   }
   
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 50px;
+    margin: 10px auto;
+    color: #fff;
+    background-color: #4c009d;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+  }
+  
+  .submit:hover {
+    background-color: #3c009d;
+  }
+  
+  .select {
+    width: 100%;
+    max-width: 480px;
+    height: 40px;
+    background: #eaeaea;
+    color: #797979;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .oauth-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .oauth-buttons button {
+    background-color: #4c009d;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+  }
+  
+  .oauth-buttons button:hover {
+    background-color: #3c009d;
+  }
+  
+  /* For error messages */
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+/* Apply consistent styling to all buttons */
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 59px;
+    color: #fff;
+    background: #4c009d;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px; /* Space between buttons */
+}
+
+.oauth-buttons .submit {
+    width: 100%; /* Ensures uniform width for OAuth buttons */
+}

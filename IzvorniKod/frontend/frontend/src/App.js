@@ -1,14 +1,41 @@
-import './App.css';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import LoginSignup from './Components/LoginSignup/LoginSignup';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import Homepage from './Components/Homepage/Homepage';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwtToken'));
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken'); // Remove JWT token
+    setIsAuthenticated(false); // Update authentication state
+  };
+
   return (
-    <GoogleOAuthProvider clientId="529626358951-dbed6jqo4p1dsdvije3af0m500upq5l6.apps.googleusercontent.com">
-      <div className="App">
-        <LoginSignup />
-      </div>
-    </GoogleOAuthProvider>
+    <Router>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            isAuthenticated ? <Navigate to="/home" /> : <LoginSignup onLogin={handleLogin} />
+          } 
+        />
+        <Route 
+          path="/home" 
+          element={
+            isAuthenticated ? <Homepage onLogout={handleLogout} /> : <Navigate to="/" />
+          } 
+        />
+        <Route 
+          path="/logout" 
+          element={<Navigate to="/" replace />} // Redirects to login on logout
+        />
+      </Routes>
+    </Router>
   );
 }
 
