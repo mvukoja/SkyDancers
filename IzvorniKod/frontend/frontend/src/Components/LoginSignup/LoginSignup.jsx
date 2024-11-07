@@ -116,6 +116,13 @@ const LoginSignup = ({ onLogin }) => {
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             />
+            <InputField
+          icon={email_icon}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
           </>
         )}
         {!isRegistering && (
@@ -127,13 +134,6 @@ const LoginSignup = ({ onLogin }) => {
             onChange={(e) => setUsername(e.target.value)}
           />
         )}
-        <InputField
-          icon={email_icon}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
         <InputField
           icon={password_icon}
           type="password"
@@ -162,11 +162,13 @@ const LoginSignup = ({ onLogin }) => {
           {isRegistering ? "Already have an account? Login" : "Don't have an account? Register"}
         </button>
         <div className="oauth-buttons">
-          <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
-          <GoogleLogin
-            onSuccess={handleGoogleLoginSuccess}
-            onError={() => console.log("Google Login Failed")}
-          />
+          <button  onClick={handleGitHubLogin}>Login with GitHub</button>
+          <div className="custom-google-login">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={() => console.log("Google Login Failed")}
+            />
+          </div>
         </div>
       </div>
     </div>

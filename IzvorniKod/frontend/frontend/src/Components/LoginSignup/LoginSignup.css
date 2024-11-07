@@ -1,14 +1,31 @@
 /* LoginSignup.css */
 
+body, html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 .container {
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 400px;
     margin: auto;
-    margin-top: 200px;
-    width: 600px;
+    justify-content: center;
     background: #fff;
-    padding-bottom: 30px;
+    border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+    box-sizing: border-box;
+    padding: 15px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .header {
@@ -34,24 +51,24 @@
 }
 
 .inputs {
-    margin-top: 55px;
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
 }
 
 .input {
     display: flex;
     align-items: center;
     margin: auto;
-    width: 480px;
-    height: 80px;
+    width: 65%;
+    height: 15%;
     background: #eaeaea;
     border-radius: 6px;
 }
 
 .input img {
-    margin: 0px 30px;
+    margin: 0px 20px;
 }
 
 .input input {
@@ -78,24 +95,10 @@
 
 .submit-container {
     display: flex;
-    gap: 30px;
-    margin: 60px auto 0;
-    justify-content: center; /* Center align the buttons */
-}
-
-.submit {
-    display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 20px; /* razmak izmedju unosa podataka i login tipki */
     align-items: center;
-    width: 220px;
-    height: 59px;
-    color: #fff;
-    background: #4c009d;
-    border-radius: 50px;
-    font-size: 19px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s; /* Adds a smooth transition */
 }
 
 .submit.gray {
@@ -107,72 +110,49 @@
 .submit:hover:not(.gray) {
     background: #3c009d;
 }
-
-.oauth-buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
   
-.submit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 220px;
-    height: 50px;
-    margin: 10px auto;
-    color: #fff;
-    background-color: #4c009d;
-    border-radius: 50px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border: none;
-  }
-  
-  .submit:hover {
+.submit:hover {
     background-color: #3c009d;
-  }
+}
   
-  .select {
-    width: 100%;
-    max-width: 480px;
-    height: 40px;
+.select {
+    width: 360px;
+    height: 50px;
     background: #eaeaea;
     color: #797979;
+    align-self: center;
     font-size: 16px;
     border: none;
     border-radius: 6px;
-    padding: 5px;
+    padding: 15px;
     outline: none;
     cursor: pointer;
-  }
+}
   
-  .oauth-buttons {
+.oauth-buttons {
     display: flex;
+    flex-direction: column;
     gap: 10px;
+    padding-bottom: 10px;
     justify-content: center;
-    margin-top: 15px;
-  }
+}
   
-  .oauth-buttons button {
-    background-color: #4c009d;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 50px;
-    font-size: 16px;
+.oauth-buttons button {
+    background-color: #ffffff;
+    color: #4a4a4a;
+    padding: 11px;
+    border-radius: 4px;
+    border: 1px solid #d3d3d3;
+    font-size: 14px;
     cursor: pointer;
-    font-weight: 700;
     transition: background-color 0.3s ease;
-  }
-  
-  .oauth-buttons button:hover {
-    background-color: #3c009d;
-  }
-  
-  /* For error messages */
+}
+
+.oauth-buttons button:hover {
+    background-color: #2fb9f013;
+    border-color: rgba(46, 210, 247, 0.26);
+}
+
 .error-message {
     color: red;
     text-align: center;
@@ -180,23 +160,18 @@
     font-size: 16px;
 }
 
-/* Apply consistent styling to all buttons */
 .submit {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 220px;
-    height: 59px;
+    width: 360px;
+    height: 50px;
     color: #fff;
     background: #4c009d;
-    border-radius: 50px;
+    border-radius: 10px;
     font-size: 19px;
     font-weight: 700;
     cursor: pointer;
     transition: background 0.3s;
-    margin-top: 10px; /* Space between buttons */
-}
-
-.oauth-buttons .submit {
-    width: 100%; /* Ensures uniform width for OAuth buttons */
+    margin: 1px;
 }
