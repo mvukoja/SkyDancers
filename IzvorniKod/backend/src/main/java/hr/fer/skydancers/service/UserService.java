@@ -27,9 +27,9 @@ public class UserService implements UserDetailsService {
 	public MyUser get(Integer id) {
 		return userRepository.findById(id).orElse(null);
 	}
-
-	public Optional<MyUser> get(String email) {
-		return userRepository.findByEmail(email);
+	
+	public Optional<MyUser> get(String username) {
+		return userRepository.findByUsername(username);
 	}
 	
 	public MyUser put(MyUser user) {
