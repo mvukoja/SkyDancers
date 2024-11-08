@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import Homepage from './Components/Homepage/Homepage';
-import Logout from './Components/LoginSignup/logout';
+import OAuthCompletionPage from './Components/OAuthCompletionPage/OAuthCompletionPage';
+import Logout from './Components/LoginSignup/Logout';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwtToken'));
@@ -16,26 +17,27 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    setIsAuthenticated(!!token);
+  }, []);
+
   return (
     <Router>
       <Routes>
         <Route
           path="/"
-          element={isAuthenticated ? <Navigate to="/home" /> : <LoginSignup onLogin={handleLogin} />}
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <LoginSignup onLogin={handleLogin} />}
         />
         <Route
           path="/home"
-          element={isAuthenticated ? <Homepage onLogout={handleLogout} /> : <Navigate to="/" />}
-        />
-        {/* Logout routes to clear authentication and redirect to login */}
-        <Route
-          path="/logout"
-          element={<Logout onLogout={handleLogout} />}
+          element={isAuthenticated ? <Homepage onLogout={handleLogout} /> : <Navigate to="/" replace />}
         />
         <Route
-          path="/home/logout"
-          element={<Logout onLogout={handleLogout} />}
+          path="/oauth-completion"
+          element={isAuthenticated ? <OAuthCompletionPage /> : <Navigate to="/" replace />}
         />
+        <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
       </Routes>
     </Router>
   );

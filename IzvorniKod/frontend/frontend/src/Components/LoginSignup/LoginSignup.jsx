@@ -5,6 +5,7 @@ import user_icon from '../Assets/person.png';
 import email_icon from '../Assets/email.png';
 import password_icon from '../Assets/password.png';
 import InputField from './InputField';
+import { useNavigate } from 'react-router-dom';
 
 const LoginSignup = ({ onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -14,6 +15,8 @@ const LoginSignup = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("DANCER");
+
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     const data = {
@@ -34,15 +37,10 @@ const LoginSignup = ({ onLogin }) => {
       });
       if (!response.ok) throw new Error("Registration failed");
 
-      // Expect the response as plain text for the token
       const token = await response.text();
-      console.log("Registration successful. Token received:", token);
-
       if (token) {
         localStorage.setItem('jwtToken', token);
         onLogin();
-      } else {
-        console.error("No token received after registration.");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -60,15 +58,10 @@ const LoginSignup = ({ onLogin }) => {
       });
       if (!response.ok) throw new Error("Login failed");
 
-      // Expect the response as plain text for the token
       const token = await response.text();
-      console.log("Login successful. Token received:", token);
-
       if (token) {
         localStorage.setItem('jwtToken', token);
         onLogin();
-      } else {
-        console.error("No token received after login.");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -83,7 +76,9 @@ const LoginSignup = ({ onLogin }) => {
 
   const handleGoogleLoginSuccess = (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
-    onLogin();
+    localStorage.setItem('jwtToken', credentialResponse.credential);
+    onLogin(); // Update authentication state
+    navigate('/oauth-completion'); // Redirect to the OAuth completion page
   };
 
   return (
@@ -117,12 +112,12 @@ const LoginSignup = ({ onLogin }) => {
               onChange={(e) => setSurname(e.target.value)}
             />
             <InputField
-          icon={email_icon}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+              icon={email_icon}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </>
         )}
         {!isRegistering && (
@@ -162,7 +157,7 @@ const LoginSignup = ({ onLogin }) => {
           {isRegistering ? "Already have an account? Login" : "Don't have an account? Register"}
         </button>
         <div className="oauth-buttons">
-          <button  onClick={handleGitHubLogin}>Login with GitHub</button>
+          <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
           <div className="custom-google-login">
             <GoogleLogin
               onSuccess={handleGoogleLoginSuccess}

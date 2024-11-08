@@ -21,8 +21,7 @@ const OAuthCompletionPage = () => {
     };
 
     try {
-      // Send the additional information along with the existing token
-      const response = await fetch('http://localhost:8080/users/complete-oauth', { // Ensure this endpoint matches backend
+      const response = await fetch('http://localhost:8080/users/complete-oauth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,12 +30,9 @@ const OAuthCompletionPage = () => {
         body: JSON.stringify(data)
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to complete OAuth registration");
-      }
+      if (!response.ok) throw new Error("Failed to complete OAuth registration");
 
-      console.log("OAuth registration completion successful.");
-      navigate('/home'); // Redirect to homepage
+      navigate('/home');
     } catch (error) {
       console.error("Error completing OAuth registration:", error);
     }
