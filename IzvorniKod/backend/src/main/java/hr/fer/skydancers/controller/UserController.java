@@ -95,6 +95,21 @@ public class UserController {
 		dto.setOauth(user.isOauth());
 		return dto;
 	}
+	
+	@GetMapping("/myprofile")
+	public UserDto getMyProfile() {
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+		if (user == null)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		UserDto dto = new UserDto();
+		dto.setEmail(user.getEmail());
+		dto.setName(user.getName());
+		dto.setSurname(user.getSurname());
+		dto.setType(user.getType());
+		dto.setOauth(user.isOauth());
+		return dto;
+	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
