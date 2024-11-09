@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -45,6 +46,7 @@ public class SecurityConfig {
 		.authorizeHttpRequests(authorize -> {
 			authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
 			authorize.requestMatchers("/admin/**").hasRole("ADMIN");
+			authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 			authorize.requestMatchers("/h2-console/**").permitAll();
 			authorize.anyRequest().authenticated();
 		}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
@@ -61,14 +63,19 @@ public class SecurityConfig {
                         user.setUsername(userId);
                         user.setPassword(passwordEncoder().encode(customOAuth2User.getAttribute("id").toString()));
                         user.setOauth(true);
+                        user.setFinishedoauth(false);
                         userService.put(user);
                     }
-
+                    if(!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
+                    	Cookie finished = new Cookie("finishedoauth","true");
+                    	finished.setPath("/");
+                    	response.addCookie(finished);
+                    }
                     String token = jwtService.generateToken(userService.loadUserByUsername(userId));
                     Cookie jwtCookie = new Cookie("jwtToken", token);
                     jwtCookie.setPath("/");
                     response.addCookie(jwtCookie);
-                    response.sendRedirect("http://localhost:3000");
+                    response.sendRedirect("http://localhost:3000/oauth-completion");
                 })
             )
 				.logout(logout -> logout.logoutSuccessUrl("/").permitAll())

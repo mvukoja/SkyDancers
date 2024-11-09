@@ -35,7 +35,7 @@ function App() {
         />
         <Route
           path="/oauth-completion"
-          element={isAuthenticated ? <OAuthCompletionPage /> : <Navigate to="/" replace />}
+          element={<OAuthCompletionPage onLogin={handleLogin}/>}
         />
         <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
       </Routes>

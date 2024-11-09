@@ -4,26 +4,22 @@ import hr.fer.skydancers.enums.UserType;
 
 public class UserDto {
 
-	private Integer id;
 	private String name;
 	private String surname;
 	private String email;
 	private UserType type;
+	private boolean oauth;
 	
+	public UserDto() {
+	}
 	
-	public UserDto(Integer id, String name, String surname, String email, UserType type) {
+	public UserDto(String name, String surname, String email, UserType type, boolean oauth) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.type = type;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
+		this.oauth = oauth;
 	}
 	public String getName() {
 		return name;
@@ -48,6 +44,12 @@ public class UserDto {
 	}
 	public void setType(UserType type) {
 		this.type = type;
+	}
+	public boolean isOauth() {
+		return oauth;
+	}
+	public void setOauth(boolean oauth) {
+		this.oauth = oauth;
 	}
 	
 	

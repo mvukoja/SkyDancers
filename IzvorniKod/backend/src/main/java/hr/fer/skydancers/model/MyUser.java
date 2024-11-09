@@ -31,12 +31,15 @@ public class MyUser {
 	private UserType type;
 
 	private boolean oauth;
+	
+	private boolean finishedoauth;
 
 	public MyUser() {
 	}
 
+
 	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
-			String password, UserType type, boolean oauth) {
+			String password, UserType type, boolean oauth, boolean finishedOauth) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -46,7 +49,19 @@ public class MyUser {
 		this.password = password;
 		this.type = type;
 		this.oauth = oauth;
+		this.finishedoauth = finishedOauth;
 	}
+
+
+	public boolean isFinishedOauth() {
+		return finishedoauth;
+	}
+
+
+	public void setFinishedoauth(boolean finishedOauth) {
+		this.finishedoauth = finishedOauth;
+	}
+
 
 	public boolean isOauth() {
 		return oauth;

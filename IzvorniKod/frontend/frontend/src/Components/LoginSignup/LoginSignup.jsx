@@ -27,6 +27,7 @@ const LoginSignup = ({ onLogin }) => {
       password,
       type,
       oauth: "false",
+      finishedoauth: "true"
     };
 
     try {
@@ -36,12 +37,15 @@ const LoginSignup = ({ onLogin }) => {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Registration failed");
-
-      const token = await response.text();
-      if (token) {
-        localStorage.setItem('jwtToken', token);
-        onLogin();
+      const text = await response.text();
+      if(text === "Registration successful!"){
+        alert("Registration successful, now login!");
+        window.location.href = '/';
       }
+      else{
+        alert("Username already exists!");
+      }
+      
     } catch (error) {
       console.error("Error during registration:", error);
     }
