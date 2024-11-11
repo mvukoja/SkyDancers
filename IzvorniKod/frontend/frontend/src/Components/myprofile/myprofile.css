@@ -1,0 +1,178 @@
+/* src/Components/MyProfile/MyProfile.css */
+
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .profile-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-details p,
+  .profile-edit-form label {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .profile-edit-form input,
+  .profile-edit-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+  }
+  
+  .profile-edit-form button {
+    margin-right: 10px;
+  }
+  
+  .logout-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff4b5c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .logout-button:hover {
+    background-color: #ff2e44;
+  }
+  
+  .portfolio-section {
+    margin-top: 30px;
+  }
+  
+  .portfolio-section h3 {
+    margin-bottom: 15px;
+  }
+  
+  .portfolio-section input[type="file"] {
+    margin-bottom: 20px;
+  }
+  
+  .portfolio-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .portfolio-item {
+    position: relative;
+  }
+  
+  .portfolio-item img,
+  .portfolio-item video {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 5px;
+  }
+  
+  .portfolio-item button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 75, 92, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+  }
+  
+  .portfolio-item button:hover {
+    background-color: rgba(255, 75, 92, 1);
+  }
+  
+  .dance-styles-section {
+    margin-top: 30px;
+  }
+  
+  .dance-styles-section h3 {
+    margin-bottom: 15px;
+  }
+  
+  .dance-styles-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .dance-styles-list label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .dance-styles-list input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+  
+  .inactive-section {
+    margin-top: 30px;
+  }
+  
+  .inactive-section label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .applications-section {
+    margin-top: 30px;
+  }
+  
+  .applications-section h3 {
+    margin-bottom: 15px;
+  }
+  
+  .applications-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .applications-section li {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .profile-edit-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .profile-edit-form label {
+    display: block;
+    margin-bottom: 15px;
+  }
+  
+  .profile-edit-form button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .profile-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .profile-details p {
+    margin: 10px 0;
+  }
+  
+  .profile-details button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  

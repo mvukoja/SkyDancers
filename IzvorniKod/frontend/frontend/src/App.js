@@ -4,6 +4,7 @@ import LoginSignup from './Components/LoginSignup/LoginSignup';
 import Homepage from './Components/Homepage/Homepage';
 import OAuthCompletionPage from './Components/OAuthCompletionPage/OAuthCompletionPage';
 import Logout from './Components/LoginSignup/Logout';
+import MyProfile from './Components/myprofile/myprofile'; // Import MyProfile
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwtToken'));
@@ -36,6 +37,10 @@ function App() {
         <Route
           path="/oauth-completion"
           element={<OAuthCompletionPage onLogin={handleLogin}/>}
+        />
+        <Route
+          path="/myprofile"
+          element={isAuthenticated ? <MyProfile onLogout={handleLogout} /> : <Navigate to="/" replace />}
         />
         <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
       </Routes>
