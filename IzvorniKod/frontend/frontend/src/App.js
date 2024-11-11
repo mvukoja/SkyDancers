@@ -4,6 +4,7 @@ import LoginSignup from './Components/LoginSignup/LoginSignup';
 import Homepage from './Components/Homepage/Homepage';
 import OAuthCompletionPage from './Components/OAuthCompletionPage/OAuthCompletionPage';
 import Logout from './Components/LoginSignup/Logout';
+import LandingPage from './Components/LandingPage/LandingPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwtToken'));
@@ -25,8 +26,9 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path='/' element={<LandingPage />} />
         <Route
-          path="/"
+          path="/login"
           element={isAuthenticated ? <Navigate to="/home" replace /> : <LoginSignup onLogin={handleLogin} />}
         />
         <Route

@@ -1,0 +1,56 @@
+/* Uklonite margine i paddinge */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Stilizacija headera (navigacijskog bara) */
+header {
+  display: flex;
+  justify-content: space-between; /* Poravnava logo lijevo, linkove desno */
+  align-items: center; /* Poravnava sadržaj po vertikali */
+  background-color: #4c009d; /* Boja pozadine */
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2; /* Osigurava da je na vrhu */
+}
+
+.logo-img {
+  width: 170px;
+  height: auto;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+}
+
+.header-links a {
+  margin-left: 15px;
+}
+
+.login button {
+  color: white;
+  border: none;
+
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.login button:hover {
+  background-color: #37077a;
+}
+
+h1 {
+  margin-top: 50%;
+  color: #4c1895;
+}
