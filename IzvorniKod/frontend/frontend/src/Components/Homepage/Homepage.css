@@ -1,67 +1,71 @@
-.homepage-container {
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .homepage-header {
-    margin-bottom: 2rem;
-  }
-  
-  .homepage-header h1 {
-    font-size: 2.5rem;
-    color: #3c009d;
-  }
-  
-  .homepage-content {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-  }
-  
-  .homepage-section {
-    width: 300px;
-    padding: 1.5rem;
-    background: #f3f3f3;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .homepage-section h2 {
-    color: #4c009d;
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .homepage-section p {
-    margin-bottom: 1.5rem;
-  }
-  
-  .homepage-button {
-    padding: 0.5rem 1rem;
-    color: white;
-    background-color: #4c009d;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .homepage-button:hover {
-    background-color: #3c009d;
-  }
-  
-  button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    color: white;
-    background-color: #4c009d;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background-color: #3c009d;
-  }
-  
+/* Uklonite margine i paddinge */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Stilizacija headera (navigacijskog bara) */
+header {
+  display: flex;
+  justify-content: space-between; /* Poravnava logo lijevo, linkove desno */
+  align-items: center; /* Poravnava sadržaj po vertikali */
+  background-color: #4c009d; /* Boja pozadine */
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.logo-img {
+  width: 170px;
+  height: auto;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+}
+
+.header-links a {
+  margin-left: 15px;
+}
+
+.login button {
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.login button:hover {
+  background-color: #37077a;
+}
+
+.logout button {
+  color: white;
+  border: none;
+  background-color: #4c009d;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: center;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+
+.logout button:hover {
+  background-color: #37077a;
+}
+
+h1 {
+  margin-top: 50%;
+  color: #4c1895;
+}

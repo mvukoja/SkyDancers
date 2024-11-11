@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import LoginSignup from './Components/LoginSignup/LoginSignup';
-import Homepage from './Components/Homepage/Homepage';
+import Homepage from './Components/Homepage/Homepage.jsx';
 import OAuthCompletionPage from './Components/OAuthCompletionPage/OAuthCompletionPage';
 import Logout from './Components/LoginSignup/Logout';
 import LandingPage from './Components/LandingPage/LandingPage';
-import MyProfile from './Components/myprofile/myprofile'; // Import MyProfile
+import MyProfile from './Components/myprofile/myprofile'; // Import MyProfile 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwtToken'));
