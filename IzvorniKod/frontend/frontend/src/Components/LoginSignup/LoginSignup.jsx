@@ -18,7 +18,32 @@ const LoginSignup = ({ onLogin }) => {
 
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (isRegistering && !emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters long.")
+      return false;
+    }
+
+    if (isRegistering && (!username || !name || !surname || !email || !password)) {
+      alert("Please fill out all fields.");
+      return false;
+    } else if (!isRegistering && (!username || !password)) {
+      alert("Please enter both username and password.");
+      return false;
+    }
+
+    return true;
+  }
+
   const handleRegister = async () => {
+    if (!validateForm()) return;
+
     const data = {
       username,
       name,
@@ -52,6 +77,8 @@ const LoginSignup = ({ onLogin }) => {
   };
 
   const handleLogin = async () => {
+    if (!validateForm()) return;
+
     const data = { username, password };
 
     try {
