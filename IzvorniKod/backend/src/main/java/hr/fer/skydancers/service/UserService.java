@@ -51,4 +51,11 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
+	public MyUser save(MyUser user) {
+        return userRepository.save(user);
+    }
+	
+
+    
+
 }

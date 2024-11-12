@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import hr.fer.skydancers.dto.DanceStylesRequest;
+import hr.fer.skydancers.dto.InactiveStatusRequest;
 import hr.fer.skydancers.dto.OauthRegDto;
+import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.service.UserService;
@@ -98,18 +103,36 @@ public class UserController {
 	
 	@GetMapping("/myprofile")
 	public UserDto getMyProfile() {
+		
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	
 		MyUser user = userService.get(username).orElse(null);
-		if (user == null)
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+		
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+		}
+
+		
 		UserDto dto = new UserDto();
+		
+		
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
 		dto.setSurname(user.getSurname());
 		dto.setType(user.getType());
 		dto.setOauth(user.isOauth());
+		dto.setLocation(user.getLocation());
+		dto.setGender(user.getGender());
+		dto.setAge(user.getAge()); 
+		dto.setDanceStyles(user.getDanceStyles());
+		dto.setInactive(user.isInactive());
+		dto.setInactiveUntil(user.getInactiveUntil());
+		
 		return dto;
 	}
+
+	
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
@@ -117,6 +140,88 @@ public class UserController {
 		if (user == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		userService.remove(id);
+	}
+
+	@PutMapping("/update-profile")
+	public UserDto updateProfile(@RequestBody UpdateProfileRequest updateRequest) {
+
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+		}
+
+		
+		user.setName(updateRequest.getName());
+		user.setSurname(updateRequest.getSurname());
+		user.setEmail(updateRequest.getEmail());
+		user.setLocation(updateRequest.getLocation());
+		user.setGender(updateRequest.getGender());
+		user.setAge(updateRequest.getAge());
+		
+		
+		userService.save(user);
+
+		
+		UserDto dto = new UserDto();
+		dto.setEmail(user.getEmail());
+		dto.setName(user.getName());
+		dto.setSurname(user.getSurname());
+		dto.setLocation(user.getLocation());
+		dto.setGender(user.getGender());
+		dto.setAge(user.getAge());
+
+		return dto;
+	}
+
+	@PutMapping("/update-dance-styles")
+    public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest) {
+        
+        
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        
+        MyUser user = userService.get(username).orElse(null);
+
+        
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+       
+        user.setDanceStyles(danceStylesRequest.getDanceStyles());
+
+        
+        userService.save(user);
+
+        
+        UserDto dto = new UserDto();
+        
+        dto.setDanceStyles(user.getDanceStyles()); 
+
+        return dto;
+    }
+	@PutMapping("/update-inactive-status")
+	public UserDto updatInactiveStatus(@RequestBody InactiveStatusRequest inactiveStatusRequest) {
+		System.out.println("Received isInactive: " + inactiveStatusRequest.isInactive());
+    	System.out.println("Received inactiveUntil: " + inactiveStatusRequest.getInactiveUntil());
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+		}
+		
+		user.setInactive(inactiveStatusRequest.isInactive());
+		user.setInactiveUntil(inactiveStatusRequest.getInactiveUntil());
+		userService.save(user);
+
+		UserDto dto = new UserDto();
+		dto.setInactive(user.isInactive());
+		dto.setInactiveUntil(user.getInactiveUntil());
+		return dto;
+
 	}
 
 }
