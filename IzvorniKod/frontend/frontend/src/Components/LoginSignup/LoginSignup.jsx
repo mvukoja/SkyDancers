@@ -189,12 +189,6 @@ const LoginSignup = ({ onLogin }) => {
         </button>
         <div className="oauth-buttons">
           <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
-          <div className="custom-google-login">
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSuccess}
-              onError={() => console.log("Google Login Failed")}
-            />
-          </div>
         </div>
       </div>
     </div>
