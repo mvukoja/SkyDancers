@@ -2,6 +2,8 @@ package hr.fer.skydancers.dto;
 
 import java.time.LocalDate;
 
+//Ova klasa predstavlja zahtjev za ažuriranje statusa neaktivnosti korisnika
+
 public class InactiveStatusRequest {
 	private boolean inactive;
 	private LocalDate inactiveUntil;

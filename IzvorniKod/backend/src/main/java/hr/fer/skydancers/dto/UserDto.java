@@ -5,6 +5,8 @@ import hr.fer.skydancers.enums.UserType;
 import java.time.LocalDate;
 import java.util.List;
 
+//Ova klasa predstavlja DTO za korisnika, sadrži sve informacije o korisniku koje se prenose između servera i klijenta
+
 public class UserDto {
 
     private String name;

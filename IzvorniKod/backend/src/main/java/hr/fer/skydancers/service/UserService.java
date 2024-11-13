@@ -20,26 +20,35 @@ public class UserService implements UserDetailsService {
 		this.userRepository = userRepository;
 	}
 
+	//Dohvaća sve korisnike iz baze podataka
 	public Iterable<MyUser> get() {
 		return userRepository.findAll();
 	}
 
+	//Dohvaća korisnika prema ID-u
 	public MyUser get(Integer id) {
 		return userRepository.findById(id).orElse(null);
 	}
 	
+	//Dohvaća korisnika prema korisničkom imenu
 	public Optional<MyUser> get(String username) {
 		return userRepository.findByUsername(username);
 	}
 	
+	//Spremanje novog ili ažuriranje postojećeg korisnika
 	public MyUser put(MyUser user) {
 		return userRepository.save(user);
 	}
+	public MyUser save(MyUser user) {
+        return userRepository.save(user);
+    }
 
+	//Brisanje korisnika prema ID-u
 	public void remove(Integer id) {
 		userRepository.deleteById(id);
 	}
 
+	//Učitavanje korisničkih podataka za autentifikaciju
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<MyUser> user = userRepository.findByUsername(username);
@@ -51,9 +60,7 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public MyUser save(MyUser user) {
-        return userRepository.save(user);
-    }
+	
 	
 
     

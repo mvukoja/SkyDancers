@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.List;
 
+//Ova klasa predstavlja korisnički entitet
+
 @Entity
 @Table(name = "users")
 public class MyUser {

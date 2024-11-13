@@ -2,6 +2,8 @@ package hr.fer.skydancers.dto;
 
 import java.util.List;
 
+//Ova klasa predstavlja zahtjev za ažuriranje plesnih stilova korisnika
+
 public class DanceStylesRequest {
 
     private List<String> danceStyles;

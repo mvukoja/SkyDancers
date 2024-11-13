@@ -1,5 +1,7 @@
 package hr.fer.skydancers.dto;
 
+//Ova klasa predstavlja zahtjev za ažuriranje korisničkog profila
+
 public class UpdateProfileRequest {
     private String name;
     private String surname;

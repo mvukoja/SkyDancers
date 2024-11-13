@@ -48,6 +48,8 @@ public class UserController {
 	@Autowired
 	private JwtService jwtService;
 
+
+	// Završava OAuth registraciju korisnika
 	@PostMapping("/complete-oauth")
 	public MyUser completeOauth(@RequestBody OauthRegDto dto) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -60,6 +62,7 @@ public class UserController {
 		return user;
 	}
 
+	// Autentificira korisnika i generira JWT token
 	@PostMapping("/authenticate")
 	public ResponseEntity<String> authenticateAndGetToken(@RequestBody LoginForm loginForm) {
 		Authentication auth;
@@ -75,6 +78,7 @@ public class UserController {
 		return ResponseEntity.ok("Invalid credentials");
 	}
 
+	// Registrira novog korisnika
 	@PostMapping("/register")
 	public ResponseEntity<String> createUser(@RequestBody MyUser user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
@@ -85,12 +89,13 @@ public class UserController {
 			return ResponseEntity.ok("Username already exists!");
 		}
 	}
-
+	// Dohvaća sve korisnike
 	@GetMapping("/getall")
 	public Iterable<MyUser> get() {
 		return userService.get();
 	}
 
+	// Dohvaća korisnika prema korisničkom imenu
 	@GetMapping("/get/{username}")
 	public UserDto get(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
@@ -105,6 +110,7 @@ public class UserController {
 		return dto;
 	}
 
+	// Dohvaća profil trenutnog prijavljenog korisnika
 	@GetMapping("/myprofile")
 	public UserDto getMyProfile() {
 
@@ -134,6 +140,7 @@ public class UserController {
 		return dto;
 	}
 
+	// Briše korisnika prema ID-u
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
 		MyUser user = userService.get(id);
@@ -142,6 +149,7 @@ public class UserController {
 		userService.remove(id);
 	}
 
+	// Ažurira profil trenutnog korisnika
 	@PutMapping("/update-profile")
 	public UserDto updateProfile(@RequestBody UpdateProfileRequest updateRequest) {
 
@@ -178,6 +186,7 @@ public class UserController {
 		return dto;
 	}
 
+	// Ažurira plesne stilove korisnika
 	@PutMapping("/update-dance-styles")
 	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest) {
 
@@ -200,6 +209,7 @@ public class UserController {
 		return dto;
 	}
 
+	// Ažurira status neaktivnosti korisnika
 	@PutMapping("/update-inactive-status")
 	public UserDto updatInactiveStatus(@RequestBody InactiveStatusRequest inactiveStatusRequest) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
