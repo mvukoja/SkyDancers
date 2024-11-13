@@ -1,6 +1,7 @@
 package hr.fer.skydancers.security;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -54,14 +55,16 @@ public class SecurityConfig {
 		.oauth2Login(oauth2 -> oauth2
                 .successHandler((request, response, authentication) -> {
                     OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
-                    String userId = customOAuth2User.getAttribute("id").toString() + "_" + customOAuth2User.getAttribute("login");
+                    String userId = customOAuth2User.getAttribute("id").toString() + "_" + customOAuth2User.getAttribute("login") + "_oauth";
                     
                     Optional<MyUser> existingUser = userService.get(userId);
                     if (existingUser.isEmpty()) {
                         MyUser user = new MyUser();
-                        user.setName(customOAuth2User.getAttribute("name"));
+                        String name = customOAuth2User.getAttribute("name");
+                        user.setName(name.split(" ")[0]);
+                        user.setSurname(name.split(" ")[1]);
                         user.setUsername(userId);
-                        user.setPassword(passwordEncoder().encode(customOAuth2User.getAttribute("id").toString()));
+                        user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
                         user.setOauth(true);
                         user.setFinishedoauth(false);
                         userService.put(user);

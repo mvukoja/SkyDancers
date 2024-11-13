@@ -1,7 +1,6 @@
 package hr.fer.skydancers.model;
 
 import hr.fer.skydancers.enums.UserType;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,10 +45,9 @@ public class MyUser {
 
     private boolean inactive;
 
-    private LocalDate inactiveUntil;
+    private LocalDate inactiveuntil;
 
-    @ElementCollection
-    private List<String> danceStyles;
+    private List<String> dancestyles;
 
     public MyUser() {
     }
@@ -71,8 +69,8 @@ public class MyUser {
         this.gender = gender;
         this.age = age;
         this.inactive = inactive;
-        this.inactiveUntil = inactiveUntil;
-        this.danceStyles = danceStyles;
+        this.inactiveuntil = inactiveUntil;
+        this.dancestyles = danceStyles;
     }
 
     // Getteri i setteri za nove atribute
@@ -110,19 +108,19 @@ public class MyUser {
     }
 
     public LocalDate getInactiveUntil() {
-        return inactiveUntil;
+        return inactiveuntil;
     }
 
     public void setInactiveUntil(LocalDate inactiveUntil) {
-        this.inactiveUntil = inactiveUntil;
+        this.inactiveuntil = inactiveUntil;
     }
 
     public List<String> getDanceStyles() {
-        return danceStyles;
+        return dancestyles;
     }
 
     public void setDanceStyles(List<String> danceStyles) {
-        this.danceStyles = danceStyles;
+        this.dancestyles = danceStyles;
     }
 
     public boolean isFinishedOauth() {

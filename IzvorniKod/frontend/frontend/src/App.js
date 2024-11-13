@@ -41,14 +41,18 @@ function App() {
     <Router>
       <Routes>
         {/* Definicija rute za početnu stranicu */}
-        <Route path='/' element={<LandingPage />} />
+        <Route path='/' element={
+            isAuthenticated 
+              ? <Homepage onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži Homepage komponentu
+              : <LandingPage /> // Inače, preusmjeri na početnu stranicu
+          }/>
         
         {/* Definicija rute za stranicu za prijavu */}
         <Route
           path="/login"
           element={
             isAuthenticated 
-              ? <Navigate to="/home" replace /> // Ako je korisnik već autentificiran, preusmjeri na /home
+              ? <Navigate to="/" replace /> // Ako je korisnik već autentificiran, preusmjeri na /home
               : <LoginSignup onLogin={handleLogin} /> // Inače, prikaži komponentu za prijavu/registraciju
           }
         />

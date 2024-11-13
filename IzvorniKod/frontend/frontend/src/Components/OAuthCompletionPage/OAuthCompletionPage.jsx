@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react';
+import './OAuthCompletionPage.css';
 import { useNavigate } from 'react-router-dom';
 
 const OAuthCompletionPage = ({ onLogin }) => {
@@ -65,7 +66,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
       <p>Please enter additional information to complete your registration.</p>
       
       <label>
-        Email:
+        Email:&nbsp;
         <input
           type="email"
           value={email}
@@ -75,7 +76,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
       </label>
 
       <label>
-        Account Type:
+        Account Type:&nbsp;
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="DANCER">Dancer</option>
           <option value="DIRECTOR">Director</option>

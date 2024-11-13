@@ -6,8 +6,9 @@ import headerlogo from '../Assets/header-logo.png';
 const Homepage = ({ onLogout }) => {
   return (
     <div className="homepage-container">
+      <div className="background-image-container"></div>
       <header className='homepage-header'>
-        <a href="#" className='logo'>
+        <a href="/" className='logo'>
           <img src={headerlogo} alt="" className='logo-img'/>
         </a>
 

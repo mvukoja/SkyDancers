@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './LoginSignup.css';
-import { GoogleLogin } from '@react-oauth/google';
 import user_icon from '../Assets/person.png';
 import email_icon from '../Assets/email.png';
 import password_icon from '../Assets/password.png';
 import InputField from './InputField';
-import { useNavigate } from 'react-router-dom';
 
 // Komponenta za Login i Signup funkcionalnosti
 const LoginSignup = ({ onLogin }) => {
@@ -17,8 +15,6 @@ const LoginSignup = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("DANCER");
-
-  const navigate = useNavigate();
 
   // Funkcija za validaciju unesenih podataka u formi
   const validateForm = () => {
@@ -73,7 +69,7 @@ const LoginSignup = ({ onLogin }) => {
       // Ako registracija uspije, korisnik dobiva poruku i preusmjerava se na login
       if(text === "Registration successful!"){
         alert("Registration successful, now login!");
-        window.location.href = '/';
+        window.location.href = '/login';
       } else {
         alert("Username already exists!");
       }
@@ -98,6 +94,10 @@ const LoginSignup = ({ onLogin }) => {
       if (!response.ok) throw new Error("Login failed"); // Ako prijava ne uspije, baci grešku
 
       const token = await response.text();
+      if(token==="Invalid credentials"){
+        alert("Invalid credentials!");
+        return;
+      }
       if (token) {
         localStorage.setItem('jwtToken', token); // Sprema JWT token u lokalnu pohranu
         onLogin(); // Poziva funkciju koja postavlja status prijavljenog korisnika
@@ -113,14 +113,6 @@ const LoginSignup = ({ onLogin }) => {
   // Funkcija za prijavu putem GitHub OAuth-a
   const handleGitHubLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
-  };
-
-  // Funkcija koja se poziva kada je prijava putem Google-a uspješna
-  const handleGoogleLoginSuccess = (credentialResponse) => {
-    console.log("Google Login Success:", credentialResponse);
-    localStorage.setItem('jwtToken', credentialResponse.credential); // Sprema JWT token
-    onLogin(); // Ažurira status prijavljenog korisnika
-    navigate('/oauth-completion'); // Preusmjerava korisnika na stranicu za dodatne podatke
   };
 
   return (
@@ -208,7 +200,7 @@ const LoginSignup = ({ onLogin }) => {
         <button className="submit" onClick={toggleRegistration}>
           {isRegistering ? "Already have an account? Login" : "Don't have an account? Register"}
         </button>
-        {/* Gumbi za OAuth prijavu putem GitHub-a i Google-a */}
+        {/* Gumbi za OAuth prijavu putem GitHub-a */}
         <div className="oauth-buttons">
           <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
         </div>

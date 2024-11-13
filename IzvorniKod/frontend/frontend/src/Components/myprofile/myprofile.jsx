@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './myprofile.css';
+import { Link } from 'react-router-dom';
+import headerlogo from '../Assets/header-logo.png';
 import { jwtDecode } from 'jwt-decode';
 
 const MyProfile = ({ onLogout }) => {
@@ -12,7 +14,7 @@ const MyProfile = ({ onLogout }) => {
   const [formData, setFormData] = useState({}); // Pohranjuje podatke unutar forme za uređivanje
   const [portfolioItems, setPortfolioItems] = useState([]); // Lista stavki u portfoliju korisnika
   const [selectedDanceStyles, setSelectedDanceStyles] = useState([]); // Odabrane vrste plesa
-  const [isInactive, setIsInactive] = useState(false); // Status neaktivnosti korisničkog profila
+  const [inactive, setIsInactive] = useState(false); // Status neaktivnosti korisničkog profila
   const [inactiveUntil, setInactiveUntil] = useState(''); // Datum do kojeg je profil neaktivan
 
   const navigate = useNavigate(); // Hook za navigaciju između ruta
@@ -48,26 +50,6 @@ const MyProfile = ({ onLogout }) => {
 
       let username = getUsernameFromToken(); // Pokušaj izdvojiti korisničko ime iz tokena
 
-      if (!username) {
-        // Ako korisničko ime nije u tokenu, dohvatiti ga s backend-a
-        try {
-          const usernameResponse = await fetch('http://localhost:8080/users/get-username', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
-            },
-          });
-
-          if (!usernameResponse.ok) {
-            throw new Error('Greška pri dohvaćanju korisničkog imena');
-          }
-
-          username = await usernameResponse.text(); // Dohvati korisničko ime kao tekst
-        } catch (error) {
-          console.error('Greška pri dohvaćanju korisničkog imena:', error);
-          return;
-        }
-      }
 
       try {
         const response = await fetch('http://localhost:8080/users/myprofile', {
@@ -94,9 +76,11 @@ const MyProfile = ({ onLogout }) => {
         setFormData(data); // Inicijaliziraj formData s dohvaćenim podacima
         setPortfolioItems(data.portfolio || []); // Postavi portfolio stavke
         setSelectedDanceStyles(data.danceStyles || []); // Postavi odabrane vrste plesa
-        setIsInactive(data.isInactive || false); // Postavi status neaktivnosti
+        setIsInactive(data.inactive || false); // Postavi status neaktivnosti
         setInactiveUntil(data.inactiveUntil || ''); // Postavi datum neaktivnosti
       } catch (error) {
+        alert("Your token has expired, please login again.");
+        onLogout();
         console.error('Greška pri dohvaćanju podataka profila:', error);
       }
     };
@@ -144,6 +128,8 @@ const MyProfile = ({ onLogout }) => {
       setIsEditing(false); // Prekini način uređivanja
       alert('Profil uspješno ažuriran'); // Prikaži poruku uspjeha korisniku
     } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
       console.error('Greška pri ažuriranju profila:', error);
     }
   };
@@ -171,6 +157,8 @@ const MyProfile = ({ onLogout }) => {
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioItems([...portfolioItems, newItem]); // Dodaj novu stavku u portfolio
     } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
       console.error('Greška pri uploadu datoteke:', error);
     }
   };
@@ -193,6 +181,8 @@ const MyProfile = ({ onLogout }) => {
 
       setPortfolioItems(portfolioItems.filter(item => item.id !== itemId)); // Ukloni stavku iz stanja portfolia
     } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
       console.error('Greška pri brisanju stavke iz portfolia:', error);
     }
   };
@@ -227,13 +217,15 @@ const MyProfile = ({ onLogout }) => {
 
       alert('Vrste plesa uspješno ažurirane'); // Prikaži poruku uspjeha korisniku
     } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
       console.error('Greška pri ažuriranju vrsta plesa:', error);
     }
   };
 
   // Funkcija za promjenu statusa neaktivnosti profila
   const handleInactiveChange = () => {
-    setIsInactive(!isInactive); // Prebaci status neaktivnosti
+    setIsInactive(!inactive); // Prebaci status neaktivnosti
   };
 
   // Funkcija za spremanje statusa neaktivnosti na backend
@@ -247,7 +239,7 @@ const MyProfile = ({ onLogout }) => {
           'Content-Type': 'application/json', // Postavi Content-Type zaglavlje
           'Authorization': `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
         },
-        body: JSON.stringify({ isInactive, inactiveUntil }), // Pošalji status i datum neaktivnosti kao JSON
+        body: JSON.stringify({ inactive, inactiveUntil }), // Pošalji status i datum neaktivnosti kao JSON
       });
 
       if (!response.ok) {
@@ -256,6 +248,8 @@ const MyProfile = ({ onLogout }) => {
 
       alert('Status profila uspješno ažuriran'); // Prikaži poruku uspjeha korisniku
     } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
       console.error('Greška pri ažuriranju statusa profila:', error);
     }
   };
@@ -267,6 +261,21 @@ const MyProfile = ({ onLogout }) => {
 
   return (
     <div className="profile-container">
+      <header className='homepage-header'>
+        <a href="/" className='logo'>
+          <img src={headerlogo} alt="" className='logo-img'/>
+        </a>
+
+        <div className='header-links'>
+          <Link to="/" className='login'>
+            <button>Home</button>
+          </Link>
+          <Link to="/logout" className='logout'>
+            <button>Log Out</button>
+          </Link>
+        </div>
+          
+      </header>
       <h2>Moj Profil</h2>
 
       {/* Prikaz detalja profila ili forme za uređivanje */}
@@ -327,9 +336,9 @@ const MyProfile = ({ onLogout }) => {
             </select>
           </label>
           {/* Dugme za spremanje promjena */}
-          <button onClick={handleSave}>Spremi</button>
+          <button class="buttons" onClick={handleSave}>Spremi</button>
           {/* Dugme za odustajanje od uređivanja */}
-          <button onClick={handleEditToggle}>Odustani</button>
+          <button class="buttons" onClick={handleEditToggle}>Odustani</button>
         </div>
       ) : (
         <div className="profile-details">
@@ -374,13 +383,13 @@ const MyProfile = ({ onLogout }) => {
         <label>
           <input
             type="checkbox"
-            checked={isInactive}
+            checked={inactive}
             onChange={handleInactiveChange}
           />
           Neaktivan
         </label>
         {/* Ako je profil označen kao neaktivan, prikazi opciju za odabir datuma */}
-        {isInactive && (
+        {inactive && (
           <div>
             <label>
               Neaktivan do:

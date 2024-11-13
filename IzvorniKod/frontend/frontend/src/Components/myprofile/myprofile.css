@@ -18,11 +18,12 @@
     color: var(--text-color);
     margin: 0;
     padding: 0;
+    overflow-y: auto;
   }
   
   .profile-container {
     max-width: 800px;
-    margin: 40px auto;
+    margin: 150px auto;
     padding: 30px;
     background-color: #fff;
     border-radius: var(--border-radius);
@@ -104,6 +105,22 @@
   .portfolio-section input[type="file"] {
     margin-bottom: 25px;
   }
+
+  .portfolio-section input {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .portfolio-section input:hover {
+    background-color: #2980B9;
+  }
   
   .portfolio-items {
     display: flex;
@@ -178,6 +195,22 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
+  }
+
+  .dance-styles-section button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .dance-styles-section button:hover {
+    background-color: #2980B9;
   }
   
   .inactive-section {
@@ -285,3 +318,6 @@
     }
   }
   
+  .buttons{
+    margin-top: 10px;
+  }

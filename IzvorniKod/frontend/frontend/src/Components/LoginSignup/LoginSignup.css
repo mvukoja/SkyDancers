@@ -149,6 +149,7 @@ body {
 
 .oauth-buttons button:hover {
   background-color: #2fb9f013;
+  color: #fff;
   border-color: rgba(46, 210, 247, 0.26);
 }
 
