@@ -22,6 +22,8 @@ const OAuthCompletionPage = ({ onLogin }) => {
     }
   }, [jwt, navigate]);
 
+  console.log(jwt, finished);
+
   if(finished==="true"){
       localStorage.setItem('jwtToken', jwt);
       onLogin();
@@ -45,7 +47,6 @@ const OAuthCompletionPage = ({ onLogin }) => {
       });
 
       if (!response.ok) throw new Error("Failed to complete OAuth registration");
-      document.cookie = "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       localStorage.setItem('jwtToken', jwt);
       onLogin();
     } catch (error) {

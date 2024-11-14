@@ -70,7 +70,11 @@ function App() {
         {/* Definicija rute za završnu stranicu OAuth procesa */}
         <Route
           path="/oauth-completion"
-          element={<OAuthCompletionPage onLogin={handleLogin}/>} // Prikaži OAuthCompletionPage komponentu i proslijedi handleLogin funkciju
+          element={
+            isAuthenticated 
+            ? <Navigate to="/" replace />
+            : <OAuthCompletionPage onLogin={handleLogin}/> // Prikaži OAuthCompletionPage komponentu i proslijedi handleLogin funkciju
+          } 
         />
         
         {/* Definicija rute za korisnički profil */}
