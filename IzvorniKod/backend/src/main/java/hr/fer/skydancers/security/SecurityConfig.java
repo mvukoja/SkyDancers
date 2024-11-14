@@ -72,12 +72,20 @@ public class SecurityConfig {
                     if(!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
                     	Cookie finished = new Cookie("finishedoauth","true");
                     	finished.setPath("/");
+                    	finished.setHttpOnly(true);
+                    	finished.setSecure(true);
                     	response.addCookie(finished);
                     }
                     String token = jwtService.generateToken(userService.loadUserByUsername(userId));
                     Cookie jwtCookie = new Cookie("jwtToken", token);
                     jwtCookie.setPath("/");
+                    jwtCookie.setHttpOnly(true);
+                    jwtCookie.setSecure(true);
                     response.addCookie(jwtCookie);
+                    response.addHeader("Set-Cookie", "jwtToken=" + token + "; Path=/; HttpOnly; Secure; Max-Age=3600; SameSite=None; Domain=skydancers-back.onrender.com");
+                    response.addHeader("Set-Cookie", 
+                            "finishedoauth=true" + 
+                            "; Path=/; HttpOnly; Secure; Max-Age=3600; SameSite=None; Domain=skydancers-back.onrender.com");
                     response.sendRedirect("https://skydancers.onrender.com/oauth-completion");
                 })
             )
