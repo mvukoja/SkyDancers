@@ -1,38 +1,35 @@
 import React, { useState, useEffect} from 'react';
 import './OAuthCompletionPage.css';
 import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const OAuthCompletionPage = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [type, setType] = useState("DANCER");
   const navigate = useNavigate();
-  
+  /////
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
   var jwt = null;
   var finished = false;
-  const cookies = document.cookie.split('; ');
-    for (let cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.split('=');
-            if (cookieName === "jwtToken") {
-              jwt = decodeURIComponent(cookieValue);
-            }
-            else if(cookieName === "finishedoauth"){
-              finished = decodeURIComponent(cookieValue);
-            }
+  jwt = searchParams.get('jwt');
+  finished = searchParams.get('finished');
+  setSearchParams((params) => {
+      params.delete('jwt');
+      params.delete('finished');
+      return params;
+    });
+  useEffect(() => {
+    if (!jwt) {
+        navigate('/', { replace: true });
     }
-    useEffect(() => {
-      if (!jwt) {
-          navigate('/', { replace: true });
-      }
   }, [jwt, navigate]);
 
-
   if(finished==="true"){
-      document.cookie = "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "finishedoauth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       localStorage.setItem('jwtToken', jwt);
       onLogin();
   }
-
 
   const handleSubmit = async () => {
     const data = {
