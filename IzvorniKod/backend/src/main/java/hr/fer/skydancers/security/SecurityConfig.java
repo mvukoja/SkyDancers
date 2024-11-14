@@ -36,60 +36,56 @@ public class SecurityConfig {
 
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
-	
+
 	@Autowired
-    private JwtService jwtService;
+	private JwtService jwtService;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-		 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		.authorizeHttpRequests(authorize -> {
-			authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
-			authorize.requestMatchers("/admin/**").hasRole("ADMIN");
-			authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-			authorize.requestMatchers("/h2-console/**").permitAll();
-			authorize.anyRequest().authenticated();
-		}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
-		
-		.oauth2Login(oauth2 -> oauth2
-                .successHandler((request, response, authentication) -> {
-                    OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
-                    String userId = customOAuth2User.getAttribute("id").toString() + "_" + customOAuth2User.getAttribute("login") + "_oauth";
-                    
-                    Optional<MyUser> existingUser = userService.get(userId);
-                    if (existingUser.isEmpty()) {
-                        MyUser user = new MyUser();
-                        String name = customOAuth2User.getAttribute("name");
-                        user.setName(name.split(" ")[0]);
-                        user.setSurname(name.split(" ")[1]);
-                        user.setUsername(userId);
-                        user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
-                        user.setOauth(true);
-                        user.setFinishedoauth(false);
-                        userService.put(user);
-                    }
-                    if(!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
-                    	Cookie finished = new Cookie("finishedoauth","true");
-                    	finished.setPath("/");
-                    	finished.setHttpOnly(true);
-                    	finished.setSecure(true);
-                    	response.addCookie(finished);
-                    }
-                    String token = jwtService.generateToken(userService.loadUserByUsername(userId));
-                    Cookie jwtCookie = new Cookie("jwtToken", token);
-                    jwtCookie.setPath("/");
-                    jwtCookie.setHttpOnly(true);
-                    jwtCookie.setSecure(true);
-                    response.addCookie(jwtCookie);
-                    response.addHeader("Set-Cookie", "jwtToken=" + token + "; Path=/; HttpOnly; Secure; Max-Age=3600; SameSite=None; Domain=skydancers-back.onrender.com");
-                    response.addHeader("Set-Cookie", 
-                            "finishedoauth=true" + 
-                            "; Path=/; HttpOnly; Secure; Max-Age=3600; SameSite=None; Domain=skydancers-back.onrender.com");
-                    response.sendRedirect("https://skydancers.onrender.com/oauth-completion");
-                })
-            )
-				.logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(authorize -> {
+					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
+					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
+					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+					authorize.requestMatchers("/h2-console/**").permitAll();
+					authorize.anyRequest().authenticated();
+				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
+
+				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
+					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
+					String userId = customOAuth2User.getAttribute("id").toString() + "_"
+							+ customOAuth2User.getAttribute("login") + "_oauth";
+
+					Optional<MyUser> existingUser = userService.get(userId);
+					if (existingUser.isEmpty()) {
+						MyUser user = new MyUser();
+						String name = customOAuth2User.getAttribute("name");
+						user.setName(name.split(" ")[0]);
+						user.setSurname(name.split(" ")[1]);
+						user.setUsername(userId);
+						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
+						user.setOauth(true);
+						user.setFinishedoauth(false);
+						userService.put(user);
+					}
+					if (!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
+						Cookie finished = new Cookie("finishedoauth", "true");
+						finished.setPath("/");
+						finished.setHttpOnly(true);
+						finished.setSecure(true);
+						response.addHeader("Set-Cookie", "finishedoauth=true"
+								+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=onrender.com");
+					}
+					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
+					Cookie jwtCookie = new Cookie("jwtToken", token);
+					jwtCookie.setPath("/");
+					jwtCookie.setHttpOnly(true);
+					jwtCookie.setSecure(true);
+					response.addHeader("Set-Cookie", "jwtToken=" + token
+							+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=onrender.com");
+					response.sendRedirect("https://skydancers.onrender.com/oauth-completion");
+				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
@@ -104,7 +100,7 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 		return userService;
 	}
-	
+
 	@Bean
 	public AuthenticationManager authenticationManager() {
 		return new ProviderManager(authenticationProvider());
