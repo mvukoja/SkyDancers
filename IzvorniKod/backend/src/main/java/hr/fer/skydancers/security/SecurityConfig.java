@@ -75,7 +75,7 @@ public class SecurityConfig {
 						finished.setHttpOnly(true);
 						finished.setSecure(true);
 						response.addHeader("Set-Cookie", "finishedoauth=true"
-								+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=.onrender.com");
+								+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=onrender.com");
 					}
 					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
 					Cookie jwtCookie = new Cookie("jwtToken", token);
@@ -83,7 +83,7 @@ public class SecurityConfig {
 					jwtCookie.setHttpOnly(true);
 					jwtCookie.setSecure(true);
 					response.addHeader("Set-Cookie", "jwtToken=" + token
-							+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=.onrender.com");
+							+ "; Path=/; Secure; Max-Age=3600; SameSite=None; Domain=onrender.com");
 					response.sendRedirect("https://skydancers.onrender.com/oauth-completion");
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
