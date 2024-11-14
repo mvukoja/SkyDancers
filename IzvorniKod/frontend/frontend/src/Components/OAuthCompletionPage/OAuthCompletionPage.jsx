@@ -15,11 +15,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
   var finished = false;
   jwt = searchParams.get('jwt');
   finished = searchParams.get('finished');
-  setSearchParams((params) => {
-      params.delete('jwt');
-      params.delete('finished');
-      return params;
-    });
+  
   useEffect(() => {
     if (!jwt) {
         navigate('/', { replace: true });
