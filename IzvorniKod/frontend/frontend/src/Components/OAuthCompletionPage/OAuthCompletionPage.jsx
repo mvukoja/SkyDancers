@@ -42,7 +42,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/users/complete-oauth', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/complete-oauth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

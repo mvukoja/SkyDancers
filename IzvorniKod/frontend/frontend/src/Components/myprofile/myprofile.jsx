@@ -52,7 +52,7 @@ const MyProfile = ({ onLogout }) => {
 
 
       try {
-        const response = await fetch('http://localhost:8080/users/myprofile', {
+        const response = await fetch('https://skydancers-back.onrender.com/users/myprofile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
@@ -110,7 +110,7 @@ const MyProfile = ({ onLogout }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/users/update-profile', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/update-profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json', // Postavi Content-Type zaglavlje
@@ -142,7 +142,7 @@ const MyProfile = ({ onLogout }) => {
     uploadData.append('file', file); // Dodaj datoteku u FormData
 
     try {
-      const response = await fetch('http://localhost:8080/users/upload-portfolio', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/upload-portfolio', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
@@ -168,7 +168,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem('jwtToken'); // Dohvati token iz localStorage
 
     try {
-      const response = await fetch(`http://localhost:8080/users/delete-portfolio/${itemId}`, {
+      const response = await fetch(`https://skydancers-back.onrender.com/users/delete-portfolio/${itemId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
@@ -202,7 +202,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem('jwtToken'); // Dohvati token iz localStorage
 
     try {
-      const response = await fetch('http://localhost:8080/users/update-dance-styles', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/update-dance-styles', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json', // Postavi Content-Type zaglavlje
@@ -233,7 +233,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem('jwtToken'); // Dohvati token iz localStorage
 
     try {
-      const response = await fetch('http://localhost:8080/users/update-inactive-status', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/update-inactive-status', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json', // Postavi Content-Type zaglavlje

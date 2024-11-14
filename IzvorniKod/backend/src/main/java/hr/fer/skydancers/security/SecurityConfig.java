@@ -78,7 +78,7 @@ public class SecurityConfig {
                     Cookie jwtCookie = new Cookie("jwtToken", token);
                     jwtCookie.setPath("/");
                     response.addCookie(jwtCookie);
-                    response.sendRedirect("http://localhost:3000/oauth-completion");
+                    response.sendRedirect("https://skydancers.onrender.com/oauth-completion");
                 })
             )
 				.logout(logout -> logout.logoutSuccessUrl("/").permitAll())

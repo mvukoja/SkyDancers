@@ -58,7 +58,7 @@ const LoginSignup = ({ onLogin }) => {
 
     try {
       // Slanje zahtjeva na backend za registraciju
-      const response = await fetch('http://localhost:8080/users/register', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -86,7 +86,7 @@ const LoginSignup = ({ onLogin }) => {
     const data = { username, password };
 
     try {
-      const response = await fetch('http://localhost:8080/users/authenticate', {
+      const response = await fetch('https://skydancers-back.onrender.com/users/authenticate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -112,7 +112,7 @@ const LoginSignup = ({ onLogin }) => {
 
   // Funkcija za prijavu putem GitHub OAuth-a
   const handleGitHubLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
+    window.location.href = "https://skydancers-back.onrender.com/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
   };
 
   return (
