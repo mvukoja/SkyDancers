@@ -1,7 +1,7 @@
 # SkyDancers
 
 # Opis projekta
-Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
+Ovaj projekt je rezultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
 
 SkyDancers je platforma za povezivanje plesača i direktora u plesnoj industriji. Dizajnirana kako bi olakšala proces audicija, SkyDancers omogućava plesnim direktorima da jednostavno pretražuju i pronalaze talentirane plesače za raznovrsne poslove i projekte. S druge strane, plesači imaju pristup sveobuhvatnom katalogu audicija i projekata, na kojem mogu pregledavati sve otvorene mogućnosti i prijaviti se na one koje im odgovaraju. Zbog nedostatka ovakvih aplikacija u regiji, SkyDancers bi mogao biti centralno mjesto koje bi povezivalo plesače i plesne direktore i pomoglo popularnosti i razvoju plesne industrije.
 
@@ -83,15 +83,15 @@ Plaćanje:
 
 # Članovi tima 
 
-| Ime i prezime    |
-| -------- |
-| Barbara Glavina  | 
-| Katarina Bubalo | 
-| Fani Jurak | 
-| Luka Malešević | 
-| Antonio Šimić | 
+| Ime i prezime     |
+| ----------------- |
+| Barbara Glavina   |
+| Katarina Bubalo   |
+| Fani Jurak        |
+| Luka Malešević    |
+| Antonio Šimić     |
 | Leonardo Klišanić |
-| Mario Vukoja | 
+| Mario Vukoja      |
 
 
 
@@ -101,32 +101,26 @@ Očekujemo da ćete poštovati [etički kodeks IEEE-a](https://www.ieee.org/abou
 
 Kodeks ponašanja skup je provedivih pravila koja služe za jasnu komunikaciju očekivanja i zahtjeva za rad zajednice/tima. Njime se jasno definiraju obaveze, prava, neprihvatljiva ponašanja te  odgovarajuće posljedice (za razliku od etičkog kodeksa). U ovom repozitoriju dan je jedan od široko prihvačenih kodeks ponašanja za rad u zajednici otvorenog koda.
 
-# 📝 Licenca
-Važeča (1)
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
+# 📝 Licence
 
-Ovaj repozitorij sadrži otvoreni obrazovni sadržaji (eng. Open Educational Resources)  i licenciran je prema pravilima Creative Commons licencije koja omogućava da preuzmete djelo, podijelite ga s drugima uz 
-uvjet da navođenja autora, ne upotrebljavate ga u komercijalne svrhe te dijelite pod istim uvjetima [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License HR][cc-by-nc-sa].
->
-> ### Napomena:
->
-> Svi paketi distribuiraju se pod vlastitim licencama.
-> Svi upotrijebleni materijali  (slike, modeli, animacije, ...) distribuiraju se pod vlastitim licencama.
+### Documentation License [![Documentation License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+The documentation for this project is licensed under the [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) license. This means that:
 
-[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc/4.0/deed.hr 
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+-   You may share and adapt the documentation, provided you give appropriate credit (attribution), do not use it for commercial purposes, and distribute any derivative works under the same license.
 
-Orginal [![cc0-1.0][cc0-1.0-shield]][cc0-1.0]
->
->COPYING: All the content within this repository is dedicated to the public domain under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
->
-[![CC0-1.0][cc0-1.0-image]][cc0-1.0]
+### Code License [![MIT License](https://img.shields.io/badge/License-MIT-blue)](https://opensource.org/licenses/MIT)
 
-[cc0-1.0]: https://creativecommons.org/licenses/by/1.0/deed.en
-[cc0-1.0-image]: https://licensebuttons.net/l/by/1.0/88x31.png
-[cc0-1.0-shield]: https://img.shields.io/badge/License-CC0--1.0-lightgrey.svg
+The code in this project is licensed under the [MIT License](https://opensource.org/licenses/MIT). This means that:
 
-### Reference na licenciranje repozitorija
+-   You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the code.
+-   The code is provided "as is", without warranty of any kind.
+
+### Media License [![MIT License](https://img.shields.io/badge/License-MIT-blue)](https://opensource.org/licenses/MIT)
+
+The media assets in this project (images, videos, etc.) are also licensed under the [MIT License](https://opensource.org/licenses/MIT). This means that:
+
+-   You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the media.
+-   The media is provided "as is", without warranty of any kind.
+
+####
