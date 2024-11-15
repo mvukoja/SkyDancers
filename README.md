@@ -5,6 +5,20 @@ Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Prog
 
 SkyDancers je platforma za povezivanje plesača i direktora u plesnoj industriji. Dizajnirana kako bi olakšala proces audicija, SkyDancers omogućava plesnim direktorima da jednostavno pretražuju i pronalaze talentirane plesače za raznovrsne poslove i projekte. S druge strane, plesači imaju pristup sveobuhvatnom katalogu audicija i projekata, na kojem mogu pregledavati sve otvorene mogućnosti i prijaviti se na one koje im odgovaraju. Zbog nedostatka ovakvih aplikacija u regiji, SkyDancers bi mogao biti centralno mjesto koje bi povezivalo plesače i plesne direktore i pomoglo popularnosti i razvoju plesne industrije.
 
+# Deploy
+Naša aplikacija je deployana na sustavu Render. 
+Upute za korištenje:
+1. potrebno je učitati stranicu na kojoj je postavljen backend (nakon nekog vremena neaktivnosti potrebno mu je oko 2 do 3 minute da se upogoni i zatim prikazuje default stranicu login od Springa, što označava da je funkcionalan)
+2. zatim učitati stranicu na kojoj je frontend i koristiti aplikaciju
+
+(s obzirom da koristimo free verziju, svaki zahtjev između frontenda i backenda može potrajati koju sekundu, hvala na razumijevanju)
+
+Linkovi:
+
+-backend: https://skydancers-back.onrender.com/
+
+-frontend: https://skydancers.onrender.com/
+
 # Funkcijski zahtjevi
 FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora
  
