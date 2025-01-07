@@ -73,7 +73,7 @@ public class SecurityConfig {
 						finished = true;
 					}
 					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
-					response.sendRedirect("https://skydancers.onrender.com/oauth-completion?jwt=" + token + "&&finished=" + finished);
+					response.sendRedirect("http://localhost:3000/oauth-completion?jwt=" + token + "&&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
