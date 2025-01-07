@@ -44,7 +44,8 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
-					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**", "/users/payment/**").permitAll();
+					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**",
+							"/users/payment/**", "/forgotpassword/**", "/forgotpassword").permitAll();
 					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.requestMatchers("/h2-console/**").permitAll();
@@ -62,8 +63,7 @@ public class SecurityConfig {
 						try {
 							user.setName(name.split(" ")[0]);
 							user.setSurname(name.split(" ")[1]);
-						}
-						catch(Exception e) {
+						} catch (Exception e) {
 							user.setName(name);
 						}
 						user.setUsername(userId);
@@ -77,7 +77,8 @@ public class SecurityConfig {
 						finished = true;
 					}
 					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
-					response.sendRedirect("http://localhost:3000/oauth-completion?jwt=" + token + "&finished=" + finished);
+					response.sendRedirect(
+							"http://localhost:3000/oauth-completion?jwt=" + token + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

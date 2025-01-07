@@ -1,5 +1,8 @@
 package hr.fer.skydancers.controller;
 
+import java.time.LocalDate;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +25,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import hr.fer.skydancers.dto.DanceStylesRequest;
 import hr.fer.skydancers.dto.InactiveStatusRequest;
+import hr.fer.skydancers.dto.MailBody;
 import hr.fer.skydancers.dto.OauthRegDto;
 import hr.fer.skydancers.dto.PaymentRequest;
 import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
+import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.repository.ForgotPasswordRepository;
+import hr.fer.skydancers.service.EmailService;
 import hr.fer.skydancers.service.StripeService;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtService;
@@ -53,6 +60,12 @@ public class UserController {
 	@Autowired
 	private StripeService stripeService;
 
+	@Autowired
+	private EmailService emailService;
+
+	@Autowired
+	private ForgotPasswordRepository forgotPasswordRepository;
+
 	@PostMapping("/payment")
 	public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody PaymentRequest productRequest) {
 		StripeResponse stripeResponse = stripeService.checkout(productRequest,
@@ -63,11 +76,12 @@ public class UserController {
 	@GetMapping("/payment/success/{username}/{sessionId}")
 	public ResponseEntity<String> handleSuccess(@PathVariable String sessionId, @PathVariable String username) {
 		try {
-			if(stripeService.processPaymentSuccess(sessionId, username))
+			if (stripeService.processPaymentSuccess(sessionId, username))
 				return ResponseEntity.status(302).header("Location", "http://localhost:3000/payment/success").build();
-			else return ResponseEntity.badRequest().body("Error processing payment!");
+			else
+				return ResponseEntity.badRequest().body("Greška pri procesiranju plaćanja!");
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("Error processing payment: " + e.getMessage());
+			return ResponseEntity.badRequest().body("Greška pri procesiranju plaćanja: " + e.getMessage());
 		}
 	}
 
@@ -92,12 +106,15 @@ public class UserController {
 			auth = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(loginForm.username(), loginForm.password()));
 		} catch (AuthenticationException e) {
-			return ResponseEntity.ok("Invalid credentials");
+			return ResponseEntity.ok("Pogrešni podaci");
 		}
 		if (auth.isAuthenticated()) {
+			if (!userService.get(loginForm.username()).orElse(null).isConfirmed()) {
+				return ResponseEntity.ok("Nedovršena registracija! Provjerite svoj mail!");
+			}
 			return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(loginForm.username())));
 		}
-		return ResponseEntity.ok("Invalid credentials");
+		return ResponseEntity.ok("Pogrešni podaci");
 	}
 
 	// Registrira novog korisnika
@@ -106,9 +123,39 @@ public class UserController {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			userService.put(user);
-			return ResponseEntity.ok("Registration successful!");
+
+			int otp = new Random().nextInt(100000, 999999);
+			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
+					"SkyDancers\n" + "Dobrodošli!" + "\n"
+							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
+							+ "/" + user.getEmail());
+
+			ForgotPassword fp = new ForgotPassword();
+			fp.setOtp(otp);
+			fp.setExpirDate(LocalDate.now().plusDays(365));
+			fp.setUser(user);
+
+			emailService.sendSimpleMessage(mailBody);
+			forgotPasswordRepository.save(fp);
+
+			return ResponseEntity.ok("Registracija uspješna! Provjerite mail za potrvrdu vaše registracije!");
 		} else {
-			return ResponseEntity.ok("Username already exists!");
+			return ResponseEntity.ok("Korisničko ime već postoji!");
+		}
+	}
+
+	@GetMapping("/register/{otp}/{email}")
+	public String finishReg(@PathVariable Integer otp, @PathVariable String email) {
+		MyUser user = userService.getByMail(email).orElse(null);
+		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElse(null);
+
+		if (!fp.equals(null)) {
+			forgotPasswordRepository.deleteById(fp.getFpid());
+			user.setConfirmed(true);
+			userService.save(user);
+			return "redirect:http//localhost:3000/login";
+		} else {
+			return "Niste dovršili potvrdu registracije!";
 		}
 	}
 

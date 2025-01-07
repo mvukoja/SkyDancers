@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -32,6 +33,8 @@ public class MyUser {
     private String email;
 
     private String password;
+    
+    private boolean confirmed;
 
     private UserType type;
 
@@ -54,17 +57,23 @@ public class MyUser {
     private LocalDate inactiveuntil;
 
     private List<String> dancestyles;
+    
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
 
     public MyUser() {
     }
 
 
     // Getteri i setteri za nove atribute
+	public String getLocation() {
+        return location;
+    }
 
     public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
-			String password, UserType type, boolean oauth, boolean finishedoauth, String location, String gender,
-			boolean paid, LocalDate subscription, int age, boolean inactive, LocalDate inactiveuntil,
-			List<String> dancestyles) {
+			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String location,
+			String gender, boolean paid, LocalDate subscription, int age, boolean inactive, LocalDate inactiveuntil,
+			List<String> dancestyles, ForgotPassword forgotPassword) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -72,26 +81,68 @@ public class MyUser {
 		this.surname = surname;
 		this.email = email;
 		this.password = password;
+		this.confirmed = confirmed;
 		this.type = type;
 		this.oauth = oauth;
 		this.finishedoauth = finishedoauth;
 		this.location = location;
 		this.gender = gender;
 		this.paid = paid;
-		this.setSubscription(subscription);
+		this.subscription = subscription;
 		this.age = age;
 		this.inactive = inactive;
 		this.inactiveuntil = inactiveuntil;
 		this.dancestyles = dancestyles;
+		this.forgotPassword = forgotPassword;
 	}
 
 
+	public boolean isConfirmed() {
+		return confirmed;
+	}
 
-	public String getLocation() {
-        return location;
-    }
 
-    public void setLocation(String location) {
+	public void setConfirmed(boolean confirmed) {
+		this.confirmed = confirmed;
+	}
+
+
+	public LocalDate getInactiveuntil() {
+		return inactiveuntil;
+	}
+
+
+	public void setInactiveuntil(LocalDate inactiveuntil) {
+		this.inactiveuntil = inactiveuntil;
+	}
+
+
+	public List<String> getDancestyles() {
+		return dancestyles;
+	}
+
+
+	public void setDancestyles(List<String> dancestyles) {
+		this.dancestyles = dancestyles;
+	}
+
+
+	public ForgotPassword getForgotPassword() {
+		return forgotPassword;
+	}
+
+
+	public void setForgotPassword(ForgotPassword forgotPassword) {
+		this.forgotPassword = forgotPassword;
+	}
+
+
+	public boolean isFinishedoauth() {
+		return finishedoauth;
+	}
+
+
+	public void setLocation(String location) {
         this.location = location;
     }
 

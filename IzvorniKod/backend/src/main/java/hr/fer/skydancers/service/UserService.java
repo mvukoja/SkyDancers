@@ -35,6 +35,11 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUsername(username);
 	}
 	
+	//Dohvaća korisnika prema emailu
+		public Optional<MyUser> getByMail(String email) {
+			return userRepository.findByEmail(email);
+		}
+	
 	//Spremanje novog ili ažuriranje postojećeg korisnika
 	public MyUser put(MyUser user) {
 		return userRepository.save(user);
@@ -46,6 +51,11 @@ public class UserService implements UserDetailsService {
 	//Brisanje korisnika prema ID-u
 	public void remove(Integer id) {
 		userRepository.deleteById(id);
+	}
+	
+	//Mijenja lozinku korisnika prema mailu
+	public void updatePassword(String email, String password) {
+		userRepository.updatePassword(email, password);
 	}
 
 	//Učitavanje korisničkih podataka za autentifikaciju
