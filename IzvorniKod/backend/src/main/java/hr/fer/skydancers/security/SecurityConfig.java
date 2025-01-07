@@ -44,13 +44,12 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
-					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
+					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**", "/users/payment/**").permitAll();
 					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.requestMatchers("/h2-console/**").permitAll();
 					authorize.anyRequest().authenticated();
 				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
-
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
 					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
 					String userId = customOAuth2User.getAttribute("id").toString() + "_"
@@ -60,8 +59,13 @@ public class SecurityConfig {
 					if (existingUser.isEmpty()) {
 						MyUser user = new MyUser();
 						String name = customOAuth2User.getAttribute("name");
-						user.setName(name.split(" ")[0]);
-						user.setSurname(name.split(" ")[1]);
+						try {
+							user.setName(name.split(" ")[0]);
+							user.setSurname(name.split(" ")[1]);
+						}
+						catch(Exception e) {
+							user.setName(name);
+						}
 						user.setUsername(userId);
 						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
 						user.setOauth(true);
@@ -73,7 +77,7 @@ public class SecurityConfig {
 						finished = true;
 					}
 					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
-					response.sendRedirect("http://localhost:3000/oauth-completion?jwt=" + token + "&&finished=" + finished);
+					response.sendRedirect("http://localhost:3000/oauth-completion?jwt=" + token + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

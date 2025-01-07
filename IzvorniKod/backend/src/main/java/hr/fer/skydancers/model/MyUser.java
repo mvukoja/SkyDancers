@@ -42,6 +42,10 @@ public class MyUser {
     private String location;
 
     private String gender;
+    
+    private boolean paid;
+    
+    private LocalDate subscription;
 
     private int age;
 
@@ -54,30 +58,36 @@ public class MyUser {
     public MyUser() {
     }
 
-    public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
-                  String password, UserType type, boolean oauth, boolean finishedOauth, String location, 
-                  String gender, int age, boolean inactive, LocalDate inactiveUntil, List<String> danceStyles) {
-        super();
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.oauth = oauth;
-        this.finishedoauth = finishedOauth;
-        this.location = location;
-        this.gender = gender;
-        this.age = age;
-        this.inactive = inactive;
-        this.inactiveuntil = inactiveUntil;
-        this.dancestyles = danceStyles;
-    }
 
     // Getteri i setteri za nove atribute
 
-    public String getLocation() {
+    public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
+			String password, UserType type, boolean oauth, boolean finishedoauth, String location, String gender,
+			boolean paid, LocalDate subscription, int age, boolean inactive, LocalDate inactiveuntil,
+			List<String> dancestyles) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.type = type;
+		this.oauth = oauth;
+		this.finishedoauth = finishedoauth;
+		this.location = location;
+		this.gender = gender;
+		this.paid = paid;
+		this.setSubscription(subscription);
+		this.age = age;
+		this.inactive = inactive;
+		this.inactiveuntil = inactiveuntil;
+		this.dancestyles = dancestyles;
+	}
+
+
+
+	public String getLocation() {
         return location;
     }
 
@@ -196,4 +206,21 @@ public class MyUser {
     public void setType(UserType type) {
         this.type = type;
     }
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+
+
+	public LocalDate getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(LocalDate subscription) {
+		this.subscription = subscription;
+	}
 }

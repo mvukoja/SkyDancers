@@ -17,16 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import hr.fer.skydancers.dto.DanceStylesRequest;
 import hr.fer.skydancers.dto.InactiveStatusRequest;
 import hr.fer.skydancers.dto.OauthRegDto;
+import hr.fer.skydancers.dto.PaymentRequest;
+import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.service.StripeService;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtService;
 import hr.fer.skydancers.webtoken.LoginForm;
@@ -48,6 +50,26 @@ public class UserController {
 	@Autowired
 	private JwtService jwtService;
 
+	@Autowired
+	private StripeService stripeService;
+
+	@PostMapping("/payment")
+	public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody PaymentRequest productRequest) {
+		StripeResponse stripeResponse = stripeService.checkout(productRequest,
+				SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		return ResponseEntity.status(HttpStatus.OK).body(stripeResponse);
+	}
+
+	@GetMapping("/payment/success/{username}/{sessionId}")
+	public ResponseEntity<String> handleSuccess(@PathVariable String sessionId, @PathVariable String username) {
+		try {
+			if(stripeService.processPaymentSuccess(sessionId, username))
+				return ResponseEntity.status(302).header("Location", "http://localhost:3000/payment/success").build();
+			else return ResponseEntity.badRequest().body("Error processing payment!");
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error processing payment: " + e.getMessage());
+		}
+	}
 
 	// Završava OAuth registraciju korisnika
 	@PostMapping("/complete-oauth")
@@ -89,6 +111,7 @@ public class UserController {
 			return ResponseEntity.ok("Username already exists!");
 		}
 	}
+
 	// Dohvaća sve korisnike
 	@GetMapping("/getall")
 	public Iterable<MyUser> get() {
@@ -133,6 +156,8 @@ public class UserController {
 		dto.setLocation(user.getLocation());
 		dto.setGender(user.getGender());
 		dto.setAge(user.getAge());
+		dto.setPaid(user.isPaid());
+		dto.setSubscription(user.getSubscription());
 		dto.setDanceStyles(user.getDanceStyles());
 		dto.setInactive(user.isInactive());
 		dto.setInactiveUntil(user.getInactiveUntil());

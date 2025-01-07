@@ -20,6 +20,8 @@ public class UserDto {
     private String location;
     private int age;
     private String gender;
+    private boolean paid;
+    private LocalDate subscription;
     private List<String> danceStyles; // Lista plesnih stilova
     private boolean inactive;
     private LocalDate inactiveUntil; // Datum u string formatu
@@ -28,26 +30,28 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(String name, String surname, String email, UserType type, boolean oauth,
-                   String username, String location, int age, String gender, 
-                   List<String> danceStyles, boolean inactive, LocalDate inactiveUntil
-                   ) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.type = type;
-        this.oauth = oauth;
-        this.username = username;
-        this.location = location;
-        this.age = age;
-        this.gender = gender;
-        this.danceStyles = danceStyles;
-        this.inactive = inactive;
-        this.inactiveUntil = inactiveUntil;
-       
-    }
+    
+    public UserDto(String name, String surname, String email, UserType type, boolean oauth, String username,
+			String location, int age, String gender, boolean paid, LocalDate subscription, List<String> danceStyles,
+			boolean inactive, LocalDate inactiveUntil) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.type = type;
+		this.oauth = oauth;
+		this.username = username;
+		this.location = location;
+		this.age = age;
+		this.gender = gender;
+		this.setPaid(paid);
+		this.setSubscription(subscription);
+		this.danceStyles = danceStyles;
+		this.inactive = inactive;
+		this.inactiveUntil = inactiveUntil;
+	}
 
-    // Getteri i setteri za sve atribute
+	// Getteri i setteri za sve atribute
     public String getUsername() {
         return username;
     }
@@ -146,4 +150,28 @@ public class UserDto {
     public void setOauth(boolean oauth) {
         this.oauth = oauth;
     }
+
+
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+
+
+
+	public LocalDate getSubscription() {
+		return subscription;
+	}
+
+
+
+	public void setSubscription(LocalDate subscription) {
+		this.subscription = subscription;
+	}
 }
