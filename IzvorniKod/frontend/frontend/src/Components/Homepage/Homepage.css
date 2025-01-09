@@ -19,6 +19,7 @@ header {
   right: 0;
   z-index: 2;
 }
+
 /* Pozadinska slika */
 .background-image-container {
   position: fixed;
@@ -26,7 +27,7 @@ header {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../Assets/week2.png');
+  background-image: url("../Assets/week2.png");
   background-size: cover;
   background-position: center;
   z-index: -1; /* Postavi iza ostalih elemenata */
@@ -79,4 +80,18 @@ header {
 h1 {
   margin-top: 50%;
   color: #4c1895;
+}
+
+.director-notice {
+  position: relative;
+  background-color: #ffefd5;
+  top: 100px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ffcc00;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+  z-index: 10;
 }

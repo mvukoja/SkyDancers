@@ -25,6 +25,38 @@ const MyProfile = ({ onLogout }) => {
     'Valcer', 'Breakdance', 'Suvremeni',
   ];
 
+  const handlePayment = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/users/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: 10000,
+          quantity: 1,
+          name: 'Godišnja pretplata za direktora',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status === 'SUCCESS') {
+        // Redirect to Stripe checkout session URL
+        window.location.href = data.sessionUrl;
+      } else {
+        alert('Došlo je do pogreške prilikom kreiranja sesije plaćanja.');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Greška prilikom obrade plaćanja. Pokušajte ponovno.');
+    }
+  };
+
   // Funkcija za izdvajanje korisničkog imena iz JWT tokena
   const getUsernameFromToken = () => {
     const token = localStorage.getItem('jwtToken'); // Dohvati token iz localStorage
@@ -278,6 +310,14 @@ const MyProfile = ({ onLogout }) => {
       </header>
       <h2>Moj Profil</h2>
 
+      {profileData?.type === 'DIRECTOR' && (
+        <div className='payment-section'>
+          <button className='payment-button' onClick={handlePayment}>
+            Plati članarinu
+          </button>
+        </div>
+      )}
+
       {/* Prikaz detalja profila ili forme za uređivanje */}
       {isEditing ? (
         <div className="profile-edit-form">
@@ -357,7 +397,8 @@ const MyProfile = ({ onLogout }) => {
       )}
 
       {/* Sekcija za odabir vrsta plesa */}
-      <div className="dance-styles-section">
+      {profileData?.type === 'DANCER' && (
+        <div className="dance-styles-section">
         <h3>Vrste plesa</h3>
         <div className="dance-styles-list">
           {/* Iteracija kroz listu vrsta plesa i prikaz checkboxa za svaku */}
@@ -376,9 +417,11 @@ const MyProfile = ({ onLogout }) => {
         {/* Dugme za spremanje odabranih vrsta plesa */}
         <button onClick={saveDanceStyles}>Spremi Vrste Plesa</button>
       </div>
-
+      )}
+      
       {/* Sekcija za postavljanje statusa neaktivnosti */}
-      <div className="inactive-section">
+      {profileData?.type === 'DANCER' && (
+        <div className="inactive-section">
         <h3>Status profila</h3>
         <label>
           <input
@@ -404,9 +447,11 @@ const MyProfile = ({ onLogout }) => {
         {/* Dugme za spremanje statusa neaktivnosti */}
         <button onClick={saveInactiveStatus}>Spremi Status</button>
       </div>
-
+      )}
+      
       {/* Sekcija za upravljanje portfoliom */}
-      <div className="portfolio-section">
+      {profileData?.type === 'DANCER' && (
+        <div className="portfolio-section">
         <h3>Moj Portfolio</h3>
         {/* Input za upload slike ili videozapisa */}
         <input type="file" accept="image/*,video/*" onChange={handleFileUpload} />
@@ -426,7 +471,8 @@ const MyProfile = ({ onLogout }) => {
           ))}
         </div>
       </div>
-
+      )}
+      
       {/* Dugme za odjavu korisnika */}
       <button className="logout-button" onClick={onLogout}>Odjava</button>
     </div>

@@ -11,6 +11,9 @@ import OAuthCompletionPage from './Components/OAuthCompletionPage/OAuthCompletio
 import Logout from './Components/LoginSignup/Logout';
 import LandingPage from './Components/LandingPage/LandingPage';
 import MyProfile from './Components/myprofile/myprofile'; // Import MyProfile komponente
+import PaymentSuccess from './Components/Payment/PaymentSuccess.jsx';
+import PaymentCancel from './Components/Payment/PaymentCancel.jsx';
+
 
 // Definicija glavne App komponente
 function App() {
@@ -89,6 +92,10 @@ function App() {
         
         {/* Definicija rute za odjavu korisnika */}
         <Route path="/logout" element={<Logout onLogout={handleLogout} />} /> {/* Prikaži Logout komponentu */}
+
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancel />} />
+        
       </Routes>
     </Router>
   );
