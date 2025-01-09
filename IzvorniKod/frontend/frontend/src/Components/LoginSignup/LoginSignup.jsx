@@ -68,16 +68,16 @@ const LoginSignup = ({ onLogin }) => {
       if (!response.ok) throw new Error("Registration failed"); // Provjera da li je zahtjev uspio
       const text = await response.text();
 
-      // Ako registracija uspije, korisnik dobiva poruku i preusmjerava se na login
+      // Ako registracija uspije, korisnik dobiva poruku o provjeri emaila
       if(text === "Registration successful!"){
-        alert("Registration successful, now login!");
-        window.location.href = '/login';
+        alert("Registracija uspješna! Molimo provjerite svoj email za verifikaciju računa.");
       } else {
-        alert("Username already exists!");
+        alert("Korisničko ime već postoji!");
       }
       
     } catch (error) {
       console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije
+      alert("Došlo je do greške prilikom registracije. Molimo pokušajte ponovno.");
     }
   };
 
