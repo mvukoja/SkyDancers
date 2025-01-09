@@ -81,10 +81,15 @@ body {
 }
 
 .forgot-password {
-  padding-left: 62px;
-  margin-top: 27px;
-  color: #797979;
-  font-size: 18px;
+  color: #4c00b4;
+  font-size: 0.9em;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
 }
 
 .forgot-password span {
@@ -158,6 +163,13 @@ body {
   text-align: center;
   margin-bottom: 10px;
   font-size: 16px;
+}
+
+.message {
+  color: #ff3e3e;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9em;
 }
 
 .submit {

@@ -4,6 +4,7 @@ import user_icon from '../Assets/person.png';
 import email_icon from '../Assets/email.png';
 import password_icon from '../Assets/password.png';
 import InputField from './InputField';
+import ForgotPassword from './ForgotPassword';
 
 // Komponenta za Login i Signup funkcionalnosti
 const LoginSignup = ({ onLogin }) => {
@@ -15,6 +16,7 @@ const LoginSignup = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("DANCER");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   // Funkcija za validaciju unesenih podataka u formi
   const validateForm = () => {
@@ -194,7 +196,12 @@ const LoginSignup = ({ onLogin }) => {
         {isRegistering ? (
           <button className="submit" onClick={handleRegister}>Register</button>
         ) : (
-          <button className="submit" onClick={handleLogin}>Login</button>
+          <>
+            <button className="submit" onClick={handleLogin}>Login</button>
+            <div className="forgot-password" onClick={() => setShowForgotPassword(true)}>
+              Zaboravili ste lozinku?
+            </div>
+          </>
         )}
         {/* Gumb za prebacivanje između registracije i prijave */}
         <button className="submit" onClick={toggleRegistration}>
@@ -205,6 +212,8 @@ const LoginSignup = ({ onLogin }) => {
           <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
         </div>
       </div>
+
+      {showForgotPassword && <ForgotPassword />}
     </div>
   );
 };
