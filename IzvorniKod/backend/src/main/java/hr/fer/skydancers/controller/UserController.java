@@ -69,7 +69,7 @@ public class UserController {
 	@PostMapping("/payment")
 	public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody PaymentRequest productRequest) {
 		StripeResponse stripeResponse = stripeService.checkout(productRequest,
-				SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+				(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		return ResponseEntity.status(HttpStatus.OK).body(stripeResponse);
 	}
 
@@ -106,7 +106,7 @@ public class UserController {
 			auth = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(loginForm.username(), loginForm.password()));
 		} catch (AuthenticationException e) {
-			return ResponseEntity.ok("Pogrešni podaci");
+			return ResponseEntity.ok("Invalid credentials");
 		}
 		if (auth.isAuthenticated()) {
 			if (!userService.get(loginForm.username()).orElse(null).isConfirmed()) {
@@ -114,7 +114,7 @@ public class UserController {
 			}
 			return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(loginForm.username())));
 		}
-		return ResponseEntity.ok("Pogrešni podaci");
+		return ResponseEntity.ok("Invalid credentials");
 	}
 
 	// Registrira novog korisnika
@@ -138,14 +138,14 @@ public class UserController {
 			emailService.sendSimpleMessage(mailBody);
 			forgotPasswordRepository.save(fp);
 
-			return ResponseEntity.ok("Registracija uspješna! Provjerite mail za potrvrdu vaše registracije!");
+			return ResponseEntity.ok("Registration successful!");
 		} else {
 			return ResponseEntity.ok("Korisničko ime već postoji!");
 		}
 	}
 
 	@GetMapping("/register/{otp}/{email}")
-	public String finishReg(@PathVariable Integer otp, @PathVariable String email) {
+	public ResponseEntity<String> finishReg(@PathVariable Integer otp, @PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
 		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElse(null);
 
@@ -153,9 +153,9 @@ public class UserController {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			user.setConfirmed(true);
 			userService.save(user);
-			return "redirect:http//localhost:3000/login";
+			return ResponseEntity.status(302).header("Location", "http//localhost:3000/login").build();
 		} else {
-			return "Niste dovršili potvrdu registracije!";
+			return ResponseEntity.ok("Niste dovršili potvrdu registracije!");
 		}
 	}
 

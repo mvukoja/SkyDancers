@@ -40,6 +40,13 @@ body {
   color: #3c009d;
   font-size: 48px;
   font-weight: 700;
+  text-align: center;
+}
+
+.forgot-password {
+  color: #3c009d;
+  font-size: 48px;
+  font-weight: 700;
 }
 
 .underline {
@@ -186,4 +193,33 @@ body {
   cursor: pointer;
   transition: background 0.3s;
   margin: 1px;
+}
+
+.forgot-password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 360px;
+  height: 50px;
+  color: #fff;
+  background: #4c009d;
+  border-radius: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 1px;
+}
+.forgot-password.gray {
+  background: #eaeaea;
+  color: #676767;
+}
+
+/* Add hover effect for better user experience */
+.forgot-password:hover:not(.gray) {
+  background: #3c009d;
+}
+
+.forgot-password:hover {
+  background-color: #3c009d;
 }

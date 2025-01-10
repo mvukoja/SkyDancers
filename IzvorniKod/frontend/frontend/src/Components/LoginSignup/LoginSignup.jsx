@@ -71,6 +71,7 @@ const LoginSignup = ({ onLogin }) => {
       // Ako registracija uspije, korisnik dobiva poruku o provjeri emaila
       if(text === "Registration successful!"){
         alert("Registracija uspješna! Molimo provjerite svoj email za verifikaciju računa.");
+        window.location.href = '/login';
       } else {
         alert("Korisničko ime već postoji!");
       }
@@ -100,6 +101,10 @@ const LoginSignup = ({ onLogin }) => {
         alert("Invalid credentials!");
         return;
       }
+      if(token==="Nedovršena registracija! Provjerite svoj mail!"){
+        alert("Nedovršena registracija! Provjerite svoj mail za potvrdu registracije!");
+        return;
+      }
       if (token) {
         localStorage.setItem('jwtToken', token); // Sprema JWT token u lokalnu pohranu
         onLogin(); // Poziva funkciju koja postavlja status prijavljenog korisnika
@@ -117,6 +122,13 @@ const LoginSignup = ({ onLogin }) => {
     window.location.href = "http://localhost:8080/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
   };
 
+  if (showForgotPassword) {
+    return (
+      <>
+      {showForgotPassword && <ForgotPassword />}
+      </>
+    );
+  }
   return (
     <div className="container">
       {/* Zaglavlje stranice */}
@@ -198,9 +210,6 @@ const LoginSignup = ({ onLogin }) => {
         ) : (
           <>
             <button className="submit" onClick={handleLogin}>Login</button>
-            <div className="forgot-password" onClick={() => setShowForgotPassword(true)}>
-              Zaboravili ste lozinku?
-            </div>
           </>
         )}
         {/* Gumb za prebacivanje između registracije i prijave */}
@@ -212,9 +221,16 @@ const LoginSignup = ({ onLogin }) => {
           <button className="submit" onClick={handleGitHubLogin}>Login with GitHub</button>
         </div>
       </div>
-
-      {showForgotPassword && <ForgotPassword />}
+      {!isRegistering && (
+      <>
+        <button className="forgot-password" onClick={() => setShowForgotPassword(true)}>
+          Zaboravili ste lozinku?
+        </button>
+        {showForgotPassword && <ForgotPassword />}
+      </>
+    )}
     </div>
+    
   );
 };
 

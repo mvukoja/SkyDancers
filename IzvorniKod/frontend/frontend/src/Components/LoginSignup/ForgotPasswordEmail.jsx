@@ -17,7 +17,7 @@ const ForgotPasswordEmail = ({ onEmailSent }) => {
                 setMessage('Email s kodom je poslan na vašu adresu.');
                 onEmailSent(email); // Pass email to parent component
             } else {
-                setMessage('Došlo je do greške. Molimo pokušajte ponovno.');
+                setMessage('Korisnik s tim emailom ne postoji.');
             }
         } catch (error) {
             setMessage('Došlo je do greške. Molimo pokušajte ponovno.');
@@ -30,18 +30,24 @@ const ForgotPasswordEmail = ({ onEmailSent }) => {
                 <div className="text">Zaboravljena Lozinka</div>
                 <div className="underline"></div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <InputField
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <div className="submit-container">
-                    <button type="submit" className="submit">Pošalji kod</button>
-                </div>
-                {message && <div className="message">{message}</div>}
-            </form>
+            <div className="inputs">
+                <form onSubmit={handleSubmit}>
+                    <InputField
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <div className="submit-container">
+                        <button type="submit" className="submit">Pošalji kod</button>
+                        <button className="submit" onClick={() => window.location.href = "/login"}>
+                             Nazad na prijavu/registraciju
+                        </button>
+                    </div>
+                    
+                    {message && <div className="message">{message}</div>}
+                </form>
+            </div>
         </div>
     );
 };

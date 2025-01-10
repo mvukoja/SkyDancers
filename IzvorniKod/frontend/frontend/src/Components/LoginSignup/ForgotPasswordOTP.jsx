@@ -29,18 +29,21 @@ const ForgotPasswordOTP = ({ email, onOTPVerified }) => {
                 <div className="text">Unesite Kod</div>
                 <div className="underline"></div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <InputField
-                    type="text"
-                    placeholder="Unesite kod iz emaila"
-                    value={otp}
-                    onChange={(e) => setOTP(e.target.value)}
-                />
-                <div className="submit-container">
-                    <button type="submit" className="submit">Potvrdi</button>
-                </div>
-                {message && <div className="message">{message}</div>}
-            </form>
+            <div className="inputs">
+                <form onSubmit={handleSubmit}>
+                    <InputField
+                        type="text"
+                        placeholder="Unesite kod iz emaila"
+                        value={otp}
+                        onChange={(e) => setOTP(e.target.value)}
+                    />
+                    <div className="submit-container">
+                        <button type="submit" className="submit">Potvrdi</button>
+                    </div>
+                    {message && <div className="message">{message}</div>}
+                </form>
+            </div>
+            
         </div>
     );
 };

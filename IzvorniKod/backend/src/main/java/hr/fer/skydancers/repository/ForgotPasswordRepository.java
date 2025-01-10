@@ -11,4 +11,7 @@ import hr.fer.skydancers.model.MyUser;
 public interface ForgotPasswordRepository extends JpaRepository<ForgotPassword, Integer> {
 	@Query("select fp from ForgotPassword fp where fp.otp = ?1 and fp.user = ?2")
 	Optional<ForgotPassword> findByOtpAndUser(Integer otp, MyUser user);
+	
+	@Query("select fp from ForgotPassword fp where fp.user = ?1")
+	Optional<ForgotPassword> findByUser(MyUser user);
 }

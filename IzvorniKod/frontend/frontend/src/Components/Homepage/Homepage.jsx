@@ -67,6 +67,7 @@ const Homepage = ({ onLogout }) => {
   
   return (
     <div className="homepage-container">
+      <div className="background-image-container"></div>
       <header className='homepage-header'>
         <a href="/" className='logo'>
           <img src={headerlogo} alt="" className='logo-img'/>
@@ -82,9 +83,9 @@ const Homepage = ({ onLogout }) => {
         </div>
       </header>
 
-      {profileData?.type === 'DIRECTOR' && (
+      {profileData?.type === 'DIRECTOR' && profileData?.paid === false && (
         <div className='director-notice'>
-          <p>Morate izvršiti plaćanje članarine. Posjetite <Link to="/myprofile">svoj proifil</Link> kako biste izvršili uplatu.</p>
+          <p>Morate izvršiti plaćanje članarine. Posjetite <Link to="/myprofile">svoj profil</Link> kako biste izvršili uplatu.</p>
         </div>
       )}
       

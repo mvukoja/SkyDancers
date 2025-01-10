@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +41,7 @@ public class ForgotPasswordController {
 	public ResponseEntity<String> verifyEmail(@PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
 		if (user == null) {
-			return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.EXPECTATION_FAILED);
+			return ResponseEntity.ok("Korisnik ne postoji!");
 		}
 		int otp = otpGenerator();
 		MailBody mailBody = new MailBody(email, "SkyDancers: Zaboravljena lozinka",
@@ -64,9 +63,13 @@ public class ForgotPasswordController {
 		MyUser user = userService.getByMail(email).orElse(null);
 		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElse(null);
 		
+		if(fp == null) {
+			return ResponseEntity.ok("Neispravan kod!");
+		}
+		
 		if(fp.getExpirDate().isBefore(LocalDate.now())) {
 			forgotPasswordRepository.deleteById(fp.getFpid());
-			return new ResponseEntity<>("OTP je istekao!", HttpStatus.EXPECTATION_FAILED);
+			return ResponseEntity.ok("OTP je istekao!");
 		}
 		
 		return ResponseEntity.ok("Success!");
@@ -76,10 +79,13 @@ public class ForgotPasswordController {
 	@PostMapping("/changepassword/{email}")
 	public ResponseEntity<String> changePassword(@PathVariable String email, @RequestBody ChangePassword changePassword){
 		if(!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
-			return new ResponseEntity<>("Lozinke nisu iste!", HttpStatus.EXPECTATION_FAILED);
+			return ResponseEntity.ok("Lozinke nisu iste!");
 		}
 		String encodedPassword = passwordEncoder.encode(changePassword.password());
 		userService.updatePassword(email, encodedPassword);
+		MyUser user = userService.getByMail(email).orElse(null);
+		ForgotPassword fp = forgotPasswordRepository.findByUser(user).orElse(null);
+		forgotPasswordRepository.deleteById(fp.getFpid());
 		return ResponseEntity.ok("Lozinka je promijenjena!");
 	}
 

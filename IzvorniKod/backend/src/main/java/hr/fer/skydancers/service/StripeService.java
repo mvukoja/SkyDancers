@@ -25,7 +25,7 @@ public class StripeService {
 	@Value("${stripe.secretKey}")
 	private String secretKey;
 
-	public StripeResponse checkout(PaymentRequest req, Object principal) {
+	public StripeResponse checkout(PaymentRequest req, String principal) {
 		Stripe.apiKey = secretKey;
 
 		SessionCreateParams.LineItem.PriceData.ProductData prod = SessionCreateParams.LineItem.PriceData.ProductData
@@ -38,7 +38,7 @@ public class StripeService {
 				.setPriceData(priceData).build();
 
 		SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.PAYMENT)
-				.setSuccessUrl("http://localhost:8080/users/payment/success/"+ (String) principal + "/{CHECKOUT_SESSION_ID}") // Custom success URL
+				.setSuccessUrl("http://localhost:8080/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom success URL
 				.setCancelUrl("http://localhost:3000/payment/cancel").addLineItem(lineItem).build();
 
 		try {

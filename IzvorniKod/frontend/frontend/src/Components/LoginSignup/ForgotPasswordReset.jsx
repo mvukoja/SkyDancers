@@ -28,8 +28,12 @@ const ForgotPasswordReset = ({ email }) => {
             const result = await response.text();
             if (result === "Lozinka je promijenjena!") {
                 alert('Lozinka je uspješno promijenjena! Možete se prijaviti s novom lozinkom.');
-                window.location.href = '/'; // Redirect to login page
-            } else {
+                window.location.href = '/login'; // Redirect to login page
+            }
+            else if (result === "Lozinke nisu iste!") {
+                alert('Lozinke nisu iste!');
+            }
+             else {
                 setMessage('Došlo je do greške. Molimo pokušajte ponovno.');
             }
         } catch (error) {
@@ -43,24 +47,27 @@ const ForgotPasswordReset = ({ email }) => {
                 <div className="text">Nova Lozinka</div>
                 <div className="underline"></div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <InputField
-                    type="password"
-                    placeholder="Nova lozinka"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <InputField
-                    type="password"
-                    placeholder="Ponovite lozinku"
-                    value={repeatPassword}
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                />
-                <div className="submit-container">
-                    <button type="submit" className="submit">Promijeni Lozinku</button>
-                </div>
-                {message && <div className="message">{message}</div>}
-            </form>
+            <div className="inputs">
+                <form onSubmit={handleSubmit}>
+                    <InputField
+                        type="password"
+                        placeholder="Nova lozinka"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <InputField
+                        type="password"
+                        placeholder="Ponovite lozinku"
+                        value={repeatPassword}
+                        onChange={(e) => setRepeatPassword(e.target.value)}
+                    />
+                    <div className="submit-container">
+                        <button type="submit" className="submit">Promijeni Lozinku</button>
+                    </div>
+                    {message && <div className="message">{message}</div>}
+                </form>
+            </div>
+            
         </div>
     );
 };
