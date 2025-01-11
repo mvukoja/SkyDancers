@@ -57,29 +57,55 @@ const LoginSignup = ({ onLogin }) => {
       oauth: "false",
       finishedoauth: "true"
     };
-
-    try {
-      // Slanje zahtjeva na backend za registraciju
-      const response = await fetch('http://localhost:8080/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Registration failed"); // Provjera da li je zahtjev uspio
-      const text = await response.text();
-
-      // Ako registracija uspije, korisnik dobiva poruku o provjeri emaila
-      if(text === "Registration successful!"){
-        alert("Registracija uspješna! Molimo provjerite svoj email za verifikaciju računa.");
-        window.location.href = '/login';
-      } else {
-        alert("Korisničko ime već postoji!");
+    if(data.type === "DIRECTOR"){
+      try {
+        // Slanje zahtjeva na backend za registraciju
+        const response = await fetch('http://localhost:8080/users/registerdirector', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error("Registration failed"); // Provjera da li je zahtjev uspio
+        const text = await response.text();
+  
+        // Ako registracija uspije, korisnik dobiva poruku o provjeri emaila
+        if(text === "Registration successful!"){
+          alert("Registracija uspješna! Molimo provjerite svoj email za verifikaciju računa.");
+          window.location.href = '/login';
+        } else {
+          alert("Korisničko ime već postoji!");
+        }
+        
+      } catch (error) {
+        console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije
+        alert("Došlo je do greške prilikom registracije. Molimo pokušajte ponovno.");
       }
-      
-    } catch (error) {
-      console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije
-      alert("Došlo je do greške prilikom registracije. Molimo pokušajte ponovno.");
     }
+    else{
+      try {
+        // Slanje zahtjeva na backend za registraciju
+        const response = await fetch('http://localhost:8080/users/registerdancer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error("Registration failed"); // Provjera da li je zahtjev uspio
+        const text = await response.text();
+  
+        // Ako registracija uspije, korisnik dobiva poruku o provjeri emaila
+        if(text === "Registration successful!"){
+          alert("Registracija uspješna! Molimo provjerite svoj email za verifikaciju računa.");
+          window.location.href = '/login';
+        } else {
+          alert("Korisničko ime već postoji!");
+        }
+        
+      } catch (error) {
+        console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije
+        alert("Došlo je do greške prilikom registracije. Molimo pokušajte ponovno.");
+      }
+    }
+    
   };
 
   // Funkcija za prijavu korisnika

@@ -22,8 +22,6 @@ const OAuthCompletionPage = ({ onLogin }) => {
     }
   }, [jwt, navigate]);
 
-  console.log(jwt, finished);
-
   if(finished==="true"){
       localStorage.setItem('jwtToken', jwt);
       onLogin();

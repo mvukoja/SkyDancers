@@ -83,7 +83,7 @@ const Homepage = ({ onLogout }) => {
         </div>
       </header>
 
-      {profileData?.type === 'DIRECTOR' && profileData?.paid === false && (
+      {profileData?.type.type === 'DIRECTOR' && profileData?.paid === false && (
         <div className='director-notice'>
           <p>Morate izvršiti plaćanje članarine. Posjetite <Link to="/myprofile">svoj profil</Link> kako biste izvršili uplatu.</p>
         </div>

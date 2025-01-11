@@ -14,13 +14,18 @@ import com.stripe.param.checkout.SessionCreateParams;
 
 import hr.fer.skydancers.dto.PaymentRequest;
 import hr.fer.skydancers.dto.StripeResponse;
-import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.model.Director;
+import hr.fer.skydancers.model.Payment;
+import hr.fer.skydancers.repository.PaymentRepository;
 
 @Service
 public class StripeService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	@Value("${stripe.secretKey}")
 	private String secretKey;
@@ -59,8 +64,15 @@ public class StripeService {
 	public boolean processPaymentSuccess(String sessionId, String username) {
 		try {
 			Session session = Session.retrieve(sessionId);
-			if ("paid".equals(session.getPaymentStatus())) {				
-				MyUser user = userService.get(username).orElse(null);
+			if ("paid".equals(session.getPaymentStatus())) {
+				Director user = (Director) userService.get(username).orElse(null);
+				Payment payment = new Payment();
+				payment.setAmount(100);
+				payment.setDate(LocalDate.now());
+				payment.setUser(user);
+				payment.setExpiration(LocalDate.now().plusYears(1));
+				paymentRepository.save(payment);
+				
 				user.setSubscription(LocalDate.now().plusYears(1));
 				user.setPaid(true);
 				userService.save(user);

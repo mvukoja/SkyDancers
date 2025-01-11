@@ -332,7 +332,7 @@ const MyProfile = ({ onLogout }) => {
       </header>
       <h2>Moj Profil</h2>
 
-      {profileData?.type === "DIRECTOR" && (
+      {profileData?.type.type === "DIRECTOR" && (
         <div className="payment-section">
           {profileData?.paid === false ? (
             <button className="payment-button" onClick={handlePayment}>
@@ -438,7 +438,7 @@ const MyProfile = ({ onLogout }) => {
             <strong>Email:</strong> {profileData.email}
           </p>
           <p>
-            <strong>Tip korisnika:</strong> {profileData.type}
+            <strong>Tip korisnika:</strong> {profileData.type.type}
           </p>
           {/* Dugme za prelazak u način uređivanja */}
           <button onClick={handleEditToggle}>Uredi Profil</button>
@@ -446,7 +446,7 @@ const MyProfile = ({ onLogout }) => {
       )}
 
       {/* Sekcija za odabir vrsta plesa */}
-      {profileData?.type === "DANCER" && (
+      {profileData?.type.type === "DANCER" && (
         <div className="dance-styles-section">
           <h3>Vrste plesa</h3>
           <div className="dance-styles-list">
@@ -467,9 +467,9 @@ const MyProfile = ({ onLogout }) => {
           <button onClick={saveDanceStyles}>Spremi Vrste Plesa</button>
         </div>
       )}
-
+  
       {/* Sekcija za postavljanje statusa neaktivnosti */}
-      {profileData?.type === "DANCER" && (
+      {profileData?.type.type === "DANCER" && (
         <div className="inactive-section">
           <h3>Status profila</h3>
           <label>
@@ -499,7 +499,7 @@ const MyProfile = ({ onLogout }) => {
       )}
 
       {/* Sekcija za upravljanje portfoliom */}
-      {profileData?.type === "DANCER" && (
+      {profileData?.type.type === "DANCER" && (
         <div className="portfolio-section">
           <h3>Moj Portfolio</h3>
           {/* Input za upload slike ili videozapisa */}

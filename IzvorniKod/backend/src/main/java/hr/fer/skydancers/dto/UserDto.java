@@ -1,9 +1,9 @@
 package hr.fer.skydancers.dto;
 
-import hr.fer.skydancers.enums.UserType;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import hr.fer.skydancers.model.UserType;
 
 //Ova klasa predstavlja DTO za korisnika, sadrži sve informacije o korisniku koje se prenose između servera i klijenta
 

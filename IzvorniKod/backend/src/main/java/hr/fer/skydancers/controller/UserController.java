@@ -3,6 +3,7 @@ package hr.fer.skydancers.controller;
 import java.time.LocalDate;
 import java.util.Random;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ import hr.fer.skydancers.dto.PaymentRequest;
 import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
+import hr.fer.skydancers.enums.UserTypeEnum;
+import hr.fer.skydancers.model.Dancer;
+import hr.fer.skydancers.model.Director;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
@@ -65,6 +69,8 @@ public class UserController {
 
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
+	
+	private ModelMapper modelMapper = new ModelMapper();
 
 	@PostMapping("/payment")
 	public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody PaymentRequest productRequest) {
@@ -91,11 +97,23 @@ public class UserController {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 		user.setEmail(dto.getEmail());
-		user.setType(dto.getType());
 		user.setOauth(true);
-		user.setFinishedoauth(true);
-		userService.put(user);
-		return user;
+		user.setFinishedOauth(true);
+
+
+		if (dto.getType().equals(UserTypeEnum.DANCER)) {
+			Dancer dancer = modelMapper.map(user, Dancer.class);
+			dancer.getType().setType(dto.getType());
+			userService.remove(user.getId());
+			userService.put(dancer);
+			return dancer;
+		} else {
+			Director director = modelMapper.map(user, Director.class);
+			director.getType().setType(dto.getType());
+			userService.remove(user.getId());
+			userService.put(director);
+			return director;
+		}
 	}
 
 	// Autentificira korisnika i generira JWT token
@@ -118,8 +136,34 @@ public class UserController {
 	}
 
 	// Registrira novog korisnika
-	@PostMapping("/register")
-	public ResponseEntity<String> createUser(@RequestBody MyUser user) {
+	@PostMapping("/registerdirector")
+	public ResponseEntity<String> createDirector(@RequestBody Director user) {
+		if (userService.get(user.getUsername()).isEmpty()) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			userService.put(user);
+
+			int otp = new Random().nextInt(100000, 999999);
+			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
+					"SkyDancers\n" + "Dobrodošli!" + "\n"
+							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
+							+ "/" + user.getEmail());
+
+			ForgotPassword fp = new ForgotPassword();
+			fp.setOtp(otp);
+			fp.setExpirDate(LocalDate.now().plusDays(365));
+			fp.setUser(user);
+
+			emailService.sendSimpleMessage(mailBody);
+			forgotPasswordRepository.save(fp);
+
+			return ResponseEntity.ok("Registration successful!");
+		} else {
+			return ResponseEntity.ok("Korisničko ime već postoji!");
+		}
+	}
+
+	@PostMapping("/registerdancer")
+	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			userService.put(user);
@@ -149,11 +193,11 @@ public class UserController {
 		MyUser user = userService.getByMail(email).orElse(null);
 		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElse(null);
 
-		if (!fp.equals(null)) {
+		if (fp != null) {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			user.setConfirmed(true);
 			userService.save(user);
-			return ResponseEntity.status(302).header("Location", "http//localhost:3000/login").build();
+			return ResponseEntity.status(302).header("Location", "http://localhost:3000/login").build();
 		} else {
 			return ResponseEntity.ok("Niste dovršili potvrdu registracije!");
 		}
@@ -203,12 +247,15 @@ public class UserController {
 		dto.setLocation(user.getLocation());
 		dto.setGender(user.getGender());
 		dto.setAge(user.getAge());
-		dto.setPaid(user.isPaid());
-		dto.setSubscription(user.getSubscription());
-		dto.setDanceStyles(user.getDanceStyles());
-		dto.setInactive(user.isInactive());
-		dto.setInactiveUntil(user.getInactiveUntil());
-
+		if (user instanceof Dancer) {
+			dto.setDanceStyles(((Dancer) user).getDanceStyles());
+			dto.setInactive(((Dancer) user).isInactive());
+			dto.setInactiveUntil(((Dancer) user).getInactiveUntil());
+		}
+		if (user instanceof Director) {
+			dto.setPaid(((Director) user).isPaid());
+			dto.setSubscription(((Director) user).getSubscription());
+		}
 		return dto;
 	}
 
@@ -251,10 +298,12 @@ public class UserController {
 		dto.setLocation(user.getLocation());
 		dto.setGender(user.getGender());
 		dto.setAge(user.getAge());
-		dto.setDanceStyles(user.getDanceStyles());
-		dto.setInactive(user.isInactive());
-		dto.setInactiveUntil(user.getInactiveUntil());
 
+		if (user instanceof Dancer) {
+			dto.setDanceStyles(((Dancer) user).getDanceStyles());
+			dto.setInactive(((Dancer) user).isInactive());
+			dto.setInactiveUntil(((Dancer) user).getInactiveUntil());
+		}
 		return dto;
 	}
 
@@ -264,7 +313,7 @@ public class UserController {
 
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		MyUser user = userService.get(username).orElse(null);
+		Dancer user = (Dancer) userService.get(username).orElse(null);
 
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -285,7 +334,7 @@ public class UserController {
 	@PutMapping("/update-inactive-status")
 	public UserDto updatInactiveStatus(@RequestBody InactiveStatusRequest inactiveStatusRequest) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		MyUser user = userService.get(username).orElse(null);
+		Dancer user = (Dancer) userService.get(username).orElse(null);
 
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");

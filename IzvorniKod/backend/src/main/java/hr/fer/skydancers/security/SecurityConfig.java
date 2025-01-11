@@ -22,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
 import hr.fer.skydancers.webtoken.JwtService;
@@ -44,8 +45,8 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
-					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**",
-							"/users/payment/**", "/forgotpassword/**", "/forgotpassword").permitAll();
+					authorize.requestMatchers("/home", "/users/register/**", "/users/registerdancer", "/users/registerdirector", "/users/authenticate/**",
+							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/**").permitAll();
 					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.requestMatchers("/h2-console/**").permitAll();
@@ -69,7 +70,8 @@ public class SecurityConfig {
 						user.setUsername(userId);
 						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
 						user.setOauth(true);
-						user.setFinishedoauth(false);
+						user.setFinishedOauth(false);
+						user.setType(new UserType());
 						userService.put(user);
 					}
 					boolean finished = false;

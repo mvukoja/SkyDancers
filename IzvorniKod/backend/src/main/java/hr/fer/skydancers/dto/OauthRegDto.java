@@ -1,13 +1,13 @@
 package hr.fer.skydancers.dto;
 
-import hr.fer.skydancers.enums.UserType;
+import hr.fer.skydancers.enums.UserTypeEnum;
 
 public class OauthRegDto {
 	
 	private String email;
 	private Boolean oauth;
-	private UserType type;
-	public OauthRegDto(String email, Boolean oauth, UserType type) {
+	private UserTypeEnum type;
+	public OauthRegDto(String email, Boolean oauth, UserTypeEnum type) {
 		super();
 		this.email = email;
 		this.type = type;
@@ -25,10 +25,10 @@ public class OauthRegDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public UserType getType() {
+	public UserTypeEnum getType() {
 		return type;
 	}
-	public void setType(UserType type) {
+	public void setType(UserTypeEnum type) {
 		this.type = type;
 	}
 	

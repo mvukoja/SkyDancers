@@ -1,79 +1,73 @@
 package hr.fer.skydancers.model;
 
-import hr.fer.skydancers.enums.UserType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-
-import java.time.LocalDate;
-import java.util.List;
 
 //Ova klasa predstavlja korisnički entitet
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class MyUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @NotEmpty
-    private String username;
+	@NotEmpty
+	private String username;
 
-    @NotEmpty
-    private String name;
+	@NotEmpty
+	private String name;
 
-    private String surname;
+	private String surname;
 
-    private String email;
+	private String email;
 
-    private String password;
-    
-    private boolean confirmed;
+	private String password;
 
-    private UserType type;
+	private boolean confirmed;
 
-    private boolean oauth;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "usertype_id")
+	private UserType type;
 
-    private boolean finishedoauth;
+	private boolean oauth;
 
-    private String location;
+	private boolean finishedoauth;
 
-    private String gender;
-    
-    private boolean paid;
-    
-    private LocalDate subscription;
+	private String gender;
 
-    private int age;
+	private int age;
 
-    private boolean inactive;
+	private String location;
 
-    private LocalDate inactiveuntil;
+	private String contact;
 
-    private List<String> dancestyles;
-    
-    @OneToOne(mappedBy = "user")
-    private ForgotPassword forgotPassword;
+	@OneToOne(mappedBy = "user")
+	private ForgotPassword forgotPassword;
 
-    public MyUser() {
-    }
+	public MyUser() {
+	}
 
-
-    // Getteri i setteri za nove atribute
+	// Getteri i setteri za nove atribute
 	public String getLocation() {
-        return location;
-    }
+		return location;
+	}
 
-    public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
-			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String location,
-			String gender, boolean paid, LocalDate subscription, int age, boolean inactive, LocalDate inactiveuntil,
-			List<String> dancestyles, ForgotPassword forgotPassword) {
+	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
+			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String gender,
+			int age, String location, String contact, ForgotPassword forgotPassword) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -85,193 +79,128 @@ public class MyUser {
 		this.type = type;
 		this.oauth = oauth;
 		this.finishedoauth = finishedoauth;
-		this.location = location;
 		this.gender = gender;
-		this.paid = paid;
-		this.subscription = subscription;
 		this.age = age;
-		this.inactive = inactive;
-		this.inactiveuntil = inactiveuntil;
-		this.dancestyles = dancestyles;
+		this.location = location;
+		this.contact = contact;
 		this.forgotPassword = forgotPassword;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public boolean isConfirmed() {
 		return confirmed;
 	}
 
-
 	public void setConfirmed(boolean confirmed) {
 		this.confirmed = confirmed;
 	}
 
-
-	public LocalDate getInactiveuntil() {
-		return inactiveuntil;
+	public UserType getType() {
+		return type;
 	}
 
-
-	public void setInactiveuntil(LocalDate inactiveuntil) {
-		this.inactiveuntil = inactiveuntil;
+	public void setType(UserType type) {
+		this.type = type;
 	}
 
-
-	public List<String> getDancestyles() {
-		return dancestyles;
+	public boolean isOauth() {
+		return oauth;
 	}
 
-
-	public void setDancestyles(List<String> dancestyles) {
-		this.dancestyles = dancestyles;
+	public void setOauth(boolean oauth) {
+		this.oauth = oauth;
 	}
 
+	public boolean isFinishedOauth() {
+		return finishedoauth;
+	}
+
+	public void setFinishedOauth(boolean finishedoauth) {
+		this.finishedoauth = finishedoauth;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
 
 	public ForgotPassword getForgotPassword() {
 		return forgotPassword;
 	}
 
-
 	public void setForgotPassword(ForgotPassword forgotPassword) {
 		this.forgotPassword = forgotPassword;
 	}
 
-
-	public boolean isFinishedoauth() {
-		return finishedoauth;
-	}
-
-
 	public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public boolean isInactive() {
-        return inactive;
-    }
-
-    public void setInactive(boolean inactive) {
-        this.inactive = inactive;
-    }
-
-    public LocalDate getInactiveUntil() {
-        return inactiveuntil;
-    }
-
-    public void setInactiveUntil(LocalDate inactiveUntil) {
-        this.inactiveuntil = inactiveUntil;
-    }
-
-    public List<String> getDanceStyles() {
-        return dancestyles;
-    }
-
-    public void setDanceStyles(List<String> danceStyles) {
-        this.dancestyles = danceStyles;
-    }
-
-    public boolean isFinishedOauth() {
-        return finishedoauth;
-    }
-
-    public void setFinishedoauth(boolean finishedOauth) {
-        this.finishedoauth = finishedOauth;
-    }
-
-    public boolean isOauth() {
-        return oauth;
-    }
-
-    public void setOauth(boolean oauth) {
-        this.oauth = oauth;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
-    }
-
-	public boolean isPaid() {
-		return paid;
+		this.location = location;
 	}
 
-	public void setPaid(boolean paid) {
-		this.paid = paid;
-	}
-
-
-	public LocalDate getSubscription() {
-		return subscription;
-	}
-
-	public void setSubscription(LocalDate subscription) {
-		this.subscription = subscription;
-	}
+	
 }
