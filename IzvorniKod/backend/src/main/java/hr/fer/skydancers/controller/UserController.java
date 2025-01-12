@@ -148,9 +148,10 @@ public class UserController {
 	public ResponseEntity<String> createDirector(@RequestBody Director user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setConfirmed(true);//temporary
 			userService.put(user);
 
-			int otp = new Random().nextInt(100000, 999999);
+			/*int otp = new Random().nextInt(100000, 999999);
 			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
 					"SkyDancers\n" + "Dobrodošli!" + "\n"
 							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
@@ -162,7 +163,7 @@ public class UserController {
 			fp.setUser(user);
 
 			emailService.sendSimpleMessage(mailBody);
-			forgotPasswordRepository.save(fp);
+			forgotPasswordRepository.save(fp);*/
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
@@ -174,9 +175,10 @@ public class UserController {
 	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setConfirmed(true);//temporary
 			userService.put(user);
 
-			int otp = new Random().nextInt(100000, 999999);
+			/*int otp = new Random().nextInt(100000, 999999);
 			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
 					"SkyDancers\n" + "Dobrodošli!" + "\n"
 							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
@@ -188,7 +190,7 @@ public class UserController {
 			fp.setUser(user);
 
 			emailService.sendSimpleMessage(mailBody);
-			forgotPasswordRepository.save(fp);
+			forgotPasswordRepository.save(fp);*/
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
