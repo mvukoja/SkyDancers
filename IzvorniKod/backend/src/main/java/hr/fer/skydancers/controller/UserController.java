@@ -258,9 +258,9 @@ public class UserController {
 		dto.setGender(user.getGender());
 		dto.setAge(user.getAge());
 		if (user instanceof Dancer) {
-			dto.setDanceStyles(((Dancer) user).getDanceStyles());
+			dto.setDanceStyles(((Dancer) user).getDancestyles());
 			dto.setInactive(((Dancer) user).isInactive());
-			dto.setInactiveUntil(((Dancer) user).getInactiveUntil());
+			dto.setInactiveUntil(((Dancer) user).getInactiveuntil());
 		}
 		if (user instanceof Director) {
 			dto.setPaid(((Director) user).isPaid());
@@ -310,9 +310,9 @@ public class UserController {
 		dto.setAge(user.getAge());
 
 		if (user instanceof Dancer) {
-			dto.setDanceStyles(((Dancer) user).getDanceStyles());
+			dto.setDanceStyles(((Dancer) user).getDancestyles());
 			dto.setInactive(((Dancer) user).isInactive());
-			dto.setInactiveUntil(((Dancer) user).getInactiveUntil());
+			dto.setInactiveUntil(((Dancer) user).getInactiveuntil());
 		}
 		return dto;
 	}
@@ -338,10 +338,10 @@ public class UserController {
 			}
 		}
 
-		user.setDanceStyles(dances);
+		user.setDancestyles(dances);
 		userService.save(user);
 		UserDto dto = new UserDto();
-		dto.setDanceStyles(user.getDanceStyles());
+		dto.setDanceStyles(user.getDancestyles());
 		return dto;
 	}
 
@@ -356,12 +356,12 @@ public class UserController {
 		}
 
 		user.setInactive(inactiveStatusRequest.isInactive());
-		user.setInactiveUntil(inactiveStatusRequest.getInactiveUntil());
+		user.setInactiveuntil(inactiveStatusRequest.getInactiveUntil());
 		userService.save(user);
 
 		UserDto dto = new UserDto();
 		dto.setInactive(user.isInactive());
-		dto.setInactiveUntil(user.getInactiveUntil());
+		dto.setInactiveUntil(user.getInactiveuntil());
 		return dto;
 	}
 
@@ -374,7 +374,7 @@ public class UserController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
 		return ResponseEntity.ok(userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
-				dto.getGender(), dto.getDancestyles()));// za sad samo search po godinama..
+				dto.getGender(), dto.getDancestyles()));
 	}
 
 }

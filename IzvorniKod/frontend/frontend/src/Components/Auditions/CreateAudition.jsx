@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './CreateAudition.css'
 import headerlogo from '../Assets/header-logo.png';
+import { jwtDecode } from 'jwt-decode';
 
 const CreateAudition = () => {
   const [formData, setFormData] = useState({
@@ -51,18 +52,18 @@ const CreateAudition = () => {
       ...formData,
       positions: parseInt(formData.positions, 10),
       wage: parseFloat(formData.wage),
-      styles: selectedDanceStyles,
-      user: {
-        id: 1,
-      },
+      styles: selectedDanceStyles
     };
 
     try {
+      const token = localStorage.getItem('jwtToken');
+      console.log(auditionData);
       const response = await fetch('http://localhost:8080/audition/create', 
        {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(auditionData),
       });

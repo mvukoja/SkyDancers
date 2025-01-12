@@ -24,10 +24,9 @@ public interface UserRepository extends JpaRepository<MyUser, Integer> {
 	void updatePassword(String email, String password);
 
 	@Query("select danc from Dancer danc " + "join danc.dancestyles dance " + "join MyUser us on us.id = danc.id "
-			+ "where danc.age >= ?1 " + "and danc.age <= ?2 " + "and danc.gender = ?3 " + "and not exists ( "
+			+ "where danc.age >= ?2 " + "and danc.age <= ?1 " + "and danc.gender = ?3 " + "and not exists ( "
 			+ "    select ds from Dance ds " + "    where ds.name in ?4 "
-			+ "    and ds not in (select ds2 from danc.dancestyles ds2) " + ") " + "and not exists ( "
-			+ "    select ds3 from danc.dancestyles ds3 " + "    where ds3.name not in ?4 " + ")")
+			+ "    and ds not in (select ds2 from danc.dancestyles ds2) " + ")")
 	Optional<Iterable<Dancer>> findByAgeAndGenderAndDanceStyles(Integer ageup, Integer agedown, String gender,
 			List<String> danceStyles);
 

@@ -7,6 +7,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 
 @Entity
@@ -20,14 +21,19 @@ public class Dancer extends MyUser {
 	@JoinTable(name = "dancer_dance", joinColumns = @JoinColumn(name = "dancer_id"), inverseJoinColumns = @JoinColumn(name = "dance_id"))
 	private List<Dance> dancestyles;
 
-	public Dancer(boolean inactive, LocalDate inactiveuntil, List<Dance> dancestyles) {
+	@OneToMany(mappedBy = "dancer")
+    private List<AuditionApplication> applications;
+
+	public Dancer() {
+	}
+
+	public Dancer(boolean inactive, LocalDate inactiveuntil, List<Dance> dancestyles,
+			List<AuditionApplication> applications) {
 		super();
 		this.inactive = inactive;
 		this.inactiveuntil = inactiveuntil;
 		this.dancestyles = dancestyles;
-	}
-
-	public Dancer() {
+		this.applications = applications;
 	}
 
 	public boolean isInactive() {
@@ -38,19 +44,30 @@ public class Dancer extends MyUser {
 		this.inactive = inactive;
 	}
 
-	public LocalDate getInactiveUntil() {
+	public LocalDate getInactiveuntil() {
 		return inactiveuntil;
 	}
 
-	public void setInactiveUntil(LocalDate inactiveuntil) {
+	public void setInactiveuntil(LocalDate inactiveuntil) {
 		this.inactiveuntil = inactiveuntil;
 	}
 
-	public List<Dance> getDanceStyles() {
+	public List<Dance> getDancestyles() {
 		return dancestyles;
 	}
 
-	public void setDanceStyles(List<Dance> dancestyles) {
+	public void setDancestyles(List<Dance> dancestyles) {
 		this.dancestyles = dancestyles;
 	}
+
+	public List<AuditionApplication> getApplications() {
+		return applications;
+	}
+
+	public void setApplications(List<AuditionApplication> applications) {
+		this.applications = applications;
+	}
+
+	
+
 }

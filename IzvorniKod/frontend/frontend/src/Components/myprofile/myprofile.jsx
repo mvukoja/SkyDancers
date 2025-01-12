@@ -114,9 +114,14 @@ const MyProfile = ({ onLogout }) => {
         setProfileData(data); // Postavi podatke profila u stanje
         setFormData(data); // Inicijaliziraj formData s dohvaćenim podacima
         setPortfolioItems(data.portfolio || []); // Postavi portfolio stavke
-        const matchingDanceStyles = data.danceStyles
+        var matchingDanceStyles;
+        if(data.type.type === "DANCER"){
+          matchingDanceStyles = data.danceStyles
           .filter((danceStyle) => danceStylesList.includes(danceStyle.name))
           .map((danceStyle) => danceStyle.name);
+        }
+        else matchingDanceStyles = null;
+        
         setSelectedDanceStyles(matchingDanceStyles || []); // Postavi odabrane vrste plesa
         setIsInactive(data.inactive || false); // Postavi status neaktivnosti
         setInactiveUntil(data.inactiveUntil || ""); // Postavi datum neaktivnosti

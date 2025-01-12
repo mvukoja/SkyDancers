@@ -40,6 +40,7 @@ const SearchDancers = () => {
 
   const handleSearch = async () => {
     try {
+      const token = localStorage.getItem('jwtToken');
       setError("");
       const response = await fetch(
         "http://localhost:8080/users/searchdancers",
@@ -47,6 +48,7 @@ const SearchDancers = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
             ageup: parseInt(filters.ageup),
@@ -166,7 +168,7 @@ const SearchDancers = () => {
                   </p>
                   <p>
                     <strong>Stilovi plesa:</strong>{" "}
-                    {dancer.dancestyles.join(", ")}
+                    {dancer.danceStyles?.map(style => style.name).join(", ")}
                   </p>
                 </li>
               ))}

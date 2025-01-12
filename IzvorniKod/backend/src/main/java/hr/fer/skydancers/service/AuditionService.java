@@ -1,5 +1,6 @@
 package hr.fer.skydancers.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,9 @@ public class AuditionService {
 	
 	public void remove(Audition audition) {
 		auditionRepository.delete(audition);
+	}
+	
+	public List<Audition> getByFilter(LocalDate datetime, Integer wage, String location, List<String> styles){
+		return auditionRepository.findByFilter(datetime, wage, location, styles).orElse(null);
 	}
 }

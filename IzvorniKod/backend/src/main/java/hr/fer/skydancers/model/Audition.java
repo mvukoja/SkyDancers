@@ -3,12 +3,16 @@ package hr.fer.skydancers.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,11 +22,11 @@ public class Audition {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private LocalDateTime creation;
 
 	private LocalDateTime datetime;
-	
+
 	private LocalDateTime deadline;
 
 	private String location;
@@ -36,8 +40,15 @@ public class Audition {
 	private Integer subscribed;
 
 	private Integer wage;
+	
+	private boolean archived;
 
-	private List<String> styles;
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "audition_dance", joinColumns = @JoinColumn(name = "audition_id"), inverseJoinColumns = @JoinColumn(name = "dance_id"))
+	private List<Dance> styles;
+
+	@OneToMany(mappedBy = "audition")
+	private List<AuditionApplication> applications;// prijave na ovu audiciju
 
 	// autor
 	@ManyToOne
@@ -48,7 +59,8 @@ public class Audition {
 	}
 
 	public Audition(Integer id, LocalDateTime creation, LocalDateTime datetime, LocalDateTime deadline, String location,
-			String description, Integer positions, Integer subscribed, Integer wage, List<String> styles, MyUser user) {
+			String description, Integer positions, Integer subscribed, Integer wage, boolean archived,
+			List<Dance> styles, List<AuditionApplication> applications, MyUser user) {
 		super();
 		this.id = id;
 		this.creation = creation;
@@ -59,7 +71,9 @@ public class Audition {
 		this.positions = positions;
 		this.subscribed = subscribed;
 		this.wage = wage;
+		this.archived = archived;
 		this.styles = styles;
+		this.applications = applications;
 		this.user = user;
 	}
 
@@ -135,12 +149,28 @@ public class Audition {
 		this.wage = wage;
 	}
 
-	public List<String> getStyles() {
+	public boolean isArchived() {
+		return archived;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+
+	public List<Dance> getStyles() {
 		return styles;
 	}
 
-	public void setStyles(List<String> styles) {
+	public void setStyles(List<Dance> styles) {
 		this.styles = styles;
+	}
+
+	public List<AuditionApplication> getApplications() {
+		return applications;
+	}
+
+	public void setApplications(List<AuditionApplication> applications) {
+		this.applications = applications;
 	}
 
 	public MyUser getUser() {
@@ -149,9 +179,6 @@ public class Audition {
 
 	public void setUser(MyUser user) {
 		this.user = user;
-	}	
-	
-	
-	
+	}
 
 }

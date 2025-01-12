@@ -19,6 +19,9 @@ public class DancerSearchDTO {
 		this.gender = gender;
 		this.dancestyles = dancestyles;
 	}
+	
+	public DancerSearchDTO() {
+	}
 
 	public Integer getAgeup() {
 		return ageup;
