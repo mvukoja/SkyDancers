@@ -67,7 +67,7 @@ const Homepage = ({ onLogout }) => {
   
   return (
     <div className="homepage-container">
-      <div className="background-image-container"></div>
+      
       <header className='homepage-header'>
         <a href="/" className='logo'>
           <img src={headerlogo} alt="" className='logo-img'/>
@@ -89,7 +89,27 @@ const Homepage = ({ onLogout }) => {
         </div>
       )}
       
-      {/* Other homepage content */}
+      {profileData?.type.type === 'DIRECTOR' ? (
+        <div className='button-group'>
+          <button className='navigation-button' onClick={() => navigate('/post-audition')}>
+            Objava audicije
+          </button>
+          <button className='navigation-button' onClick={() => navigate('/search-dancers')}>
+            Pretraga plesača
+          </button>
+        </div>
+      ) : profileData?.type.type === 'DANCER' ? (
+        <div className='button-group'>
+          <button className='navigation-button' onClick={() => navigate('/search-auditions')}>
+            Pretraživanje audicija
+          </button>
+          <button className='navigation-button' onClick={() => navigate('/chat')}>
+            Chat s plesačima
+          </button>
+        </div>
+      ) : (
+        <p>Molimo prijavite se za pristup funkcionalnostima.</p>
+      )}
     </div>
   );
 };

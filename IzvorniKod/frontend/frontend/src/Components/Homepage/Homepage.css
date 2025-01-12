@@ -95,3 +95,36 @@ h1 {
   color: #555;
   z-index: 10;
 }
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.navigation-button {
+  flex: 0 1 auto;
+  min-width: 400px;
+  max-width: none;
+  font-size: 2rem;
+  padding: 60px 50px;
+  border: 3px solid #4c009d;
+  border-radius: 8px;
+  background-color: #e6d5f2;
+  color: #4c009d;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navigation-button:hover {
+  background-color: #d1b3f2;
+  transform: scale(1.05);
+}
