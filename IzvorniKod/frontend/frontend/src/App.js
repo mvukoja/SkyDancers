@@ -13,7 +13,7 @@ import LandingPage from './Components/LandingPage/LandingPage';
 import MyProfile from './Components/myprofile/myprofile'; // Import MyProfile komponente
 import PaymentSuccess from './Components/Payment/PaymentSuccess.jsx';
 import PaymentCancel from './Components/Payment/PaymentCancel.jsx';
-
+import CreateAudition from './Components/Auditions/CreateAudition';
 
 // Definicija glavne App komponente
 function App() {
@@ -95,6 +95,7 @@ function App() {
 
         <Route path="/payment/success" element={<PaymentSuccess />} />
         <Route path="/payment/cancel" element={<PaymentCancel />} />
+        <Route path="/post-audition" element={<CreateAudition />} />
         
       </Routes>
     </Router>
