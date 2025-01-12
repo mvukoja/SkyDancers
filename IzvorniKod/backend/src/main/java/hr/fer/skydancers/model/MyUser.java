@@ -48,7 +48,7 @@ public class MyUser {
 
 	private String gender;
 
-	private int age;
+	private Integer age;
 
 	private String location;
 
@@ -67,7 +67,7 @@ public class MyUser {
 
 	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
 			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String gender,
-			int age, String location, String contact, ForgotPassword forgotPassword) {
+			Integer age, String location, String contact, ForgotPassword forgotPassword) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -174,11 +174,11 @@ public class MyUser {
 		this.gender = gender;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
@@ -202,5 +202,4 @@ public class MyUser {
 		this.location = location;
 	}
 
-	
 }

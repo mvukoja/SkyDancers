@@ -114,7 +114,10 @@ const MyProfile = ({ onLogout }) => {
         setProfileData(data); // Postavi podatke profila u stanje
         setFormData(data); // Inicijaliziraj formData s dohvaćenim podacima
         setPortfolioItems(data.portfolio || []); // Postavi portfolio stavke
-        setSelectedDanceStyles(data.danceStyles || []); // Postavi odabrane vrste plesa
+        const matchingDanceStyles = data.danceStyles
+          .filter((danceStyle) => danceStylesList.includes(danceStyle.name))
+          .map((danceStyle) => danceStyle.name);
+        setSelectedDanceStyles(matchingDanceStyles || []); // Postavi odabrane vrste plesa
         setIsInactive(data.inactive || false); // Postavi status neaktivnosti
         setInactiveUntil(data.inactiveUntil || ""); // Postavi datum neaktivnosti
       } catch (error) {
@@ -405,11 +408,11 @@ const MyProfile = ({ onLogout }) => {
             </select>
           </label>
           {/* Dugme za spremanje promjena */}
-          <button class="buttons" onClick={handleSave}>
+          <button className="buttons" onClick={handleSave}>
             Spremi
           </button>
           {/* Dugme za odustajanje od uređivanja */}
-          <button class="buttons" onClick={handleEditToggle}>
+          <button className="buttons" onClick={handleEditToggle}>
             Odustani
           </button>
         </div>
@@ -467,7 +470,7 @@ const MyProfile = ({ onLogout }) => {
           <button onClick={saveDanceStyles}>Spremi Vrste Plesa</button>
         </div>
       )}
-  
+
       {/* Sekcija za postavljanje statusa neaktivnosti */}
       {profileData?.type.type === "DANCER" && (
         <div className="inactive-section">

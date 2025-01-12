@@ -1,6 +1,9 @@
 package hr.fer.skydancers.controller;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.modelmapper.ModelMapper;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import hr.fer.skydancers.dto.DanceStylesRequest;
+import hr.fer.skydancers.dto.DancerSearchDTO;
 import hr.fer.skydancers.dto.InactiveStatusRequest;
 import hr.fer.skydancers.dto.MailBody;
 import hr.fer.skydancers.dto.OauthRegDto;
@@ -33,10 +37,12 @@ import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
 import hr.fer.skydancers.enums.UserTypeEnum;
+import hr.fer.skydancers.model.Dance;
 import hr.fer.skydancers.model.Dancer;
 import hr.fer.skydancers.model.Director;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
 import hr.fer.skydancers.service.EmailService;
 import hr.fer.skydancers.service.StripeService;
@@ -69,7 +75,10 @@ public class UserController {
 
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
-	
+
+	@Autowired
+	private DanceRepository danceRepository;
+
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@PostMapping("/payment")
@@ -99,7 +108,6 @@ public class UserController {
 		user.setEmail(dto.getEmail());
 		user.setOauth(true);
 		user.setFinishedOauth(true);
-
 
 		if (dto.getType().equals(UserTypeEnum.DANCER)) {
 			Dancer dancer = modelMapper.map(user, Dancer.class);
@@ -318,15 +326,20 @@ public class UserController {
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 		}
+		List<Dance> dances = new LinkedList<>();
+		for (String name : danceStylesRequest.getDanceStyles()) {
+			Optional<Dance> danceOpt = danceRepository.findByName(name);
+			if (danceOpt.isPresent()) {
+				dances.add(danceOpt.get());
+			} else {
+				throw new IllegalArgumentException("DanceStyle not found: " + name);
+			}
+		}
 
-		user.setDanceStyles(danceStylesRequest.getDanceStyles());
-
+		user.setDanceStyles(dances);
 		userService.save(user);
-
 		UserDto dto = new UserDto();
-
 		dto.setDanceStyles(user.getDanceStyles());
-
 		return dto;
 	}
 
@@ -348,7 +361,18 @@ public class UserController {
 		dto.setInactive(user.isInactive());
 		dto.setInactiveUntil(user.getInactiveUntil());
 		return dto;
+	}
 
+	@PostMapping("/searchdancers")
+	public ResponseEntity<Iterable<Dancer>> searchDancers(@RequestBody DancerSearchDTO dto) {
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+
+		if (!(user instanceof Director)) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+		}
+		return ResponseEntity.ok(userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
+				dto.getGender(), dto.getDancestyles()));// za sad samo search po godinama..
 	}
 
 }
