@@ -11,11 +11,16 @@ const MyProfile = ({ onLogout }) => {
   // Inicijalizacija stanja komponente
   const [profileData, setProfileData] = useState(null); // Pohranjuje podatke korisničkog profila
   const [isEditing, setIsEditing] = useState(false); // Kontrolira prikaz forme za uređivanje ili prikaz podataka
+  const [isEditingPortfolio, setIsEditingPortfolio] = useState(false);
   const [formData, setFormData] = useState({}); // Pohranjuje podatke unutar forme za uređivanje
   const [portfolioItems, setPortfolioItems] = useState([]); // Lista stavki u portfoliju korisnika
   const [selectedDanceStyles, setSelectedDanceStyles] = useState([]); // Odabrane vrste plesa
   const [inactive, setIsInactive] = useState(false); // Status neaktivnosti korisničkog profila
   const [inactiveUntil, setInactiveUntil] = useState(""); // Datum do kojeg je profil neaktivan
+  const [description, setDescription] = useState("");
+  const [descriptionchange, setDescriptionchange] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   const navigate = useNavigate(); // Hook za navigaciju između ruta
 
@@ -111,17 +116,31 @@ const MyProfile = ({ onLogout }) => {
         const data = await response.json(); // Parsiraj odgovor kao JSON
         data.username = username; // Dodaj korisničko ime u podatke profila
 
+        const portfolio = await fetch(
+          `http://localhost:8080/portfolio/get/${username}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
+            },
+          }
+        );
+        if (!portfolio.ok) {
+          throw new Error("Greška pri dohvaćanju podataka profila");
+        }
+        const portfoliodata = await portfolio.json();
+
         setProfileData(data); // Postavi podatke profila u stanje
         setFormData(data); // Inicijaliziraj formData s dohvaćenim podacima
-        setPortfolioItems(data.portfolio || []); // Postavi portfolio stavke
+        setPortfolioItems(portfoliodata || []); // Postavi portfolio stavke
+        setDescription(portfoliodata.description);
         var matchingDanceStyles;
-        if(data.type.type === "DANCER"){
+        if (data.type.type === "DANCER") {
           matchingDanceStyles = data.danceStyles
-          .filter((danceStyle) => danceStylesList.includes(danceStyle.name))
-          .map((danceStyle) => danceStyle.name);
-        }
-        else matchingDanceStyles = null;
-        
+            .filter((danceStyle) => danceStylesList.includes(danceStyle.name))
+            .map((danceStyle) => danceStyle.name);
+        } else matchingDanceStyles = null;
+
         setSelectedDanceStyles(matchingDanceStyles || []); // Postavi odabrane vrste plesa
         setIsInactive(data.inactive || false); // Postavi status neaktivnosti
         setInactiveUntil(data.inactiveUntil || ""); // Postavi datum neaktivnosti
@@ -138,6 +157,10 @@ const MyProfile = ({ onLogout }) => {
   // Funkcija za prebacivanje između prikaza detalja i forme za uređivanje profila
   const handleEditToggle = () => {
     setIsEditing(!isEditing); // Promijeni status uređivanja
+  };
+
+  const handlePortfolioEditToggle = () => {
+    setIsEditingPortfolio(!isEditingPortfolio);
   };
 
   // Funkcija za rukovanje promjenama unutar forme za uređivanje profila
@@ -185,21 +208,22 @@ const MyProfile = ({ onLogout }) => {
   };
 
   // Funkcija za upload datoteke u portfolio
-  const handleFileUpload = async (e) => {
+  const handleFileUpload = async () => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
-    const file = e.target.files[0]; // Dohvati odabranu datoteku
-    const uploadData = new FormData();
-    uploadData.append("file", file); // Dodaj datoteku u FormData
-
+    const formData = new FormData();
+    photos.forEach((file) => formData.append("photos", file));
+    if (videos.length > 0) {
+      videos.forEach((file) => formData.append("videos", file));
+    }
     try {
       const response = await fetch(
-        "http://localhost:8080/users/upload-portfolio",
+        "http://localhost:8080/portfolio/uploadfile",
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
           },
-          body: uploadData, // Pošalji FormData kao tijelo zahtjeva
+          body: formData, // Pošalji FormData kao tijelo zahtjeva
         }
       );
 
@@ -208,7 +232,7 @@ const MyProfile = ({ onLogout }) => {
       }
 
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
-      setPortfolioItems([...portfolioItems, newItem]); // Dodaj novu stavku u portfolio
+      setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -216,13 +240,38 @@ const MyProfile = ({ onLogout }) => {
     }
   };
 
-  // Funkcija za brisanje stavke iz portfolia
-  const handleDeletePortfolioItem = async (itemId) => {
+  const handleDescription = async () => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
-
     try {
       const response = await fetch(
-        `http://localhost:8080/users/delete-portfolio/${itemId}`,
+        "http://localhost:8080/portfolio/updatedescription",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
+          },
+          body: descriptionchange,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Greška pri uploadu datoteke");
+      }
+      const newItem = await response.json(); // Parsiraj odgovor kao JSON
+      setDescription(newItem.description); // Dodaj novu stavku u portfolio*/
+    } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
+      console.error("Greška pri uploadu datoteke:", error);
+    }
+  };
+
+  // Funkcija za brisanje slike iz portfolia
+  const handleDeletePortfolioPhoto = async (name) => {
+    const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
+    try {
+      const response = await fetch(
+        `http://localhost:8080/portfolio/deletephoto?photoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -234,8 +283,33 @@ const MyProfile = ({ onLogout }) => {
       if (!response.ok) {
         throw new Error("Greška pri brisanju stavke iz portfolia");
       }
+      const newItem = await response.json(); // Parsiraj odgovor kao JSON
+      setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
+    } catch (error) {
+      alert("Your token has expired, please login again.");
+      onLogout();
+      console.error("Greška pri brisanju stavke iz portfolia:", error);
+    }
+  };
+  // Funkcija za brisanje videa iz portfolia
+  const handleDeletePortfolioVideo = async (name) => {
+    const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
+    try {
+      const response = await fetch(
+        `http://localhost:8080/portfolio/deletevideo?photoname=${name}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
+          },
+        }
+      );
 
-      setPortfolioItems(portfolioItems.filter((item) => item.id !== itemId)); // Ukloni stavku iz stanja portfolia
+      if (!response.ok) {
+        throw new Error("Greška pri brisanju stavke iz portfolia");
+      }
+      const newItem = await response.json(); // Parsiraj odgovor kao JSON
+      setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -252,6 +326,22 @@ const MyProfile = ({ onLogout }) => {
           ? prevStyles.filter((style) => style !== value) // Ako je već odabrano, ukloni ga iz liste
           : [...prevStyles, value] // Inače, dodaj ga u listu
     );
+  };
+
+  const handleFileSelect = (event) => {
+    const files = event.target.files;
+    if (event.target.name === "photos") {
+      setPhotos([...files]);
+    } else if (event.target.name === "videos") {
+      setVideos([...files]);
+    }
+  };
+
+  const handleSubmit = () => {
+    handleDescription();
+    handleFileUpload();
+    setIsEditingPortfolio();
+    alert("Uspješno izmijenjen portfolio");
   };
 
   // Funkcija za spremanje odabranih vrsta plesa na backend
@@ -321,6 +411,10 @@ const MyProfile = ({ onLogout }) => {
   if (!profileData) {
     return <div>Učitavam profil...</div>;
   }
+
+  const handleDescriptionChange = (e) => {
+    setDescriptionchange(e.target.value); // Update state as user types in the input field
+  };
 
   return (
     <div className="profile-container">
@@ -507,34 +601,106 @@ const MyProfile = ({ onLogout }) => {
       )}
 
       {/* Sekcija za upravljanje portfoliom */}
-      {profileData?.type.type === "DANCER" && (
-        <div className="portfolio-section">
-          <h3>Moj Portfolio</h3>
-          {/* Input za upload slike ili videozapisa */}
-          <input
-            type="file"
-            accept="image/*,video/*"
-            onChange={handleFileUpload}
-          />
-          <div className="portfolio-items">
-            {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
-            {portfolioItems.map((item) => (
-              <div key={item.id} className="portfolio-item">
-                {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
-                {item.type.startsWith("image") ? (
-                  <img src={item.url} alt="Portfolio" />
-                ) : (
-                  <video src={item.url} controls />
-                )}
-                {/* Dugme za brisanje portfolio stavke */}
-                <button onClick={() => handleDeletePortfolioItem(item.id)}>
-                  Obriši
+      <div className="portfolio-section">
+        <h3>Moj Portfolio</h3>
+        <button className="buttons" onClick={handlePortfolioEditToggle}>
+          Uredi portfolio
+        </button>
+        <hr />
+        {/* Input za upload slike ili videozapisa */}
+        {isEditingPortfolio ? (
+          <>
+            <input
+              name="description"
+              type="text"
+              placeholder={description}
+              value={descriptionchange}
+              onChange={handleDescriptionChange}
+            />
+            <p>Fotografije:</p>
+            <input
+              type="file"
+              accept="image/*"
+              name="photos"
+              multiple
+              onChange={handleFileSelect}
+            />
+            <p>Videozapisi:</p>
+            <input
+              type="file"
+              name="videos"
+              accept="video/*"
+              multiple
+              onChange={handleFileSelect}
+            />
+            <button onClick={handleSubmit}>Save Portfolio</button>
+          </>
+        ) : (
+          <></>
+        )}
+        <p className="portfolio-description">{description ? description : "Nemate uneseno ništa u portfolio"}</p>
+        <br /><br /><hr />
+        <br />
+        <div className="portfolio-items">
+          {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
+          {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
+          {portfolioItems.photos.length > 0 ? (
+            portfolioItems.photos.map((photo, index) => (
+              <div key={index} className="portfolio-item">
+                <a
+                  href={`http://localhost:8080${photo}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={`http://localhost:8080${photo}`}
+                    alt={`Portfolio Photo ${index + 1}`}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "300px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </a>
+                <button
+                  onClick={() =>
+                    handleDeletePortfolioPhoto(photo.split("uploads/")[1])
+                  }
+                >
+                  X
                 </button>
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <p>Nemate spremljene slike.</p>
+          )}
+
+          {portfolioItems.videos.length > 0 ? (
+            portfolioItems.videos.map((video, index) => (
+              <div key={index} className="portfolio-item">
+                <video
+                  src={`http://localhost:8080${video}`}
+                  controls
+                  style={{ maxWidth: "100%", maxHeight: "300px" }}
+                >
+                  <button
+                    onClick={() =>
+                      handleDeletePortfolioVideo(video.split("uploads/")[1])
+                    }
+                  >
+                    X
+                  </button>
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ))
+          ) : (
+            <p>Nemate spremljene videozapise.</p>
+          )}
+
+          {/* Dugme za brisanje portfolio stavke */}
         </div>
-      )}
+      </div>
 
       {/* Dugme za odjavu korisnika */}
       <button className="logout-button" onClick={onLogout}>

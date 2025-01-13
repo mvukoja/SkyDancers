@@ -46,10 +46,9 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
 					authorize.requestMatchers("/home", "/users/register/**", "/users/registerdancer", "/users/registerdirector", "/users/authenticate/**",
-							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/**").permitAll();
+							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/**", "/uploads/**").permitAll();
 					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-					authorize.requestMatchers("/h2-console/**").permitAll();
 					authorize.anyRequest().authenticated();
 				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
@@ -70,12 +69,12 @@ public class SecurityConfig {
 						user.setUsername(userId);
 						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
 						user.setOauth(true);
-						user.setFinishedOauth(false);
+						user.setFinishedoauth(false);
 						user.setType(new UserType());
 						userService.put(user);
 					}
 					boolean finished = false;
-					if (!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
+					if (!existingUser.isEmpty() && existingUser.get().isFinishedoauth()) {
 						finished = true;
 					}
 					String token = jwtService.generateToken(userService.loadUserByUsername(userId));

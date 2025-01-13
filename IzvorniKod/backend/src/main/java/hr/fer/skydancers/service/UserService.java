@@ -80,4 +80,7 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByAgeAndGenderAndDanceStyles(ageup, agedown, gender, danceStyleName).orElse(null);
 	}
 
+	public List<MyUser> getByNameLike(String username){
+		return userRepository.findByNameLike(username).orElse(null);
+	}
 }

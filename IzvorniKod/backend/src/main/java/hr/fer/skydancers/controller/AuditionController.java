@@ -235,6 +235,35 @@ public class AuditionController {
 		});
 		return ResponseEntity.ok(dtoo);
 	}
+	
+	//dva filtra su znaci vrsta plesa i lokacija...
+	@GetMapping("/notifications")
+	public ResponseEntity<List<AuditionDTO>> notificationAuditions(){
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+		if (!(user instanceof Dancer)) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		List<String> dances = new LinkedList<>();
+		((Dancer)user).getDancestyles().forEach(el -> dances.add(el.getName()));
+		
+		List<Audition> list = auditionService.getByPreference(user.getLocation(), dances);
+		
+		List<AuditionDTO> dtoo = new LinkedList<>();
+		list.forEach(el -> {
+			if (!el.isArchived()) {
+				AuditionDTO aud = modelMapper.map(el, AuditionDTO.class);
+				List<String> dance = new LinkedList<>();
+				el.getStyles().forEach(e -> dance.add(e.getName()));
+				aud.setStyles(dance);
+				dtoo.add(aud);
+			}
+		});
+		return ResponseEntity.ok(dtoo);
+	}
+	
+	
 
 	@PostMapping("/applytoaudition")
 	public ResponseEntity<AuditionApplicationDTO> applyToAudition(@RequestBody AuditionApplicationDTO dto) {

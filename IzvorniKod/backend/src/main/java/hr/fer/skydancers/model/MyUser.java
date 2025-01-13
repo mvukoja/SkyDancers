@@ -56,18 +56,16 @@ public class MyUser {
 
 	@OneToOne(mappedBy = "user")
 	private ForgotPassword forgotPassword;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Portfolio portfolio;
 
 	public MyUser() {
 	}
 
-	// Getteri i setteri za nove atribute
-	public String getLocation() {
-		return location;
-	}
-
 	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
 			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String gender,
-			Integer age, String location, String contact, ForgotPassword forgotPassword) {
+			Integer age, String location, String contact, ForgotPassword forgotPassword, Portfolio portfolio) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -84,6 +82,7 @@ public class MyUser {
 		this.location = location;
 		this.contact = contact;
 		this.forgotPassword = forgotPassword;
+		this.portfolio = portfolio;
 	}
 
 	public Integer getId() {
@@ -158,11 +157,11 @@ public class MyUser {
 		this.oauth = oauth;
 	}
 
-	public boolean isFinishedOauth() {
+	public boolean isFinishedoauth() {
 		return finishedoauth;
 	}
 
-	public void setFinishedOauth(boolean finishedoauth) {
+	public void setFinishedoauth(boolean finishedoauth) {
 		this.finishedoauth = finishedoauth;
 	}
 
@@ -182,6 +181,14 @@ public class MyUser {
 		this.age = age;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	public String getContact() {
 		return contact;
 	}
@@ -198,8 +205,17 @@ public class MyUser {
 		this.forgotPassword = forgotPassword;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public Portfolio getPortfolio() {
+		return portfolio;
 	}
+
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+
+	// Getteri i setteri za nove atribute
+	
+
+	
 
 }

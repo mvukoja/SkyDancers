@@ -39,4 +39,10 @@ public class AuditionService {
 	public List<Audition> getByFilter(LocalDate datetime, Integer wage, String location, List<String> styles){
 		return auditionRepository.findByFilter(datetime, wage, location, styles).orElse(null);
 	}
+	
+	public List<Audition> getByPreference(String location, List<String> styles){
+		return auditionRepository.findByPreference(location, styles).orElse(null);
+	}
+	
+	
 }

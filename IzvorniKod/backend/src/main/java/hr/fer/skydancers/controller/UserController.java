@@ -42,8 +42,10 @@ import hr.fer.skydancers.model.Dancer;
 import hr.fer.skydancers.model.Director;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.model.Portfolio;
 import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
+import hr.fer.skydancers.repository.PortfolioRepository;
 import hr.fer.skydancers.service.EmailService;
 import hr.fer.skydancers.service.StripeService;
 import hr.fer.skydancers.service.UserService;
@@ -75,6 +77,9 @@ public class UserController {
 
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
+	
+	@Autowired
+	private PortfolioRepository portfolioRepository;
 
 	@Autowired
 	private DanceRepository danceRepository;
@@ -107,7 +112,11 @@ public class UserController {
 		MyUser user = userService.get(username).orElse(null);
 		user.setEmail(dto.getEmail());
 		user.setOauth(true);
-		user.setFinishedOauth(true);
+		user.setFinishedoauth(true);
+		
+		Portfolio portfolio = new Portfolio();
+		portfolio.setUser(user);
+		portfolioRepository.save(portfolio);
 
 		if (dto.getType().equals(UserTypeEnum.DANCER)) {
 			Dancer dancer = modelMapper.map(user, Dancer.class);
@@ -150,6 +159,11 @@ public class UserController {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setConfirmed(true);//temporary
 			userService.put(user);
+			
+			Portfolio portfolio = new Portfolio();
+			portfolio.setUser(user);
+			portfolioRepository.save(portfolio);
+			
 
 			/*int otp = new Random().nextInt(100000, 999999);
 			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
@@ -177,6 +191,10 @@ public class UserController {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setConfirmed(true);//temporary
 			userService.put(user);
+			
+			Portfolio portfolio = new Portfolio();
+			portfolio.setUser(user);
+			portfolioRepository.save(portfolio);
 
 			/*int otp = new Random().nextInt(100000, 999999);
 			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
@@ -376,5 +394,23 @@ public class UserController {
 		return ResponseEntity.ok(userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
 				dto.getGender(), dto.getDancestyles()));
 	}
+	
+	@GetMapping("/searchuser/{username}")
+	public ResponseEntity<List<UserDto>> searchUser(@PathVariable String username){
+		if(username == null)
+			return ResponseEntity.ok(null);
+			
+		List<MyUser> list = userService.getByNameLike(username);
+		
+		if(list == null)
+			return ResponseEntity.ok(null);
+		
+		List<UserDto> dto = new LinkedList<>();
+		list.forEach(el -> {
+			UserDto d = modelMapper.map(el, UserDto.class);
+			dto.add(d);
+		});
+		return ResponseEntity.ok(dto);
+	}	
 
 }
