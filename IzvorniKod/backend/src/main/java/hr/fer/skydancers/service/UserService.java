@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	// Dohvat plesača po godinama, spolu i stilu plesa
-	public Iterable<Dancer> getByAgeAndGenderAndDanceStyle(Integer ageup, Integer agedown, String gender,
+	public List<Dancer> getByAgeAndGenderAndDanceStyle(Integer ageup, Integer agedown, String gender,
 			List<String> danceStyleName) {
 		return userRepository.findByAgeAndGenderAndDanceStyles(ageup, agedown, gender, danceStyleName).orElse(null);
 	}

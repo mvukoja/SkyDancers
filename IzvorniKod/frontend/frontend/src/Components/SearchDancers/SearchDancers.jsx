@@ -164,6 +164,9 @@ const SearchDancers = () => {
                 <li key={dancer.id} className="dancer-card">
                   <div className="dancer-info">
                     <p>
+                      <strong>{dancer.username}</strong> 
+                    </p>
+                    <p>
                       <strong>Ime:</strong> {dancer.name}
                     </p>
                     <p>

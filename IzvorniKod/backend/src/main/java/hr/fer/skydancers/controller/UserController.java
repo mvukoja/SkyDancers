@@ -384,15 +384,27 @@ public class UserController {
 	}
 
 	@PostMapping("/searchdancers")
-	public ResponseEntity<Iterable<Dancer>> searchDancers(@RequestBody DancerSearchDTO dto) {
+	public ResponseEntity<List<UserDto>> searchDancers(@RequestBody DancerSearchDTO dto) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 
 		if (!(user instanceof Director)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
-		return ResponseEntity.ok(userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
-				dto.getGender(), dto.getDancestyles()));
+		List<Dancer> list = userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
+				dto.getGender(), dto.getDancestyles());
+		
+		if(list == null)
+			return ResponseEntity.ok(null);
+		
+		List<UserDto> dtoo = new LinkedList<>();
+		list.forEach(el -> {
+			UserDto d = modelMapper.map(el, UserDto.class);
+			dtoo.add(d);
+		});
+		
+		
+		return ResponseEntity.ok(dtoo);
 	}
 	
 	@GetMapping("/searchuser/{username}")
@@ -410,6 +422,7 @@ public class UserController {
 			UserDto d = modelMapper.map(el, UserDto.class);
 			dto.add(d);
 		});
+		
 		return ResponseEntity.ok(dto);
 	}	
 
