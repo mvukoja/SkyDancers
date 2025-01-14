@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
 const SearchDancers = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     ageup: "",
     agedown: "",
@@ -70,6 +71,10 @@ const SearchDancers = () => {
     }
   };
 
+  const handleDancerClick = (username) => {
+    navigate(`/profile/${username}`);
+  };
+
   // Then update your JSX structure:
   return (
     <div>
@@ -123,7 +128,7 @@ const SearchDancers = () => {
               <option value="F">Ženski</option>
             </select>
           </div>
-          
+
           <div className="dance-styles-section">
             <label>Stilovi plesa:</label>
             <div className="dance-styles-list">
@@ -157,19 +162,27 @@ const SearchDancers = () => {
             <ul className="results-list">
               {results.map((dancer) => (
                 <li key={dancer.id} className="dancer-card">
-                  <p>
-                    <strong>Ime:</strong> {dancer.name}
-                  </p>
-                  <p>
-                    <strong>Godine:</strong> {dancer.age}
-                  </p>
-                  <p>
-                    <strong>Spol:</strong> {dancer.gender}
-                  </p>
-                  <p>
-                    <strong>Stilovi plesa:</strong>{" "}
-                    {dancer.danceStyles?.map(style => style.name).join(", ")}
-                  </p>
+                  <div className="dancer-info">
+                    <p>
+                      <strong>Ime:</strong> {dancer.name}
+                    </p>
+                    <p>
+                      <strong>Godine:</strong> {dancer.age}
+                    </p>
+                    <p>
+                      <strong>Spol:</strong> {dancer.gender}
+                    </p>
+                    <p>
+                      <strong>Stilovi plesa:</strong>{" "}
+                      {dancer.danceStyles?.map(style => style.name).join(", ")}
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => handleDancerClick(dancer.username)}
+                    className="view-profile-button"
+                  >
+                    Pogledaj profil plesača
+                  </button>
                 </li>
               ))}
             </ul>

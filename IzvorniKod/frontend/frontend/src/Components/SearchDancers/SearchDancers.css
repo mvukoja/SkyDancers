@@ -148,15 +148,35 @@ header {
 }
 
 .dancer-card {
-  background-color: #f8f9fa;
   padding: 20px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
-.dancer-card:hover {
-  transform: translateY(-3px);
+.dancer-info {
+  flex: 1;
+}
+
+.view-profile-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.view-profile-button:hover {
+  background-color: #45a049;
 }
 
 .dancer-card p {

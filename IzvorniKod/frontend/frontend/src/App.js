@@ -15,6 +15,7 @@ import PaymentSuccess from './Components/Payment/PaymentSuccess.jsx';
 import PaymentCancel from './Components/Payment/PaymentCancel.jsx';
 import CreateAudition from './Components/Auditions/CreateAudition';
 import SearchDancers from './Components/SearchDancers/SearchDancers.jsx';
+import UserProfile from './Components/UserProfile/UserProfile';
 
 // Definicija glavne App komponente
 function App() {
@@ -98,6 +99,14 @@ function App() {
         <Route path="/payment/cancel" element={<PaymentCancel />} />
         <Route path="/post-audition" element={<CreateAudition />} />
         <Route path='/search-dancers' element={<SearchDancers />} />
+        <Route
+          path="/profile/:username"
+          element={
+            isAuthenticated 
+              ? <UserProfile />
+              : <Navigate to="/" replace />
+          }
+        />
         
       </Routes>
     </Router>
