@@ -50,7 +50,6 @@ const UserProfile = () => {
 
     fetchData();
   }, [username]);
-
   const handleSendOffer = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -60,7 +59,7 @@ const UserProfile = () => {
       };
 
       const body = {
-        dancerid: profileData.dancerid,
+        dancerid: profileData.type.userid,
         message: offerMessage,
       };
 
@@ -87,7 +86,7 @@ const UserProfile = () => {
   }
 
   if (!profileData) {
-    return <div>Loading...</div>;
+    return <div>Učitavanje...</div>;
   }
 
   return (
@@ -98,8 +97,8 @@ const UserProfile = () => {
         </a>
 
         <div className="header-links">
-          <Link to="/myprofile" className="login">
-            <button>Moj profil</button>
+          <Link to="/" className="login">
+            <button>Početna</button>
           </Link>
           <Link to="/logout" className="logout">
             <button>Odjava</button>
@@ -128,28 +127,37 @@ const UserProfile = () => {
               <strong>Prezime:</strong> {profileData.surname}
             </p>
             <p>
-              <strong>Lokacija:</strong> {profileData.location}
+              <strong>Lokacija:</strong>{" "}
+              {profileData.location ? profileData.location : "Nije uneseno"}
             </p>
             <p>
-              <strong>Dob:</strong> {profileData.age}
+              <strong>Dob:</strong>{" "}
+              {profileData.age ? profileData.age : "Nije uneseno"}
             </p>
             <p>
-              <strong>Spol:</strong> {profileData.gender}
+              <strong>Spol:</strong>{" "}
+              {profileData.gender ? profileData.gender : "Nije uneseno"}
             </p>
             <p>
               <strong>Email:</strong> {profileData.email}
+            </p>
+            <p>
+              <strong>Tip korisnika:</strong>{" "}
+              {profileData.type.type === "DANCER" ? "Plesač" : "Direktor"}
             </p>
           </div>
 
           {profileData.type.type === "DANCER" && (
             <div className="dance-styles">
-              <h3>Stilovi plesa</h3>
+              <h3>Stilovi plesa:</h3>
               <div className="dance-styles-list">
-                {profileData.danceStyles?.map((style, index) => (
-                  <span key={index} className="dance-style-tag">
-                    {style.name}
-                  </span>
-                ))}
+                {profileData.danceStyles?.length > 0
+                  ? profileData.danceStyles?.map((style, index) => (
+                      <span key={index} className="dance-style-tag">
+                        {style.name}
+                      </span>
+                    ))
+                  : "Nisu uneseni"}
               </div>
             </div>
           )}
@@ -181,16 +189,18 @@ const UserProfile = () => {
           <div className="confirmation-message">{confirmationMessage}</div>
         )}
 
-        {portfolioData && (
+{portfolioData && (
           <div className="portfolio-section">
             <h3>Portfolio</h3>
 
-            {portfolioData.description && (
-              <div className="portfolio-description">
-                <h4>O meni</h4>
-                <p>{portfolioData.description}</p>
-              </div>
-            )}
+            <div className="portfolio-description">
+              <h4>O meni</h4>
+              <p>
+                {portfolioData.description
+                  ? portfolioData.description
+                  : "Nije unesen portfolio"}
+              </p>
+            </div>
 
             {portfolioData.photos && portfolioData.photos.length > 0 && (
               <div className="portfolio-photos">
@@ -198,7 +208,16 @@ const UserProfile = () => {
                 <div className="photo-grid">
                   {portfolioData.photos.map((photo, index) => (
                     <div key={index} className="photo-item">
-                      <img src={photo} alt={`Portfolio photo ${index + 1}`} />
+                      <a
+                        href={`http://localhost:8080${photo}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={`http://localhost:8080${photo}`}
+                          alt={`Portfolio photo ${index + 1}`}
+                        />
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -212,7 +231,10 @@ const UserProfile = () => {
                   {portfolioData.videos.map((video, index) => (
                     <div key={index} className="video-item">
                       <video controls>
-                        <source src={video} type="video/mp4" />
+                        <source
+                          src={`http://localhost:8080${video}`}
+                          type="video/mp4"
+                        />
                         Your browser does not support the video tag.
                       </video>
                     </div>

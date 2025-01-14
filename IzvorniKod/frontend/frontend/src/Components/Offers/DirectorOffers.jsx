@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Offers.css';
-import headerlogo from '../Assets/header-logo.png';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Offers.css";
+import headerlogo from "../Assets/header-logo.png";
 
 const DirectorOffers = () => {
   const [offers, setOffers] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const token = localStorage.getItem('jwtToken');
-        const response = await fetch('http://localhost:8080/offer/director', {
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch("http://localhost:8080/offer/director", {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (!response.ok) {
-          throw new Error('Nije moguće dohvatiti ponude');
+          throw new Error("Nije moguće dohvatiti ponude");
         }
 
         const data = await response.json();
@@ -34,14 +34,14 @@ const DirectorOffers = () => {
   return (
     <div>
       <header>
-        <a href="/" className='logo'>
-          <img src={headerlogo} alt="" className='logo-img'/>
+        <a href="/" className="logo">
+          <img src={headerlogo} alt="" className="logo-img" />
         </a>
-        <div className='header-links'>
-          <Link to="/myprofile" className='login'>
-            <button>Moj profil</button>
+        <div className="header-links">
+          <Link to="/" className="login">
+            <button>Početna</button>
           </Link>
-          <Link to="/logout" className='logout'>
+          <Link to="/logout" className="logout">
             <button>Odjava</button>
           </Link>
         </div>
@@ -53,10 +53,22 @@ const DirectorOffers = () => {
         <div className="offers-list">
           {offers.map((offer) => (
             <div key={offer.id} className="offer-card">
-              <p><strong>Plesač:</strong> {offer.dancerName}</p>
-              <p><strong>Poruka:</strong> {offer.message}</p>
-              <p><strong>Status:</strong> {offer.status}</p>
-              <p><strong>Datum:</strong> {new Date(offer.createdAt).toLocaleDateString()}</p>
+              <p>
+                <strong>Plesač:</strong>{" "}
+                <Link to={`/profile/${offer.dancername}`}>
+                  {offer.dancername}
+                </Link>
+              </p>
+              <p>
+                <strong>Poruka:</strong> {offer.message}
+              </p>
+              <p>
+                <strong>Status:</strong> {offer.state}
+              </p>
+              <p>
+                <strong>Datum:</strong>{" "}
+                {new Date(offer.createdAt).toLocaleDateString()}
+              </p>
             </div>
           ))}
           {offers.length === 0 && <p>Nema poslanih ponuda.</p>}
@@ -66,4 +78,4 @@ const DirectorOffers = () => {
   );
 };
 
-export default DirectorOffers; 
+export default DirectorOffers;

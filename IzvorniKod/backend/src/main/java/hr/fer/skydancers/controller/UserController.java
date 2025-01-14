@@ -244,11 +244,21 @@ public class UserController {
 		if (user == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		UserDto dto = new UserDto();
+		dto.setUsername(user.getUsername());
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
 		dto.setSurname(user.getSurname());
 		dto.setType(user.getType());
 		dto.setOauth(user.isOauth());
+		if (user instanceof Dancer) {
+			dto.setDanceStyles(((Dancer) user).getDancestyles());
+			dto.setInactive(((Dancer) user).isInactive());
+			dto.setInactiveUntil(((Dancer) user).getInactiveuntil());
+		}
+		if (user instanceof Director) {
+			dto.setPaid(((Director) user).isPaid());
+			dto.setSubscription(((Director) user).getSubscription());
+		}
 		return dto;
 	}
 

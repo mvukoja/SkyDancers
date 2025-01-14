@@ -1,6 +1,9 @@
 .profile-container {
+  margin-top: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
   max-width: 1200px;
-  margin: 2rem auto;
   padding: 2rem;
   background-color: white;
   border-radius: 8px;
@@ -168,8 +171,32 @@
   margin-bottom: 10px;
 }
 
+.send-offer-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-offer-section button{
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color var(--transition-speed);
+}
+
+.send-offer-section button:hover {
+  background-color: #2980b9;
+
+}
+
 .confirmation-message {
   margin-top: 10px;
   color: green;
   font-weight: bold;
+  text-align: center;
 }

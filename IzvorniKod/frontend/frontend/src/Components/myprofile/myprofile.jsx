@@ -417,7 +417,7 @@ const MyProfile = ({ onLogout }) => {
   };
 
   return (
-    <div className="profile-container">
+    <div>
       <header className="homepage-header">
         <a href="/" className="logo">
           <img src={headerlogo} alt="" className="logo-img" />
@@ -432,280 +432,292 @@ const MyProfile = ({ onLogout }) => {
           </Link>
         </div>
       </header>
-      <h2>Moj Profil</h2>
+      <div className="profile-container">
+        <h2>Moj Profil</h2>
 
-      {profileData?.type.type === "DIRECTOR" && (
-        <div className="payment-section">
-          {profileData?.paid === false ? (
-            <button className="payment-button" onClick={handlePayment}>
+        {profileData?.type.type === "DIRECTOR" && (
+          <div className="payment-section">
+            {profileData?.paid === false ? (
+              <><button className="payment-button" onClick={handlePayment}>
               Plati članarinu
             </button>
-          ) : (
-            <p className="subscription-info">
-              Vaša direktorska članarina traje do:{" "}
-              {new Date(profileData.subscription).toLocaleDateString()}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Prikaz detalja profila ili forme za uređivanje */}
-      {isEditing ? (
-        <div className="profile-edit-form">
-          {/* Polje za unos imena */}
-          <label>
-            Ime:
-            <input
-              type="text"
-              name="name"
-              value={formData.name || ""}
-              onChange={handleChange}
-            />
-          </label>
-          {/* Polje za unos prezimena */}
-          <label>
-            Prezime:
-            <input
-              type="text"
-              name="surname"
-              value={formData.surname || ""}
-              onChange={handleChange}
-            />
-          </label>
-          {/* Polje za unos lokacije */}
-          <label>
-            Lokacija:
-            <input
-              type="text"
-              name="location"
-              value={formData.location || ""}
-              onChange={handleChange}
-            />
-          </label>
-          {/* Polje za unos dobi */}
-          <label>
-            Dob:
-            <input
-              type="number"
-              name="age"
-              value={formData.age || ""}
-              onChange={handleChange}
-            />
-          </label>
-          {/* Dropdown za odabir spola */}
-          <label>
-            Spol:
-            <select
-              name="gender"
-              value={formData.gender || ""}
-              onChange={handleChange}
-            >
-              <option value="">Odaberite</option>
-              <option value="M">Muško</option>
-              <option value="F">Žensko</option>
-              <option value="O">Ostalo</option>
-            </select>
-          </label>
-          {/* Dugme za spremanje promjena */}
-          <button className="buttons" onClick={handleSave}>
-            Spremi
-          </button>
-          {/* Dugme za odustajanje od uređivanja */}
-          <button className="buttons" onClick={handleEditToggle}>
-            Odustani
-          </button>
-        </div>
-      ) : (
-        <div className="profile-details">
-          {/* Prikaz podataka korisničkog profila */}
-          <p>
-            <strong>Korisničko ime:</strong> {profileData.username}
-          </p>
-          <p>
-            <strong>Ime:</strong> {profileData.name}
-          </p>
-          <p>
-            <strong>Prezime:</strong> {profileData.surname}
-          </p>
-          <p>
-            <strong>Lokacija:</strong> {profileData.location}
-          </p>
-          <p>
-            <strong>Dob:</strong> {profileData.age}
-          </p>
-          <p>
-            <strong>Spol:</strong> {profileData.gender}
-          </p>
-          <p>
-            <strong>Email:</strong> {profileData.email}
-          </p>
-          <p>
-            <strong>Tip korisnika:</strong> {profileData.type.type}
-          </p>
-          {/* Dugme za prelazak u način uređivanja */}
-          <button onClick={handleEditToggle}>Uredi Profil</button>
-        </div>
-      )}
-
-      {/* Sekcija za odabir vrsta plesa */}
-      {profileData?.type.type === "DANCER" && (
-        <div className="dance-styles-section">
-          <h3>Vrste plesa</h3>
-          <div className="dance-styles-list">
-            {/* Iteracija kroz listu vrsta plesa i prikaz checkboxa za svaku */}
-            {danceStylesList.map((style) => (
-              <label key={style}>
-                <input
-                  type="checkbox"
-                  value={style}
-                  checked={selectedDanceStyles.includes(style)}
-                  onChange={handleDanceStyleChange}
-                />
-                {style}
-              </label>
-            ))}
+            <p>Da biste koristili ovu aplikaciju potrebno je platiti godišnju članarinu.</p>
+            </>  
+            ) : (
+              <p className="subscription-info">
+                Vaša direktorska članarina traje do:{" "}
+                {new Date(profileData.subscription).toLocaleDateString()}
+              </p>
+            )}
           </div>
-          {/* Dugme za spremanje odabranih vrsta plesa */}
-          <button onClick={saveDanceStyles}>Spremi Vrste Plesa</button>
-        </div>
-      )}
-
-      {/* Sekcija za postavljanje statusa neaktivnosti */}
-      {profileData?.type.type === "DANCER" && (
-        <div className="inactive-section">
-          <h3>Status profila</h3>
-          <label>
-            <input
-              type="checkbox"
-              checked={inactive}
-              onChange={handleInactiveChange}
-            />
-            Neaktivan
-          </label>
-          {/* Ako je profil označen kao neaktivan, prikazi opciju za odabir datuma */}
-          {inactive && (
-            <div>
-              <label>
-                Neaktivan do:
-                <input
-                  type="date"
-                  value={inactiveUntil}
-                  onChange={(e) => setInactiveUntil(e.target.value)}
-                />
-              </label>
-            </div>
-          )}
-          {/* Dugme za spremanje statusa neaktivnosti */}
-          <button onClick={saveInactiveStatus}>Spremi Status</button>
-        </div>
-      )}
-
-      {/* Sekcija za upravljanje portfoliom */}
-      <div className="portfolio-section">
-        <h3>Moj Portfolio</h3>
-        <button className="buttons" onClick={handlePortfolioEditToggle}>
-          Uredi portfolio
-        </button>
-        <hr />
-        {/* Input za upload slike ili videozapisa */}
-        {isEditingPortfolio ? (
-          <>
-            <input
-              name="description"
-              type="text"
-              placeholder={description}
-              value={descriptionchange}
-              onChange={handleDescriptionChange}
-            />
-            <p>Fotografije:</p>
-            <input
-              type="file"
-              accept="image/*"
-              name="photos"
-              multiple
-              onChange={handleFileSelect}
-            />
-            <p>Videozapisi:</p>
-            <input
-              type="file"
-              name="videos"
-              accept="video/*"
-              multiple
-              onChange={handleFileSelect}
-            />
-            <button onClick={handleSubmit}>Save Portfolio</button>
-          </>
-        ) : (
-          <></>
         )}
-        <p className="portfolio-description">{description ? description : "Nemate uneseno ništa u portfolio"}</p>
-        <br /><br /><hr />
-        <br />
-        <div className="portfolio-items">
-          {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
-          {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
-          {portfolioItems.photos.length > 0 ? (
-            portfolioItems.photos.map((photo, index) => (
-              <div key={index} className="portfolio-item">
-                <a
-                  href={`http://localhost:8080${photo}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src={`http://localhost:8080${photo}`}
-                    alt={`Portfolio Photo ${index + 1}`}
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "300px",
-                      objectFit: "cover",
-                    }}
-                  />
-                </a>
-                <button
-                  onClick={() =>
-                    handleDeletePortfolioPhoto(photo.split("uploads/")[1])
-                  }
-                >
-                  X
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>Nemate spremljene slike.</p>
-          )}
 
-          {portfolioItems.videos.length > 0 ? (
-            portfolioItems.videos.map((video, index) => (
-              <div key={index} className="portfolio-item">
-                <video
-                  src={`http://localhost:8080${video}`}
-                  controls
-                  style={{ maxWidth: "100%", maxHeight: "300px" }}
-                >
+        {/* Prikaz detalja profila ili forme za uređivanje */}
+        {isEditing ? (
+          <div className="profile-edit-form">
+            {/* Polje za unos imena */}
+            <label>
+              Ime:
+              <input
+                type="text"
+                name="name"
+                value={formData.name || ""}
+                onChange={handleChange}
+              />
+            </label>
+            {/* Polje za unos prezimena */}
+            <label>
+              Prezime:
+              <input
+                type="text"
+                name="surname"
+                value={formData.surname || ""}
+                onChange={handleChange}
+              />
+            </label>
+            {/* Polje za unos lokacije */}
+            <label>
+              Lokacija:
+              <input
+                type="text"
+                name="location"
+                value={formData.location || ""}
+                onChange={handleChange}
+              />
+            </label>
+            {/* Polje za unos dobi */}
+            <label>
+              Dob:
+              <input
+                type="number"
+                name="age"
+                value={formData.age || ""}
+                onChange={handleChange}
+              />
+            </label>
+            {/* Dropdown za odabir spola */}
+            <label>
+              Spol:
+              <select
+                name="gender"
+                value={formData.gender || ""}
+                onChange={handleChange}
+              >
+                <option value="">Odaberite</option>
+                <option value="M">Muško</option>
+                <option value="F">Žensko</option>
+                <option value="O">Ostalo</option>
+              </select>
+            </label>
+            {/* Dugme za spremanje promjena */}
+            <button className="buttons" onClick={handleSave}>
+              Spremi
+            </button>
+            {/* Dugme za odustajanje od uređivanja */}
+            <button className="buttons" onClick={handleEditToggle}>
+              Odustani
+            </button>
+          </div>
+        ) : (
+          <div className="profile-details">
+            {/* Prikaz podataka korisničkog profila */}
+            <p>
+              <strong>Korisničko ime:</strong> {profileData.username}
+            </p>
+            <p>
+              <strong>Ime:</strong> {profileData.name}
+            </p>
+            <p>
+              <strong>Prezime:</strong> {profileData.surname}
+            </p>
+            <p>
+              <strong>Lokacija:</strong>{" "}
+              {profileData.location ? profileData.location : "Nije uneseno"}
+            </p>
+            <p>
+              <strong>Dob:</strong>{" "}
+              {profileData.age ? profileData.age : "Nije uneseno"}
+            </p>
+            <p>
+              <strong>Spol:</strong>{" "}
+              {profileData.gender ? profileData.gender : "Nije uneseno"}
+            </p>
+            <p>
+              <strong>Email:</strong> {profileData.email}
+            </p>
+            <p>
+              <strong>Tip korisnika:</strong>{" "}
+              {profileData.type.type === "DANCER" ? "Plesač" : "Direktor"}
+            </p>
+            {/* Dugme za prelazak u način uređivanja */}
+            <button onClick={handleEditToggle}>Uredi Profil</button>
+          </div>
+        )}
+
+        {/* Sekcija za odabir vrsta plesa */}
+        {profileData?.type.type === "DANCER" && (
+          <div className="dance-styles-section">
+            <h3>Vrste plesa</h3>
+            <div className="dance-styles-list">
+              {/* Iteracija kroz listu vrsta plesa i prikaz checkboxa za svaku */}
+              {danceStylesList.map((style) => (
+                <label key={style}>
+                  <input
+                    type="checkbox"
+                    value={style}
+                    checked={selectedDanceStyles.includes(style)}
+                    onChange={handleDanceStyleChange}
+                  />
+                  {style}
+                </label>
+              ))}
+            </div>
+            {/* Dugme za spremanje odabranih vrsta plesa */}
+            <button onClick={saveDanceStyles}>Spremi Vrste Plesa</button>
+          </div>
+        )}
+
+        {/* Sekcija za postavljanje statusa neaktivnosti */}
+        {profileData?.type.type === "DANCER" && (
+          <div className="inactive-section">
+            <h3>Status profila</h3>
+            <label>
+              <input
+                type="checkbox"
+                checked={inactive}
+                onChange={handleInactiveChange}
+              />
+              Neaktivan
+            </label>
+            {/* Ako je profil označen kao neaktivan, prikazi opciju za odabir datuma */}
+            {inactive && (
+              <div>
+                <label>
+                  Neaktivan do:
+                  <input
+                    type="date"
+                    value={inactiveUntil}
+                    onChange={(e) => setInactiveUntil(e.target.value)}
+                  />
+                </label>
+              </div>
+            )}
+            {/* Dugme za spremanje statusa neaktivnosti */}
+            <button onClick={saveInactiveStatus}>Spremi Status</button>
+          </div>
+        )}
+
+        {/* Sekcija za upravljanje portfoliom */}
+        <div className="portfolio-section">
+          <h3>Moj Portfolio</h3>
+          <button className="buttons" onClick={handlePortfolioEditToggle}>
+            Uredi portfolio
+          </button>
+          <hr />
+          {/* Input za upload slike ili videozapisa */}
+          {isEditingPortfolio ? (
+            <>
+              <input
+                name="description"
+                type="text"
+                placeholder={description}
+                value={descriptionchange}
+                onChange={handleDescriptionChange}
+              />
+              <p>Fotografije:</p>
+              <input
+                type="file"
+                accept="image/*"
+                name="photos"
+                multiple
+                onChange={handleFileSelect}
+              />
+              <p>Videozapisi:</p>
+              <input
+                type="file"
+                name="videos"
+                accept="video/*"
+                multiple
+                onChange={handleFileSelect}
+              />
+              <button onClick={handleSubmit}>Spremi Portfolio</button>
+            </>
+          ) : (
+            <></>
+          )}
+          <p className="portfolio-description">
+            {description ? description : "Nemate uneseno ništa u portfolio"}
+          </p>
+          <br />
+          <br />
+          <hr />
+          <br />
+          <div className="portfolio-items">
+            {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
+            {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
+            {portfolioItems.photos.length > 0 ? (
+              portfolioItems.photos.map((photo, index) => (
+                <div key={index} className="portfolio-item">
+                  <a
+                    href={`http://localhost:8080${photo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`http://localhost:8080${photo}`}
+                      alt={`Portfolio Photo ${index + 1}`}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "300px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </a>
                   <button
                     onClick={() =>
-                      handleDeletePortfolioVideo(video.split("uploads/")[1])
+                      handleDeletePortfolioPhoto(photo.split("uploads/")[1])
                     }
                   >
                     X
                   </button>
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            ))
-          ) : (
-            <p>Nemate spremljene videozapise.</p>
-          )}
+                </div>
+              ))
+            ) : (
+              <p>Nemate spremljene slike.</p>
+            )}
 
-          {/* Dugme za brisanje portfolio stavke */}
+            {portfolioItems.videos.length > 0 ? (
+              portfolioItems.videos.map((video, index) => (
+                <div key={index} className="portfolio-item">
+                  <video
+                    src={`http://localhost:8080${video}`}
+                    controls
+                    style={{ maxWidth: "100%", maxHeight: "300px" }}
+                  >
+                    <button
+                      onClick={() =>
+                        handleDeletePortfolioVideo(video.split("uploads/")[1])
+                      }
+                    >
+                      X
+                    </button>
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ))
+            ) : (
+              <p>Nemate spremljene videozapise.</p>
+            )}
+
+            {/* Dugme za brisanje portfolio stavke */}
+          </div>
         </div>
-      </div>
 
-      {/* Dugme za odjavu korisnika */}
-      <button className="logout-button" onClick={onLogout}>
-        Odjava
-      </button>
+        {/* Dugme za odjavu korisnika */}
+        <button className="logout-button" onClick={onLogout}>
+          Odjava
+        </button>
+      </div>
     </div>
   );
 };

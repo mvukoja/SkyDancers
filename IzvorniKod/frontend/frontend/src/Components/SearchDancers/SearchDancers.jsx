@@ -32,16 +32,16 @@ const SearchDancers = () => {
 
   const handleDanceStyleChange = (e) => {
     const value = e.target.value;
-    setSelectedDanceStyles(prevStyles =>
+    setSelectedDanceStyles((prevStyles) =>
       prevStyles.includes(value)
-        ? prevStyles.filter(style => style !== value)
+        ? prevStyles.filter((style) => style !== value)
         : [...prevStyles, value]
     );
   };
 
   const handleSearch = async () => {
     try {
-      const token = localStorage.getItem('jwtToken');
+      const token = localStorage.getItem("jwtToken");
       setError("");
       const response = await fetch(
         "http://localhost:8080/users/searchdancers",
@@ -49,7 +49,7 @@ const SearchDancers = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             ageup: parseInt(filters.ageup),
@@ -84,8 +84,8 @@ const SearchDancers = () => {
         </a>
 
         <div className="header-links">
-          <Link to="/myprofile" className="login">
-            <button>Moj profil</button>
+          <Link to="/" className="login">
+            <button>Početna</button>
           </Link>
           <Link to="/logout" className="logout">
             <button>Odjava</button>
@@ -164,23 +164,27 @@ const SearchDancers = () => {
                 <li key={dancer.id} className="dancer-card">
                   <div className="dancer-info">
                     <p>
-                      <strong>{dancer.username}</strong> 
+                      <strong id="username">{dancer.username}</strong>
                     </p>
                     <p>
                       <strong>Ime:</strong> {dancer.name}
                     </p>
                     <p>
-                      <strong>Godine:</strong> {dancer.age}
+                      <strong>Godine:</strong>{" "}
+                      {dancer.age ? dancer.age : "Nije uneseno"}
                     </p>
                     <p>
-                      <strong>Spol:</strong> {dancer.gender}
+                      <strong>Spol:</strong>{" "}
+                      {dancer.gender ? dancer.gender : "Nije uneseno"}
                     </p>
                     <p>
                       <strong>Stilovi plesa:</strong>{" "}
-                      {dancer.danceStyles?.map(style => style.name).join(", ")}
+                      {dancer.danceStyles
+                        ?.map((style) => style.name)
+                        .join(", ")}
                     </p>
                   </div>
-                  <button 
+                  <button
                     onClick={() => handleDancerClick(dancer.username)}
                     className="view-profile-button"
                   >

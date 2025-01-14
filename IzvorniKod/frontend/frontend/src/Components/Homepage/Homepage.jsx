@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 
 const Homepage = ({ onLogout }) => {
   const [profileData, setProfileData] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
   const getUsernameFromToken = () => {
@@ -64,19 +65,33 @@ const Homepage = ({ onLogout }) => {
     fetchProfile(); // Pozovi funkciju za dohvaćanje profila
   }, [navigate, onLogout]); // Ovisnosti useEffect-a (navigate i onLogout)
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchInput.trim() !== "") {
+      navigate(`/search-results/${searchInput.trim()}`);
+    }
+  };
+
   return (
     <div className="homepage-container">
       <header className="homepage-header">
         <a href="/" className="logo">
           <img src={headerlogo} alt="" className="logo-img" />
         </a>
-
         <div className="header-links">
+          <input
+            type="text"
+            placeholder="Pretraga korisnika..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="search-bar"
+            id="usersearch"
+          />
           <Link to="/myprofile" className="login">
-            <button>My Profile</button>
+            <button>Moj profil</button>
           </Link>
           <Link to="/logout" className="logout">
-            <button>Log Out</button>
+            <button>Odjava</button>
           </Link>
         </div>
       </header>

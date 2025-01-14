@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import './CreateAudition.css'
-import headerlogo from '../Assets/header-logo.png';
-import { jwtDecode } from 'jwt-decode';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import "./CreateAudition.css";
+import headerlogo from "../Assets/header-logo.png";
+import { jwtDecode } from "jwt-decode";
 
 const CreateAudition = () => {
   const [formData, setFormData] = useState({
-    datetime: '',
-    deadline: '',
-    location: '',
-    description: '',
-    positions: '',
-    wage: '',
+    datetime: "",
+    deadline: "",
+    location: "",
+    description: "",
+    positions: "",
+    wage: "",
   });
 
   const [selectedDanceStyles, setSelectedDanceStyles] = useState([]);
@@ -38,9 +38,9 @@ const CreateAudition = () => {
 
   const handleDanceStyleChange = (e) => {
     const value = e.target.value;
-    setSelectedDanceStyles(prevStyles =>
+    setSelectedDanceStyles((prevStyles) =>
       prevStyles.includes(value)
-        ? prevStyles.filter(style => style !== value)
+        ? prevStyles.filter((style) => style !== value)
         : [...prevStyles, value]
     );
   };
@@ -52,47 +52,46 @@ const CreateAudition = () => {
       ...formData,
       positions: parseInt(formData.positions, 10),
       wage: parseFloat(formData.wage),
-      styles: selectedDanceStyles
+      styles: selectedDanceStyles,
     };
 
     try {
-      const token = localStorage.getItem('jwtToken');
+      const token = localStorage.getItem("jwtToken");
       console.log(auditionData);
-      const response = await fetch('http://localhost:8080/audition/create', 
-       {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/audition/create", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(auditionData),
       });
 
       if (response.ok) {
         const data = await response.json();
-        alert('Audicija uspješno kreirana!');
-        navigate('/');
+        alert("Audicija uspješno kreirana!");
+        navigate("/");
       } else {
-        alert('Došlo je do greške pri kreiranju audicije.');
+        alert("Došlo je do greške pri kreiranju audicije.");
       }
     } catch (error) {
-      console.error('Greška:', error);
-      alert('Greška pri povezivanju s poslužiteljem.');
+      console.error("Greška:", error);
+      alert("Greška pri povezivanju s poslužiteljem.");
     }
   };
 
   return (
     <div>
-      <header className='homepage-header'>
-        <a href="/" className='logo'>
-          <img src={headerlogo} alt="" className='logo-img'/>
+      <header className="homepage-header">
+        <a href="/" className="logo">
+          <img src={headerlogo} alt="" className="logo-img" />
         </a>
 
-        <div className='header-links'>
-          <Link to="/myprofile" className='login'>
-            <button>Moj profil</button>
+        <div className="header-links">
+          <Link to="/" className="login">
+            <button>Početna</button>
           </Link>
-          <Link to="/logout" className='logout'>
+          <Link to="/logout" className="logout">
             <button>Odjava</button>
           </Link>
         </div>
@@ -128,6 +127,7 @@ const CreateAudition = () => {
               name="location"
               value={formData.location}
               onChange={handleInputChange}
+              placeholder="Unesite lokaciju"
               required
             />
           </label>
@@ -137,6 +137,7 @@ const CreateAudition = () => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
+              placeholder="Unesite opis"
               required
             />
           </label>
@@ -147,16 +148,18 @@ const CreateAudition = () => {
               name="positions"
               value={formData.positions}
               onChange={handleInputChange}
+              placeholder="Unesite broj pozicija"
               required
             />
           </label>
           <label>
-            Satnica (EUR):
+            Plaća (EUR):
             <input
               type="number"
               name="wage"
               value={formData.wage}
               onChange={handleInputChange}
+              placeholder="Unesite plaću"
               required
             />
           </label>

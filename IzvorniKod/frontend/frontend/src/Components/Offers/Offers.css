@@ -1,5 +1,6 @@
 .offers-container {
-  max-width: 800px;
+  max-width: 1200px;
+  width: 80%;
   margin: auto auto;
   padding: 30px;
   background-color: white;
@@ -19,6 +20,9 @@
 
 .offers-list {
   display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 
@@ -27,6 +31,9 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f8f9fa;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word; 
 }
 
 .offer-card p {
