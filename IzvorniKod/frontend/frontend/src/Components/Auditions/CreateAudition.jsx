@@ -90,10 +90,10 @@ const CreateAudition = () => {
 
         <div className='header-links'>
           <Link to="/myprofile" className='login'>
-            <button>My Profile</button>
+            <button>Moj profil</button>
           </Link>
           <Link to="/logout" className='logout'>
-            <button>Log Out</button>
+            <button>Odjava</button>
           </Link>
         </div>
       </header>

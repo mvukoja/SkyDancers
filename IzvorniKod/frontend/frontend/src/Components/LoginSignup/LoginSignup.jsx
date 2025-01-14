@@ -171,21 +171,21 @@ const LoginSignup = ({ onLogin }) => {
             <InputField
               icon={user_icon}
               type="text"
-              placeholder="Username"
+              placeholder="Korisničko ime"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <InputField
               icon={user_icon}
               type="text"
-              placeholder="Name"
+              placeholder="Ime"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <InputField
               icon={user_icon}
               type="text"
-              placeholder="Surname"
+              placeholder="Prezime"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             />
@@ -203,7 +203,7 @@ const LoginSignup = ({ onLogin }) => {
           <InputField
             icon={user_icon}
             type="text"
-            placeholder="Username"
+            placeholder="Korisničko ime"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -211,7 +211,7 @@ const LoginSignup = ({ onLogin }) => {
         <InputField
           icon={password_icon}
           type="password"
-          placeholder="Password"
+          placeholder="Lozinka"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

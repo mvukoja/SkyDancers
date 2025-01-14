@@ -13,7 +13,7 @@ function LandingPage() {
         </a>
         <div className="header-links">
           <Link to="/login" className="login">
-            <button>Login</button>
+            <button>Prijava</button>
           </Link>
         </div>
       </header>

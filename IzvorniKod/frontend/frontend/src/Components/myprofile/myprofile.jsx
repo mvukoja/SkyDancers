@@ -425,10 +425,10 @@ const MyProfile = ({ onLogout }) => {
 
         <div className="header-links">
           <Link to="/" className="login">
-            <button>Home</button>
+            <button>Početna</button>
           </Link>
           <Link to="/logout" className="logout">
-            <button>Log Out</button>
+            <button>Odjava</button>
           </Link>
         </div>
       </header>
