@@ -67,7 +67,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
-	@GetMapping("/get/{username}")
+	@GetMapping("/getdirectors/{username}")
 	public ResponseEntity<List<AuditionDTO>> getAllDirectorsAuditions(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
 
