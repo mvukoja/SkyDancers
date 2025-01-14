@@ -1,0 +1,99 @@
+.director-auditions {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.director-auditions h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.auditions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.audition-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.audition-card:hover {
+    transform: translateY(-5px);
+}
+
+.audition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.audition-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.subscribed-count {
+    background: #e0e0e0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.audition-details p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.styles-list {
+    margin-top: 15px;
+}
+
+.style-tag {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 4px;
+    font-size: 0.9em;
+}
+
+.error-message {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    color: #c00;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.no-auditions {
+    text-align: center;
+    color: #666;
+    margin: 40px 0;
+    font-size: 1.1em;
+}
+
+.loading {
+    text-align: center;
+    color: #666;
+    margin: 40px 0;
+    font-size: 1.1em;
+}
+
+.no-styles {
+    color: #999;
+    font-style: italic;
+    margin-left: 8px;
+}

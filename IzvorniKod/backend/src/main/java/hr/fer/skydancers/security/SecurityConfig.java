@@ -43,10 +43,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
+				.cors(cors -> cors.configure(http))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
 					authorize.requestMatchers("/home", "/users/register/**", "/users/registerdancer", "/users/registerdirector", "/users/authenticate/**",
-							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/**", "/uploads/**").permitAll();
+							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/getall", "/uploads/**").permitAll();
 					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.anyRequest().authenticated();

@@ -75,10 +75,10 @@ const Homepage = ({ onLogout }) => {
 
         <div className='header-links'>
           <Link to="/myprofile" className='login'>
-            <button>Moj profil</button>
+            <button>My Profile</button>
           </Link>
           <Link to="/logout" className='logout'>
-            <button>Odjava</button>
+            <button>Log Out</button>
           </Link>
         </div>
       </header>
@@ -93,6 +93,9 @@ const Homepage = ({ onLogout }) => {
         <div className='button-group'>
           <button className='navigation-button' onClick={() => navigate('/post-audition')}>
             Objava audicije
+          </button>
+          <button className='navigation-button' onClick={() => navigate('/my-auditions')}>
+            Moje audicije
           </button>
           <button className='navigation-button' onClick={() => navigate('/search-dancers')}>
             Pretraga plesača
