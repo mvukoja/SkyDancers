@@ -78,6 +78,11 @@ const Homepage = ({ onLogout }) => {
           <img src={headerlogo} alt="" className="logo-img" />
         </a>
         <div className="header-links">
+          {profileData?.type.type === "DANCER" && (
+            <Link to="/notifications" className="notifications">
+              <button><img src="../../notification-bell.svg" alt="" style={{ width: "15px", height: "15px" }}/> Obavijesti</button>
+            </Link>
+          )}
           <input
             type="text"
             placeholder="Pretraga korisnika..."

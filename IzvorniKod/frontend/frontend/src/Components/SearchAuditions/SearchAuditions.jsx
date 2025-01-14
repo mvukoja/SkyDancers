@@ -114,8 +114,8 @@ const SearchAuditions = () => {
         </a>
 
         <div className="header-links">
-          <Link to="/myprofile" className="login">
-            <button>Moj profil</button>
+          <Link to="/" className="login">
+            <button>Početna</button>
           </Link>
           <Link to="/logout" className="logout">
             <button>Odjava</button>

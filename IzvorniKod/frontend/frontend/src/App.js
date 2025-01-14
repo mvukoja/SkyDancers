@@ -26,6 +26,7 @@ import DirectorAuditions from "./Components/DirectorAuditions/DirectorAuditions"
 import SearchAuditions from "./Components/SearchAuditions/SearchAuditions";
 import DancerOffers from "./Components/Offers/DancerOffers.jsx";
 import DirectorOffers from "./Components/Offers/DirectorOffers.jsx";
+import NotificationsPage from "./Components/Notifications/Notifications.jsx";
 
 // Definicija glavne App komponente
 function App() {
@@ -147,6 +148,7 @@ function App() {
         />
         <Route path="/dancer-offers" element={<DancerOffers />} />
         <Route path="/director-offers" element={<DirectorOffers />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
       </Routes>
     </Router>
   );

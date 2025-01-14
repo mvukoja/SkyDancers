@@ -59,9 +59,26 @@ header {
   margin-left: 15px;
 }
 
+.notifications button {
+  color: white;
+  border: none;
+  background-color: #ffcc00;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.notifications button:hover {
+  background-color: #f1de92;
+}
+
 .login button {
   color: white;
   border: none;
+  background-color: #4c009d;
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 20px;
