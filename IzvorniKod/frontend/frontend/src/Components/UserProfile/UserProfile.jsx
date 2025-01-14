@@ -8,6 +8,9 @@ const UserProfile = () => {
   const [profileData, setProfileData] = useState(null);
   const [portfolioData, setPortfolioData] = useState(null);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [offerMessage, setOfferMessage] = useState("");
+  const [confirmationMessage, setConfirmationMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +51,37 @@ const UserProfile = () => {
     fetchData();
   }, [username]);
 
+  const handleSendOffer = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const body = {
+        dancerid: profileData.dancerid,
+        message: offerMessage,
+      };
+
+      const response = await fetch("http://localhost:8080/offer/make", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error("Došlo je do greške pri slanju ponude.");
+      }
+
+      const result = await response.json();
+      setConfirmationMessage("Ponuda je uspješno poslana!");
+      setShowModal(false);
+    } catch (err) {
+      setConfirmationMessage(err.message);
+    }
+  };
+
   if (error) {
     return <div className="error-message">{error}</div>;
   }
@@ -75,7 +109,9 @@ const UserProfile = () => {
 
       <div className="profile-container">
         <div className="profile-header">
-          <h2>{profileData.name} {profileData.surname}</h2>
+          <h2>
+            {profileData.name} {profileData.surname}
+          </h2>
           <span className="user-type">{profileData.type.type}</span>
         </div>
 
@@ -119,10 +155,36 @@ const UserProfile = () => {
           )}
         </div>
 
+        {profileData.type.type === "DANCER" && (
+          <div className="send-offer-section">
+            <button onClick={() => setShowModal(true)}>Pošalji ponudu</button>
+          </div>
+        )}
+
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Pošalji ponudu</h3>
+              <textarea
+                value={offerMessage}
+                onChange={(e) => setOfferMessage(e.target.value)}
+                placeholder="Unesite svoju poruku..."
+              ></textarea>
+              <button onClick={handleSendOffer}>Pošalji</button>
+              <button onClick={() => setShowModal(false)}>Zatvori</button>
+            </div>
+          </div>
+        )}
+
+        {/* Poruka potvrde */}
+        {confirmationMessage && (
+          <div className="confirmation-message">{confirmationMessage}</div>
+        )}
+
         {portfolioData && (
           <div className="portfolio-section">
             <h3>Portfolio</h3>
-            
+
             {portfolioData.description && (
               <div className="portfolio-description">
                 <h4>O meni</h4>

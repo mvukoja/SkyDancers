@@ -23,7 +23,7 @@
 }
 
 .user-type {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -133,9 +133,43 @@
   .profile-sections {
     grid-template-columns: 1fr;
   }
-  
+
   .profile-container {
     padding: 1rem;
     margin: 1rem;
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.confirmation-message {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
 }

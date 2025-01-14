@@ -18,6 +18,8 @@ import SearchDancers from './Components/SearchDancers/SearchDancers.jsx';
 import UserProfile from './Components/UserProfile/UserProfile';
 import DirectorAuditions from './Components/DirectorAuditions/DirectorAuditions'; // Import DirectorAuditions komponente
 import SearchAuditions from './Components/SearchAuditions/SearchAuditions';
+import DancerOffers from './Components/Offers/DancerOffers.jsx';
+import DirectorOffers from './Components/Offers/DirectorOffers.jsx';
 
 // Definicija glavne App komponente
 function App() {
@@ -119,6 +121,9 @@ function App() {
               : <Navigate to="/" replace />
           }
         />
+
+      <Route path='/dancer-offers' element={<DancerOffers />} />
+      <Route path='/director-offers' element={<DirectorOffers />} />
         
       </Routes>
     </Router>

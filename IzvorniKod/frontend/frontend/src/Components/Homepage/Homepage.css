@@ -97,8 +97,8 @@ h1 {
 }
 
 .button-group {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   justify-content: center;
   align-items: center;
@@ -122,6 +122,8 @@ h1 {
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .navigation-button:hover {
