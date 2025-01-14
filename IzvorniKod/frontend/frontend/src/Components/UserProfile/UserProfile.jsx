@@ -72,8 +72,6 @@ const UserProfile = () => {
       if (!response.ok) {
         throw new Error("Došlo je do greške pri slanju ponude.");
       }
-
-      const result = await response.json();
       setConfirmationMessage("Ponuda je uspješno poslana!");
       setShowModal(false);
     } catch (err) {

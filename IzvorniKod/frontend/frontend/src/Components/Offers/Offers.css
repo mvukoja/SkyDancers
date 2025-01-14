@@ -1,5 +1,6 @@
 .offers-container {
   max-width: 1200px;
+  min-width: 700px;
   width: 80%;
   margin: auto auto;
   padding: 30px;

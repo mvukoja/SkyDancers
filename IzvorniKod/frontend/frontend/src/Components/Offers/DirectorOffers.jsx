@@ -31,6 +31,31 @@ const DirectorOffers = () => {
     fetchOffers();
   }, []);
 
+  const handleDelete = async (offerId) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await fetch(
+        `http://localhost:8080/offer/delete/${offerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Nije moguće ažurirati ponudu");
+      }
+      const updatedOffers = offers.filter((item) =>
+        offerId !== item.id
+      );
+      setOffers(updatedOffers);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div>
       <header>
@@ -69,6 +94,12 @@ const DirectorOffers = () => {
                 <strong>Datum:</strong>{" "}
                 {new Date(offer.createdAt).toLocaleDateString()}
               </p>
+              <button
+                className="reject-button"
+                onClick={() => handleDelete(offer.id)}
+              >
+                Ukloni
+              </button>
             </div>
           ))}
           {offers.length === 0 && <p>Nema poslanih ponuda.</p>}
