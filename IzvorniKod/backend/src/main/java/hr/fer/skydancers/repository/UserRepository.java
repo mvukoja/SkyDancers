@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<MyUser, Integer> {
 			+ "where danc.age >= ?2 " + "and danc.age <= ?1 " + "and danc.gender = ?3 " + "and not exists ( "
 			+ "    select ds from Dance ds " + "    where ds.name in ?4 "
 			+ "    and ds not in (select ds2 from danc.dancestyles ds2) " + ")")
-	Optional<Iterable<Dancer>> findByAgeAndGenderAndDanceStyles(Integer ageup, Integer agedown, String gender,
+	Optional<List<Dancer>> findByAgeAndGenderAndDanceStyles(Integer ageup, Integer agedown, String gender,
 			List<String> danceStyles);
 
 	
