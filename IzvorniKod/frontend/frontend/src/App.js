@@ -27,7 +27,8 @@ import SearchAuditions from "./Components/SearchAuditions/SearchAuditions";
 import DancerOffers from "./Components/Offers/DancerOffers.jsx";
 import DirectorOffers from "./Components/Offers/DirectorOffers.jsx";
 import NotificationsPage from "./Components/Notifications/Notifications.jsx";
-
+import Chat from './Components/Chat/Chat';
+import { AuthProvider } from './Components/AuthContext';
 // Definicija glavne App komponente
 function App() {
   // Stanje koje prati je li korisnik autentificiran
@@ -56,6 +57,7 @@ function App() {
 
   // Renderiranje komponenti unutar Router-a za upravljanje navigacijom
   return (
+    <AuthProvider>
     <Router>
       <Routes>
         {/* Definicija rute za početnu stranicu */}
@@ -149,8 +151,16 @@ function App() {
         <Route path="/dancer-offers" element={<DancerOffers />} />
         <Route path="/director-offers" element={<DirectorOffers />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route
+          path="/chat"
+          element={
+              <Chat />
+              
+          }
+        />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

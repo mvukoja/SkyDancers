@@ -1,0 +1,151 @@
+/* Page Layout */
+.chat-page {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    padding-top: 80px; /* Add padding to account for fixed header */
+  }
+  
+ 
+
+
+
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 70%;
+  }
+  
+  .sent {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+  }
+  
+  .received {
+    background-color: #e9ecef;
+    margin-right: auto;
+  }
+  
+  form {
+    display: flex;
+    gap: 10px;
+  }
+  
+  input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  .user-group {
+    margin-bottom: 20px;
+  }
+  
+  .user-group h4 {
+    color: #666;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+  }
+  /* Add these new styles to your existing CSS */
+
+.search-container {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .user-details {
+    font-size: 0.8em;
+    color: #666;
+  }
+  
+  /* Update existing styles */
+  .user-item {
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .user-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .user-item.selected {
+    background-color: #e3f2fd;
+  }
+  .search-results {
+    margin-top: 10px;
+  }
+  
+
+
+  
+  .user-type {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .user-item.selected .user-type {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+  
+  
