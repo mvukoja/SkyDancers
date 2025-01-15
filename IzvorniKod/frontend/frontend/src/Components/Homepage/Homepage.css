@@ -20,7 +20,7 @@ header {
   z-index: 2;
 }
 
-/* Pozadinska slika */
+/* Pozadinska slika s efektom zamućenja od lijeva prema desno */
 .background-image-container {
   position: fixed;
   top: 10%;
@@ -30,8 +30,16 @@ header {
   background-image: url("../Assets/week2.png");
   background-size: cover;
   background-position: center;
+  filter: blur(8px) brightness(50%);
   z-index: -1; /* Postavi iza ostalih elemenata */
+  transition: filter 0.5s ease-in-out;
 }
+
+/* Unapređenje efekta zamućenja */
+.background-image-container:hover {
+  filter: blur(5px) brightness(60%);
+}
+
 .logo-img {
   width: 170px;
   height: auto;
@@ -59,23 +67,7 @@ header {
   margin-left: 15px;
 }
 
-.notifications button {
-  color: white;
-  border: none;
-  background-color: #ffcc00;
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 20px;
-  cursor: pointer;
-  align-self: center;
-  margin-bottom: 10px;
-}
-
-.notifications button:hover {
-  background-color: #f1de92;
-}
-
-.login button {
+.login button, .logout button {
   color: white;
   border: none;
   background-color: #4c009d;
@@ -85,32 +77,46 @@ header {
   cursor: pointer;
   align-self: center;
   margin-bottom: 10px;
+  transition: background-color 0.3s ease;
 }
 
-.login button:hover {
+.login button:hover, .logout button:hover {
   background-color: #37077a;
 }
 
-.logout button {
-  color: white;
-  border: none;
-  background-color: #4c009d;
-  padding: 10px 20px;
-  font-size: 20px;
-  cursor: pointer;
-  align-self: center;
-  margin-bottom: 10px;
-  border-radius: 20px;
+#welcome{
+  margin-top: 200px;
+  color: #fff;
+  margin-bottom: 50px;
+  text-align: center;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4); /* Adds shadow to text */
 }
 
-.logout button:hover {
-  background-color: #37077a;
+
+.welcome-message {
+  position: fixed;
+  top: 50%;
+  left: 25%;  /* 25% from the left side */
+  transform: translate(-50%, -50%);  /* Center the message horizontally and vertically */
+  width: 32%;  /* Adjust width for a centered but not too wide layout */
+  background-color: rgba(255, 255, 255, 0.8);  /* Slight background blur */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;  /* Darker text color for readability */
+  z-index: 3;  /* Ensure it appears over other content */
+  
+  /* Fading border effect */
+  border: 1px solid rgba(0, 0, 0, 0.1);  /* Soft border color */
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));  /* Fading effect on the border */
 }
 
-h1 {
-  margin-top: 50%;
-  color: #4c1895;
+.welcome-message p {
+  margin: 10px 0;
 }
+
 
 .director-notice {
   position: relative;
@@ -127,24 +133,24 @@ h1 {
 }
 
 .button-group {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  justify-content: center;
+  margin-top: 90px;
+  display: flex;
+  flex-direction: column;  /* Stack buttons in a column */
+  justify-content: flex-start;  /* Align buttons to the top of the container */
   align-items: center;
   position: fixed;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+  right: 15%;
+  transform: translateY(-50%);  /* Vertically center */
+  width: 25%;  /* Buttons take up 1/4 of the screen width */
 }
 
 .navigation-button {
   flex: 0 1 auto;
-  min-width: 400px;
-  max-width: none;
-  font-size: 2rem;
-  padding: 60px 50px;
+  width: 100%;  /* Make buttons take full width of the container */
+  height: 80px;  /* Fixed height for all buttons */
+  font-size: 1.6rem;  /* Adjust font size */
+  padding: 10px 0;  /* Padding for better text alignment */
   border: 3px solid #4c009d;
   border-radius: 8px;
   background-color: #e6d5f2;
@@ -152,11 +158,35 @@ h1 {
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-bottom: 20px;  /* Space between buttons */
 }
 
 .navigation-button:hover {
   background-color: #d1b3f2;
   transform: scale(1.05);
+}
+
+
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .button-group {
+    grid-template-columns: 1fr; /* Stack buttons vertically on smaller screens */
+    margin-top: 60px;
+  }
+
+  .navigation-button {
+    width: 90%; /* Make buttons take up more width */
+    margin: 10px auto;
+  }
+
+  .header-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-right: 0;
+  }
 }

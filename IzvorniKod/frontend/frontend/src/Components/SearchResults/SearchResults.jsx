@@ -3,11 +3,26 @@ import { useParams } from "react-router-dom";
 import { useNavigate, Link } from "react-router-dom";
 import "./SearchResults.css";
 import headerlogo from "../Assets/header-logo.png";
+import { jwtDecode } from "jwt-decode";
 
 const SearchResults = () => {
   const navigate = useNavigate();
   const { username } = useParams();
+  const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+  const getUsernameFromToken = () => {
+      const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
+      if (!token) return null; // Ako token ne postoji, vrati null
+  
+      try {
+        const decodedToken = jwtDecode(token); // Dekodiraj token
+        return decodedToken.sub; // Vratiti korisničko ime iz dekodiranog tokena (prilagoditi prema strukturi tokena)
+      } catch (error) {
+        console.error("Greška pri dekodiranju tokena:", error);
+        return null; // Ako dekodiranje ne uspije, vrati null
+      }
+    };
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -28,7 +43,10 @@ const SearchResults = () => {
         }
 
         const data = await response.json();
-        setSearchResults(data);
+        const filteredData = data.filter(
+          (user) => user.username !== getUsernameFromToken()
+        );
+        setSearchResults(filteredData);
         console.log(data);
       } catch (error) {
         console.error("Greška pri dohvaćanju podataka profila:", error);
@@ -41,6 +59,12 @@ const SearchResults = () => {
     navigate(`/profile/${username}`);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchInput.trim() !== "") {
+      navigate(`/search-results/${searchInput.trim()}`);
+    }
+  };
+
   return (
     <div>
       <header className="homepage-header">
@@ -49,6 +73,15 @@ const SearchResults = () => {
         </a>
 
         <div className="header-links">
+        <input
+            type="text"
+            placeholder="Pretraga korisnika..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="search-bar"
+            id="usersearch"
+          />
           <Link to="/" className="login">
             <button>Početna</button>
           </Link>

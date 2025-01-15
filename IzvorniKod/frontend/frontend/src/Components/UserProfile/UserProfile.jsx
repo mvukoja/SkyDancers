@@ -87,6 +87,15 @@ const UserProfile = () => {
     return <div>Učitavanje...</div>;
   }
 
+  const startChatWithUser = (userId, userName) => {
+    const selectedUser = {
+      type: { userid: userId },
+      name: userName,
+    };
+    localStorage.setItem("selectedUser", JSON.stringify(selectedUser));
+    window.location.href = "/chat";
+  };
+
   return (
     <div>
       <header className="homepage-header">
@@ -109,7 +118,9 @@ const UserProfile = () => {
           <h2>
             {profileData.name} {profileData.surname}
           </h2>
-          <span className="user-type">{profileData.type.type}</span>
+          <span className="user-type">
+            {profileData.type.type === "DANCER" ? "PLESAČ" : "DIREKTOR"}
+          </span>
         </div>
 
         <div className="profile-sections">
@@ -140,6 +151,9 @@ const UserProfile = () => {
               <strong>Email:</strong> {profileData.email}
             </p>
             <p>
+              <strong>Aktivnost:</strong> {(profileData.inactive === false) ? "Aktivan" : "Neaktivan do " + new Date(profileData.inactiveUntil).toLocaleString()}
+            </p>
+            <p>
               <strong>Tip korisnika:</strong>{" "}
               {profileData.type.type === "DANCER" ? "Plesač" : "Direktor"}
             </p>
@@ -161,7 +175,30 @@ const UserProfile = () => {
           )}
         </div>
 
-        {profileData.type.type === "DANCER" && (
+        <div className="chatbutton">
+          {profileData.inactive === false ? (
+            <>
+              <button
+                onClick={() =>
+                  startChatWithUser(
+                    profileData.type.userid,
+                    profileData.username
+                  )
+                }
+              >
+                Započni chat
+              </button>
+              <br />
+            </>
+          ) : (
+            <>
+              <span>Osoba je stavila status neaktivan!</span>
+              <br />
+              <br />
+            </>
+          )}
+        </div>
+        {profileData.type.type === "DANCER" && profileData.inactive === false && (
           <div className="send-offer-section">
             <button onClick={() => setShowModal(true)}>Pošalji ponudu</button>
           </div>
@@ -187,7 +224,7 @@ const UserProfile = () => {
           <div className="confirmation-message">{confirmationMessage}</div>
         )}
 
-{portfolioData && (
+        {portfolioData && (
           <div className="portfolio-section">
             <h3>Portfolio</h3>
 

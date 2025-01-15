@@ -29,6 +29,19 @@
   .header-links a {
     margin-left: 15px;
   }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    padding: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+    border-radius: 5%;
+    background-color: #d1b3f2;
+    color: #fff;
+    margin-top: -6px;
+  }
   
   .search-results-container {
     margin-top: 120px;

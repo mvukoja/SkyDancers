@@ -61,6 +61,7 @@ public class AuditionController {
 				List<String> dances = new LinkedList<>();
 				el.getStyles().forEach(e -> dances.add(e.getName()));
 				aud.setStyles(dances);
+				aud.setAuthor(el.getUser().getUsername());
 				dto.add(aud);
 			}
 		});
@@ -82,6 +83,7 @@ public class AuditionController {
 				List<String> dances = new LinkedList<>();
 				el.getStyles().forEach(e -> dances.add(e.getName()));
 				aud.setStyles(dances);
+				aud.setAuthor(el.getUser().getUsername());
 				dto.add(aud);
 			}
 		});
@@ -92,13 +94,11 @@ public class AuditionController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<AuditionDTO> getAudition(@PathVariable Integer id) {
 		Audition aud = auditionService.get(id);
-		if (aud.isArchived()) {
-			return ResponseEntity.badRequest().build();
-		}
 		AuditionDTO dto = modelMapper.map(aud, AuditionDTO.class);
 		List<String> dances = new LinkedList<>();
 		aud.getStyles().forEach(e -> dances.add(e.getName()));
 		dto.setStyles(dances);
+		dto.setAuthor(aud.getUser().getUsername());
 		return ResponseEntity.ok(dto);
 	}
 
@@ -134,6 +134,7 @@ public class AuditionController {
 				List<String> dances = new LinkedList<>();
 				el.getStyles().forEach(e -> dances.add(e.getName()));
 				aud.setStyles(dances);
+				aud.setAuthor(el.getUser().getUsername());
 				dto.add(aud);
 			}
 		});
@@ -233,6 +234,7 @@ public class AuditionController {
 				List<String> dances = new LinkedList<>();
 				el.getStyles().forEach(e -> dances.add(e.getName()));
 				aud.setStyles(dances);
+				aud.setAuthor(el.getUser().getUsername());
 				dtoo.add(aud);
 			}
 		});
@@ -260,12 +262,36 @@ public class AuditionController {
 				List<String> dance = new LinkedList<>();
 				el.getStyles().forEach(e -> dance.add(e.getName()));
 				aud.setStyles(dance);
+				aud.setAuthor(el.getUser().getUsername());
 				dtoo.add(aud);
 			}
 		});
 		return ResponseEntity.ok(dtoo);
 	}
 	
+	@GetMapping("/getmyapplications")
+	public ResponseEntity<List<AuditionDTO>> seeMyApplications(){
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(username).orElse(null);
+		if (!(user instanceof Dancer)) {
+			return ResponseEntity.badRequest().build();
+		}
+		List<Audition> list = auditionApplicationRepository.findAuditionsByDancerId(user.getId());
+		if(list == null)
+			return ResponseEntity.badRequest().build();
+		List<AuditionDTO> dtoo = new LinkedList<>();
+		list.forEach(el -> {
+			if (!el.isArchived()) {
+				AuditionDTO aud = modelMapper.map(el, AuditionDTO.class);
+				List<String> dance = new LinkedList<>();
+				el.getStyles().forEach(e -> dance.add(e.getName()));
+				aud.setStyles(dance);
+				aud.setAuthor(el.getUser().getUsername());
+				dtoo.add(aud);
+			}
+		});
+		return ResponseEntity.ok(dtoo);
+	}
 	
 
 	@PostMapping("/applytoaudition")
@@ -276,16 +302,21 @@ public class AuditionController {
 			return ResponseEntity.badRequest().build();
 		}
 		Audition aud = auditionService.get(dto.getAuditionId());
+		
+		if(aud.getSubscribed() == aud.getPositions())
+			return ResponseEntity.badRequest().build();
+		
 		AuditionApplication auditionApplication = new AuditionApplication();
 		auditionApplication.setAudition(aud);
 		auditionApplication.setDancer((Dancer) user);
 		auditionApplication.setDatetime(LocalDateTime.now());
 		dto.setDatetime(LocalDateTime.now());
-		dto.setStatus("PENDING");
-		auditionApplication.setStatus("PENDING");
+		dto.setStatus("U tijeku");
+		auditionApplication.setStatus("U tijeku");
 		auditionApplicationRepository.save(auditionApplication);
 		return ResponseEntity.ok(dto);
 	}
+	
 
 	@GetMapping("/manage/applications/{id}")
 	public ResponseEntity<List<AuditionApplicationDTO>> seeApplications(@PathVariable Integer id) {
@@ -311,22 +342,18 @@ public class AuditionController {
 		if (!(user instanceof Director)) {
 			return ResponseEntity.badRequest().build();
 		}
-
-		/*
-		 * Audition aud = auditionService.get(id); if(aud == null) return
-		 * ResponseEntity.badRequest().build(); Dancer dancer = (Dancer)
-		 * userService.get(username).orElse(null); if(dancer == null) return
-		 * ResponseEntity.badRequest().build();
-		 */
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
 		if (!auditionApplication.getAudition().getUser().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
 
-		auditionApplication.setStatus("ACCEPTED");
+		auditionApplication.setStatus("Prihvaćena");
 		auditionApplicationRepository.save(auditionApplication);
-
+		
+		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
+		aud.setSubscribed(aud.getSubscribed() + 1);
+		auditionService.put(aud);
 		return ResponseEntity.ok("Succesful!");
 	}
 
@@ -337,20 +364,13 @@ public class AuditionController {
 		if (!(user instanceof Director)) {
 			return ResponseEntity.badRequest().build();
 		}
-
-		/*
-		 * Audition aud = auditionService.get(id); if(aud == null) return
-		 * ResponseEntity.badRequest().build(); Dancer dancer = (Dancer)
-		 * userService.get(username).orElse(null); if(dancer == null) return
-		 * ResponseEntity.badRequest().build();
-		 */
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
 
 		if (!auditionApplication.getAudition().getUser().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
-		auditionApplication.setStatus("DENIED");
+		auditionApplication.setStatus("Odbijena");
 		auditionApplicationRepository.save(auditionApplication);
 		return ResponseEntity.ok("Succesful!");
 	}

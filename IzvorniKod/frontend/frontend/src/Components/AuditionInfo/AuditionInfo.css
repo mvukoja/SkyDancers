@@ -37,3 +37,26 @@
 .notification-item strong {
   color: #2c3e50;
 }
+
+.audition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #4c009d;
+}
+
+.application {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.apply-audition {
+  color: #fff;
+  background-color: #4c009d;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}

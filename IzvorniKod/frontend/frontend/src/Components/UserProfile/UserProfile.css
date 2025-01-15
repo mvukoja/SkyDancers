@@ -33,6 +33,23 @@
   font-size: 0.9rem;
 }
 
+.chatbutton{
+  text-align: center;
+}
+
+.chatbutton button{
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color var(--transition-speed);
+}
+
 .profile-sections {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -6,7 +6,7 @@ import headerlogo from '../Assets/header-logo.png';
 function LandingPage() {
   return (
     <div className="landing-container">
-      <div className="background-image-container"></div>
+      <div className="background-image-container2"></div>
       <header>
         <a href="/" className="logo">
           <img src={headerlogo} alt="" className="logo-img" />

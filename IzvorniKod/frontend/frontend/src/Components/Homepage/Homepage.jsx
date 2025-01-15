@@ -8,6 +8,8 @@ import { jwtDecode } from "jwt-decode";
 const Homepage = ({ onLogout }) => {
   const [profileData, setProfileData] = useState(null);
   const [searchInput, setSearchInput] = useState("");
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [offerCount, setOfferCount] = useState(0);
   const navigate = useNavigate();
 
   const getUsernameFromToken = () => {
@@ -65,6 +67,54 @@ const Homepage = ({ onLogout }) => {
     fetchProfile(); // Pozovi funkciju za dohvaćanje profila
   }, [navigate, onLogout]); // Ovisnosti useEffect-a (navigate i onLogout)
 
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(
+          "http://localhost:8080/audition/notifications",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Unable to load notifications");
+        }
+        const data = await response.json();
+        setNotificationCount(data.length);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
+    const fetchOffers = async (type) => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(`http://localhost:8080/offer/${type}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Unable to load notifications");
+        }
+        const data = await response.json();
+        setOfferCount(data.length);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
+    if (profileData?.type.type === "DANCER") {
+      fetchNotifications();
+      fetchOffers("dancer");
+    } else if (profileData?.type.type === "DIRECTOR") {
+      fetchOffers("director");
+    }
+  }, [profileData]); // Depend on profileData
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchInput.trim() !== "") {
       navigate(`/search-results/${searchInput.trim()}`);
@@ -73,16 +123,12 @@ const Homepage = ({ onLogout }) => {
 
   return (
     <div className="homepage-container">
+      <div className="background-image-container"></div>
       <header className="homepage-header">
         <a href="/" className="logo">
           <img src={headerlogo} alt="" className="logo-img" />
         </a>
         <div className="header-links">
-          {profileData?.type.type === "DANCER" && (
-            <Link to="/notifications" className="notifications">
-              <button><img src="../../notification-bell.svg" alt="" style={{ width: "15px", height: "15px" }}/> Obavijesti</button>
-            </Link>
-          )}
           <input
             type="text"
             placeholder="Pretraga korisnika..."
@@ -104,40 +150,61 @@ const Homepage = ({ onLogout }) => {
       {profileData?.type.type === "DIRECTOR" && profileData?.paid === false && (
         <div className="director-notice">
           <p>
-            Morate izvršiti plaćanje članarine. Posjetite{" "}
-            <Link to="/myprofile">svoj profil</Link> kako biste izvršili uplatu.
+            Morate izvršiti plaćanje članarine da biste mogli koristiti
+            aplikaciju. Posjetite <Link to="/myprofile">svoj profil</Link> kako
+            biste izvršili uplatu.
           </p>
         </div>
       )}
 
       <div className="content-container">
-        <h1>Dobrodošli na Dance Hub!</h1>
+        <h1 id="welcome">Dance Hub</h1>
+        <div className="welcome-message">
+          <h1 className="welcome-heading">
+            <strong>Dobrodošli na SkyDancers!</strong>
+          </h1>
+          <p>
+            Vaša platforma za povezivanje plesača i direktora u plesnoj
+            industriji.
+          </p>
+        </div>
+
         {profileData?.type.type === "DIRECTOR" ? (
           <div className="button-group">
-            <button
-              className="navigation-button"
-              onClick={() => navigate("/post-audition")}
-            >
-              Kreiraj audiciju
-            </button>
-            <button
-              className="navigation-button"
-              onClick={() => navigate("/my-auditions")}
-            >
-              Moje audicije
-            </button>
-            <button
-              className="navigation-button"
-              onClick={() => navigate("/search-dancers")}
-            >
-              Pretraga plesača
-            </button>
-            <button
-              className="navigation-button"
-              onClick={() => navigate("/director-offers")}
-            >
-              Pregled poslanih ponuda
-            </button>
+            {profileData?.paid === true && (
+              <>
+                <button
+                  className="navigation-button"
+                  onClick={() => navigate("/post-audition")}
+                >
+                  Kreiraj audiciju
+                </button>
+                <button
+                  className="navigation-button"
+                  onClick={() => navigate("/chat")}
+                >
+                  Chat s drugim korisnicima
+                </button>
+                <button
+                  className="navigation-button"
+                  onClick={() => navigate("/my-auditions")}
+                >
+                  Moje audicije
+                </button>
+                <button
+                  className="navigation-button"
+                  onClick={() => navigate("/search-dancers")}
+                >
+                  Pretraga plesača
+                </button>
+                <button
+                  className="navigation-button"
+                  onClick={() => navigate("/director-offers")}
+                >
+                  Pregled poslanih ponuda ({offerCount})
+                </button>
+              </>
+            )}
           </div>
         ) : profileData?.type.type === "DANCER" ? (
           <div className="button-group">
@@ -151,13 +218,30 @@ const Homepage = ({ onLogout }) => {
               className="navigation-button"
               onClick={() => navigate("/chat")}
             >
-              Chat s plesačima
+              Chat s drugim korisnicima
             </button>
             <button
               className="navigation-button"
               onClick={() => navigate("/dancer-offers")}
             >
-              Pregled primljenih ponuda
+              Pregled primljenih ponuda ({offerCount})
+            </button>
+            <button
+              className="navigation-button"
+              onClick={() => navigate("/notifications")}
+            >
+              <img
+                src="../../notification-bell.svg"
+                alt=""
+                style={{ width: "25px", height: "25px" }}
+              />{" "}
+              Audicije po vašim preferencijama ({notificationCount})
+            </button>
+            <button
+              className="navigation-button"
+              onClick={() => navigate("/applications")}
+            >
+              Pregled mojih prijava na audicije
             </button>
           </div>
         ) : (

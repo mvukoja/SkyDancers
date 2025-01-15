@@ -60,7 +60,7 @@ public class OfferController {
 		offer.setDancer(dancer);
 		offer.setMessage(dto.getMessage());
 		offer.setCreatedAt(LocalDateTime.now());
-		offer.setState("PENDING");
+		offer.setState("U tijeku");
 		directOfferRepository.save(offer);
 		
 		DirectOfferDTO dtoo = new DirectOfferDTO();
@@ -156,7 +156,7 @@ public class OfferController {
 		if(!off.getDancer().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
 		
-		off.setState("ACCEPTED");
+		off.setState("Prihvaćena");
 		directOfferRepository.save(off);
 		return ResponseEntity.ok("Success");
 	}
@@ -177,7 +177,7 @@ public class OfferController {
 		if(!off.getDancer().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
 		
-		off.setState("DENIED");
+		off.setState("Odbijena");
 		directOfferRepository.save(off);
 		return ResponseEntity.ok("Success");
 	}

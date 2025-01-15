@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./CreateAudition.css";
 import headerlogo from "../Assets/header-logo.png";
-import { jwtDecode } from "jwt-decode";
 
 const CreateAudition = () => {
   const [formData, setFormData] = useState({
@@ -68,7 +67,6 @@ const CreateAudition = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         alert("Audicija uspješno kreirana!");
         navigate("/");
       } else {

@@ -24,12 +24,16 @@ public class AuditionDTO {
 	private Integer subscribed;
 
 	private Integer wage;
+	
+	private boolean archived;
 
 	private List<String> styles;
+	
+	private String author;
 
 	public AuditionDTO(Integer id, LocalDateTime creation, LocalDateTime datetime, LocalDateTime deadline,
-			String location, String description, Integer positions, Integer subscribed, Integer wage,
-			List<String> styles) {
+			String location, String description, Integer positions, Integer subscribed, Integer wage, boolean archived,
+			List<String> styles, String author) {
 		super();
 		this.id = id;
 		this.creation = creation;
@@ -40,9 +44,11 @@ public class AuditionDTO {
 		this.positions = positions;
 		this.subscribed = subscribed;
 		this.wage = wage;
+		this.archived = archived;
 		this.styles = styles;
+		this.author = author;
 	}
-	
+
 	public AuditionDTO() {
 		
 	}
@@ -127,9 +133,19 @@ public class AuditionDTO {
 		this.styles = styles;
 	}
 
-	
-	
-	
-	
+	public String getAuthor() {
+		return author;
+	}
 
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public boolean isArchived() {
+		return archived;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
 }

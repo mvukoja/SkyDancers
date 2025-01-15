@@ -123,16 +123,16 @@ const DancerOffers = () => {
                 <strong>Datum:</strong>{" "}
                 {new Date(offer.createdAt).toLocaleDateString()}
               </p>
-              {offer.state === "PENDING" && (
+              {offer.state === "U tijeku" && (
                 <div className="offer-actions">
                   <button
-                    onClick={() => handleAcceptResponse(offer.id, "ACCEPTED")}
+                    onClick={() => handleAcceptResponse(offer.id, "Prihvaćena")}
                     className="accept-button"
                   >
                     Prihvati
                   </button>
                   <button
-                    onClick={() => handleDenyResponse(offer.id, "REJECTED")}
+                    onClick={() => handleDenyResponse(offer.id, "Odbijena")}
                     className="reject-button"
                   >
                     Odbij

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import "./DirectorAuditions.css";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
 const DirectorAuditions = () => {
+  const navigate = useNavigate();
   const [auditions, setAuditions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
 
   useEffect(() => {
     const fetchAuditions = async () => {
@@ -21,24 +23,20 @@ const DirectorAuditions = () => {
       try {
         const decodedToken = jwtDecode(token);
         const username = decodedToken.sub;
-
-        console.log("Fetching auditions for username:", username);
-
-        const response = await fetch(
-          `http://localhost:8080/audition/getdirectors/${username}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
+        const url = showArchived
+          ? `http://localhost:8080/audition/archived/${username}`
+          : `http://localhost:8080/audition/getdirectors/${username}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Received auditions:", data);
           setAuditions(Array.isArray(data) ? data : []);
         } else {
           console.error("Server response not OK:", response.status);
@@ -55,7 +53,7 @@ const DirectorAuditions = () => {
     };
 
     fetchAuditions();
-  }, []);
+  }, [showArchived]);
 
   const formatDate = (dateString) => {
     try {
@@ -92,6 +90,14 @@ const DirectorAuditions = () => {
     );
   }
 
+  const handleAuditionClick = (id) => {
+    navigate(`/audition/${id}`);
+  };
+
+  const toggleAuditionType = () => {
+    setShowArchived(!showArchived);
+  };
+
   return (
     <div>
       <header className="homepage-header">
@@ -109,7 +115,12 @@ const DirectorAuditions = () => {
         </div>
       </header>
       <div className="director-auditions">
-        <h2>Moje audicije</h2>
+        <h2>{showArchived ? "Arhivirane audicije" : "Moje audicije"}</h2>
+        <button className="archive" onClick={toggleAuditionType}>
+          {showArchived
+            ? "Povratak na aktivne audicije"
+            : "Arhivirane audicije"}
+        </button>
         {auditions.length === 0 ? (
           <p className="no-auditions">Nemate nijednu audiciju.</p>
         ) : (
@@ -118,6 +129,12 @@ const DirectorAuditions = () => {
               <div key={audition.id} className="audition-card">
                 <div className="audition-header">
                   <h3>Audicija #{audition.id}</h3>
+                  <button
+                    className="accept-button"
+                    onClick={() => handleAuditionClick(audition.id)}
+                  >
+                    Detaljnije
+                  </button>
                   <span className="subscribed-count">
                     Prijavljeni: {audition.subscribed || 0}/{audition.positions}
                   </span>
@@ -128,10 +145,6 @@ const DirectorAuditions = () => {
                   </p>
                   <p>
                     <strong>Datum:</strong> {formatDate(audition.datetime)}
-                  </p>
-                  <p>
-                    <strong>Rok prijave:</strong>{" "}
-                    {formatDate(audition.deadline)}
                   </p>
                   <p>
                     <strong>Plaća (EUR):</strong> {audition.wage}

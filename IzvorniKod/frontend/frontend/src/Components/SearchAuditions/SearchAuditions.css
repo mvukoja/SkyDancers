@@ -76,6 +76,24 @@
     margin: 0;
 }
 
+.accept-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.accept-button {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.accept-button:hover {
+  background-color: #27ae60;
+}
+
 button[type="submit"] {
     background: #3498db;
     color: white;

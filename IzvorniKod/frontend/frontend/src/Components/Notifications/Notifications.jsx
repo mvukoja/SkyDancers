@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import "./Notifications.css";
 
 const NotificationsPage = () => {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,6 +44,10 @@ const NotificationsPage = () => {
     return <div>{error}</div>;
   }
 
+  const handleAuditionClick = (id) => {
+    navigate(`/audition/${id}`);
+  };
+
   return (
     <div>
       <header>
@@ -67,28 +72,39 @@ const NotificationsPage = () => {
             {notifications.map((notification) => (
               <div key={notification.id} className="notification-item">
                 <div className="notification-header">
-                  <p>
-                    <strong>Broj pozicija: </strong>
-                    {notification.positions}
-                  </p>
+                  <div className="audition-header">
+                    <h3>Audicija #{notification.id}</h3>
+                    <button
+                      className="accept-button"
+                      onClick={() => handleAuditionClick(notification.id)}
+                    >
+                      Detaljnije
+                    </button>
+                    <span className="subscribed-count">
+                      Prijavljeni: {notification.subscribed || 0}/
+                      {notification.positions}
+                    </span>
+                  </div>
                 </div>
                 <div className="notification-details">
                   <p>
-                    <strong>Description:</strong> {notification.description}
+                    <strong>Autor: </strong>
+                    <Link to={`/profile/${notification.author}`}>
+                      {notification.author}
+                    </Link>
                   </p>
                   <p>
-                    <strong>Plaća (EUR):</strong> {notification.wage}
+                    <strong>Lokacija:</strong> {notification.location}
+                  </p>
+                  <p>
+                    <strong>Opis:</strong> {notification.description}
                   </p>
                   <p>
                     <strong>Stilovi:</strong> {notification.styles.join(", ")}
                   </p>
                   <p>
-                    <strong>Napravljena:</strong>{" "}
-                    {new Date(notification.creation).toLocaleString()}
-                  </p>
-                  <p>
-                    <strong>Rok prijave:</strong>{" "}
-                    {new Date(notification.deadline).toLocaleString()}
+                    <strong>Datum i vrijeme:</strong>{" "}
+                    {new Date(notification.datetime).toLocaleString()}
                   </p>
                 </div>
               </div>

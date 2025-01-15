@@ -27,8 +27,10 @@ import SearchAuditions from "./Components/SearchAuditions/SearchAuditions";
 import DancerOffers from "./Components/Offers/DancerOffers.jsx";
 import DirectorOffers from "./Components/Offers/DirectorOffers.jsx";
 import NotificationsPage from "./Components/Notifications/Notifications.jsx";
-import Chat from './Components/Chat/Chat';
-import { AuthProvider } from './Components/AuthContext';
+import Chat from "./Components/Chat/Chat";
+import { AuthProvider } from "./Components/AuthContext";
+import AuditionInfo from "./Components/AuditionInfo/AuditionInfo.jsx";
+import Applications from "./Components/Applications/Applications.jsx";
 // Definicija glavne App komponente
 function App() {
   // Stanje koje prati je li korisnik autentificiran
@@ -58,108 +60,108 @@ function App() {
   // Renderiranje komponenti unutar Router-a za upravljanje navigacijom
   return (
     <AuthProvider>
-    <Router>
-      <Routes>
-        {/* Definicija rute za početnu stranicu */}
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? (
-              <Homepage onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži Homepage komponentu
-            ) : (
-              <LandingPage />
-            ) // Inače, preusmjeri na početnu stranicu
-          }
-        />
-        {/* Definicija rute za stranicu za prijavu */}
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/" replace /> // Ako je korisnik već autentificiran, preusmjeri na /home
-            ) : (
-              <LoginSignup onLogin={handleLogin} />
-            ) // Inače, prikaži komponentu za prijavu/registraciju
-          }
-        />
-        {/* Definicija rute za početnu stranicu nakon prijave */}
-        <Route
-          path="/home"
-          element={
-            isAuthenticated ? (
-              <Homepage onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži Homepage komponentu
-            ) : (
-              <Navigate to="/" replace />
-            ) // Inače, preusmjeri na početnu stranicu
-          }
-        />
-        {/* Definicija rute za završnu stranicu OAuth procesa */}
-        <Route
-          path="/oauth-completion"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/" replace />
-            ) : (
-              <OAuthCompletionPage onLogin={handleLogin} />
-            ) // Prikaži OAuthCompletionPage komponentu i proslijedi handleLogin funkciju
-          }
-        />
-        {/* Definicija rute za korisnički profil */}
-        <Route
-          path="/myprofile"
-          element={
-            isAuthenticated ? (
-              <MyProfile onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži MyProfile komponentu
-            ) : (
-              <Navigate to="/" replace />
-            ) // Inače, preusmjeri na početnu stranicu
-          }
-        />
-        {/* Definicija rute za odjavu korisnika */}
-        <Route
-          path="/logout"
-          element={<Logout onLogout={handleLogout} />}
-        />{" "}
-        {/* Prikaži Logout komponentu */}
-        <Route path="/payment/success" element={<PaymentSuccess />} />
-        <Route path="/payment/cancel" element={<PaymentCancel />} />
-        <Route path="/post-audition" element={<CreateAudition />} />
-        <Route path="/search-dancers" element={<SearchDancers />} />
-        <Route path="/search-results/:username" element={<SearchResults />} />
-        <Route
-          path="/search-auditions"
-          element={
-            isAuthenticated ? <SearchAuditions /> : <Navigate to="/" replace />
-          }
-        />
-        <Route
-          path="/my-auditions"
-          element={
-            isAuthenticated ? (
-              <DirectorAuditions />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
-        />
-        <Route
-          path="/profile/:username"
-          element={
-            isAuthenticated ? <UserProfile /> : <Navigate to="/" replace />
-          }
-        />
-        <Route path="/dancer-offers" element={<DancerOffers />} />
-        <Route path="/director-offers" element={<DirectorOffers />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route
-          path="/chat"
-          element={
-              <Chat />
-              
-          }
-        />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          {/* Definicija rute za početnu stranicu */}
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Homepage onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži Homepage komponentu
+              ) : (
+                <LandingPage />
+              ) // Inače, preusmjeri na početnu stranicu
+            }
+          />
+          {/* Definicija rute za stranicu za prijavu */}
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace /> // Ako je korisnik već autentificiran, preusmjeri na /home
+              ) : (
+                <LoginSignup onLogin={handleLogin} />
+              ) // Inače, prikaži komponentu za prijavu/registraciju
+            }
+          />
+          {/* Definicija rute za početnu stranicu nakon prijave */}
+          <Route
+            path="/home"
+            element={
+              isAuthenticated ? (
+                <Homepage onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži Homepage komponentu
+              ) : (
+                <Navigate to="/" replace />
+              ) // Inače, preusmjeri na početnu stranicu
+            }
+          />
+          {/* Definicija rute za završnu stranicu OAuth procesa */}
+          <Route
+            path="/oauth-completion"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <OAuthCompletionPage onLogin={handleLogin} />
+              ) // Prikaži OAuthCompletionPage komponentu i proslijedi handleLogin funkciju
+            }
+          />
+          {/* Definicija rute za korisnički profil */}
+          <Route
+            path="/myprofile"
+            element={
+              isAuthenticated ? (
+                <MyProfile onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži MyProfile komponentu
+              ) : (
+                <Navigate to="/" replace />
+              ) // Inače, preusmjeri na početnu stranicu
+            }
+          />
+          {/* Definicija rute za odjavu korisnika */}
+          <Route
+            path="/logout"
+            element={<Logout onLogout={handleLogout} />}
+          />{" "}
+          {/* Prikaži Logout komponentu */}
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />} />
+          <Route path="/post-audition" element={<CreateAudition />} />
+          <Route path="/search-dancers" element={<SearchDancers />} />
+          <Route path="/search-results/:username" element={<SearchResults />} />
+          <Route
+            path="/search-auditions"
+            element={
+              isAuthenticated ? (
+                <SearchAuditions />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/my-auditions"
+            element={
+              isAuthenticated ? (
+                <DirectorAuditions />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/profile/:username"
+            element={
+              isAuthenticated ? <UserProfile /> : <Navigate to="/" replace />
+            }
+          />
+          <Route path="/audition/:id" element={<AuditionInfo />} />
+          <Route path="/dancer-offers" element={<DancerOffers />} />
+          <Route path="/director-offers" element={<DirectorOffers />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/applications" element={<Applications />} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

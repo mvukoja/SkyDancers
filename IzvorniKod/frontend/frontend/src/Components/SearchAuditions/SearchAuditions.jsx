@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./SearchAuditions.css";
-import headerlogo from '../Assets/header-logo.png';
+import headerlogo from "../Assets/header-logo.png";
 
 const SearchAuditions = () => {
+  const navigate = useNavigate();
   const [searchCriteria, setSearchCriteria] = useState({
     datetime: "",
     wage: "",
@@ -58,8 +59,6 @@ const SearchAuditions = () => {
         wage: searchCriteria.wage ? parseInt(searchCriteria.wage) : null,
       };
 
-      console.log("Search payload:", searchPayload);
-
       const response = await fetch(
         "http://localhost:8080/audition/searchauditions",
         {
@@ -74,7 +73,6 @@ const SearchAuditions = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Search results:", data);
         setAuditions(Array.isArray(data) ? data : []);
       } else {
         const errorText = await response.text();
@@ -104,6 +102,10 @@ const SearchAuditions = () => {
       console.error("Error formatting date:", dateString, error);
       return dateString || "N/A";
     }
+  };
+
+  const handleAuditionClick = (id) => {
+    navigate(`/audition/${id}`);
   };
 
   return (
@@ -187,7 +189,11 @@ const SearchAuditions = () => {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="create-audition-button">
+          <button
+            type="submit"
+            disabled={loading}
+            className="create-audition-button"
+          >
             {loading ? "Traženje..." : "Traži"}
           </button>
         </form>
@@ -201,6 +207,12 @@ const SearchAuditions = () => {
                 <div key={audition.id} className="audition-card">
                   <div className="audition-header">
                     <h3>Audicija #{audition.id}</h3>
+                    <button
+                      className="accept-button"
+                      onClick={() => handleAuditionClick(audition.id)}
+                    >
+                      Detaljnije
+                    </button>
                     <span className="subscribed-count">
                       Prijavljeni: {audition.subscribed || 0}/
                       {audition.positions}
@@ -208,16 +220,17 @@ const SearchAuditions = () => {
                   </div>
                   <div className="audition-details">
                     <p>
-                      <strong>Lokacija:</strong> {audition.location}
+                      <strong>Autor: </strong>
+                      <Link to={`/profile/${audition.author}`}>
+                        {audition.author}
+                      </Link>
                     </p>
                     <p>
-                      <strong>Datum i vrijeme:</strong> {formatDate(audition.datetime)}
+                      <strong>Datum i vrijeme:</strong>{" "}
+                      {formatDate(audition.datetime)}
                     </p>
                     <p>
-                      <strong>Rok prijave:</strong> {formatDate(audition.deadline)}
-                    </p>
-                    <p>
-                      <strong>Plaća:</strong> {audition.wage}
+                      <strong>Plaća (EUR):</strong> {audition.wage}
                     </p>
                     <p>
                       <strong>Opis:</strong> {audition.description}
@@ -231,7 +244,9 @@ const SearchAuditions = () => {
                           </span>
                         ))
                       ) : (
-                        <span className="no-styles">Niste izabrali stilove</span>
+                        <span className="no-styles">
+                          Niste izabrali stilove
+                        </span>
                       )}
                     </div>
                   </div>
