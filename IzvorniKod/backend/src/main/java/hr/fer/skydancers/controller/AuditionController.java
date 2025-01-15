@@ -96,6 +96,9 @@ public class AuditionController {
 			return ResponseEntity.badRequest().build();
 		}
 		AuditionDTO dto = modelMapper.map(aud, AuditionDTO.class);
+		List<String> dances = new LinkedList<>();
+		aud.getStyles().forEach(e -> dances.add(e.getName()));
+		dto.setStyles(dances);
 		return ResponseEntity.ok(dto);
 	}
 
