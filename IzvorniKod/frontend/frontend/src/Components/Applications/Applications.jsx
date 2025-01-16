@@ -68,7 +68,7 @@ const Applications = () => {
 
             const applicationStatusData = await response.json();
             const matchingApplication = applicationStatusData.find(
-              (app) => app.applicant.name === getUsernameFromToken()
+              (app) => app.applicant.username === getUsernameFromToken()
             );
 
             if (matchingApplication) {

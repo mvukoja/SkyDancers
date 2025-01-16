@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class AuditionDTO {
-	
+
 	private Integer id;
-	
+
 	private LocalDateTime creation;
-	
+
 	private LocalDateTime datetime;
-	
+
 	private LocalDateTime deadline;
 
 	private String location;
@@ -24,11 +24,11 @@ public class AuditionDTO {
 	private Integer subscribed;
 
 	private Integer wage;
-	
+
 	private boolean archived;
 
 	private List<String> styles;
-	
+
 	private String author;
 
 	public AuditionDTO(Integer id, LocalDateTime creation, LocalDateTime datetime, LocalDateTime deadline,
@@ -50,7 +50,7 @@ public class AuditionDTO {
 	}
 
 	public AuditionDTO() {
-		
+
 	}
 
 	public Integer getId() {

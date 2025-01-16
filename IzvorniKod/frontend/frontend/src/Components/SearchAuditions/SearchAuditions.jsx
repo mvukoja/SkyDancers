@@ -148,6 +148,13 @@ const SearchAuditions = () => {
             <input
               type="number"
               value={searchCriteria.wage}
+              min={0}
+              onBlur={(e) => {if(e.target.value<0){e.target.value = 0}}}
+              onKeyDown={(e) => {
+                if (e.key === "-" || e.key === "e") {
+                  e.preventDefault();
+                }
+              }}
               onChange={(e) =>
                 setSearchCriteria((prev) => ({
                   ...prev,

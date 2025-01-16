@@ -25,16 +25,19 @@ public class ForgotPassword {
 
 	@OneToOne
 	private MyUser user;
+	
+	private boolean otpverified;
 
 	public ForgotPassword() {
 	}
 
-	public ForgotPassword(Integer fpid, Integer otp, LocalDate expirDate, MyUser user) {
+	public ForgotPassword(Integer fpid, Integer otp, LocalDate expirdate, MyUser user, boolean otpverified) {
 		super();
 		this.fpid = fpid;
 		this.otp = otp;
-		this.expirdate = expirDate;
+		this.expirdate = expirdate;
 		this.user = user;
+		this.otpverified = otpverified;
 	}
 
 	public Integer getFpid() {
@@ -57,8 +60,8 @@ public class ForgotPassword {
 		return expirdate;
 	}
 
-	public void setExpirDate(LocalDate localDate) {
-		this.expirdate = localDate;
+	public void setExpirDate(LocalDate expirdate) {
+		this.expirdate = expirdate;
 	}
 
 	public MyUser getUser() {
@@ -67,6 +70,14 @@ public class ForgotPassword {
 
 	public void setUser(MyUser user) {
 		this.user = user;
+	}
+
+	public boolean isOtpverified() {
+		return otpverified;
+	}
+
+	public void setOtpverified(boolean otpverified) {
+		this.otpverified = otpverified;
 	}
 
 }

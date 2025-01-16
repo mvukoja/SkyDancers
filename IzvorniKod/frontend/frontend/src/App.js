@@ -31,6 +31,7 @@ import Chat from "./Components/Chat/Chat";
 import { AuthProvider } from "./Components/AuthContext";
 import AuditionInfo from "./Components/AuditionInfo/AuditionInfo.jsx";
 import Applications from "./Components/Applications/Applications.jsx";
+import ChangePassword from "./Components/myprofile/ChangePassword.jsx";
 // Definicija glavne App komponente
 function App() {
   // Stanje koje prati je li korisnik autentificiran
@@ -56,6 +57,43 @@ function App() {
     const token = localStorage.getItem("jwtToken"); // Dohvati JWT token iz localStorage
     setIsAuthenticated(!!token); // Postavi stanje na true ako token postoji, inače na false
   }, []); // Prazna ovisnost znači da se efekt izvršava samo jednom
+
+  const [userType, setUserType] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (isAuthenticated) {
+      const fetchUserType = async () => {
+        try {
+          const token = localStorage.getItem("jwtToken");
+          const response = await fetch(
+            "http://localhost:8080/users/getmytype",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const data = await response.text();
+          setUserType(data);
+        } catch (error) {
+          console.error("Failed to fetch user type:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserType();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  const PrivateRoute = ({ children, allowedTypes }) => {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    return allowedTypes.includes(userType) ? children : <Navigate to="/" />;
+  };
 
   // Renderiranje komponenti unutar Router-a za upravljanje navigacijom
   return (
@@ -111,7 +149,9 @@ function App() {
             path="/myprofile"
             element={
               isAuthenticated ? (
-                <MyProfile onLogout={handleLogout} /> // Ako je korisnik autentificiran, prikaži MyProfile komponentu
+                <PrivateRoute allowedTypes={["DIRECTOR", "DANCER", "ADMIN"]}>
+                  <MyProfile onLogout={handleLogout} />
+                </PrivateRoute>
               ) : (
                 <Navigate to="/" replace />
               ) // Inače, preusmjeri na početnu stranicu
@@ -123,43 +163,164 @@ function App() {
             element={<Logout onLogout={handleLogout} />}
           />{" "}
           {/* Prikaži Logout komponentu */}
-          <Route path="/payment/success" element={<PaymentSuccess />} />
-          <Route path="/payment/cancel" element={<PaymentCancel />} />
-          <Route path="/post-audition" element={<CreateAudition />} />
-          <Route path="/search-dancers" element={<SearchDancers />} />
-          <Route path="/search-results/:username" element={<SearchResults />} />
-          <Route
-            path="/search-auditions"
-            element={
-              isAuthenticated ? (
-                <SearchAuditions />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            path="/my-auditions"
-            element={
-              isAuthenticated ? (
-                <DirectorAuditions />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            path="/profile/:username"
-            element={
-              isAuthenticated ? <UserProfile /> : <Navigate to="/" replace />
-            }
-          />
-          <Route path="/audition/:id" element={<AuditionInfo />} />
-          <Route path="/dancer-offers" element={<DancerOffers />} />
-          <Route path="/director-offers" element={<DirectorOffers />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/applications" element={<Applications />} />
+          <>
+            <Route
+              path="/payment/success"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <PaymentSuccess />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/payment/cancel"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <PaymentCancel />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/post-audition"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <CreateAudition />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/search-dancers"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <SearchDancers />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/search-results/:username"
+              element={
+                isAuthenticated ? (
+                  <SearchResults />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/search-auditions"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DANCER"]}>
+                    <SearchAuditions />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/my-auditions"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <DirectorAuditions />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/profile/:username"
+              element={
+                isAuthenticated ? <UserProfile onLogout={handleLogout}/> : <Navigate to="/" replace />
+              }
+            />
+            <Route
+              path="/audition/:id"
+              element={
+                isAuthenticated ? <AuditionInfo /> : <Navigate to="/" replace />
+              }
+            />
+            <Route
+              path="/dancer-offers"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DANCER"]}>
+                    <DancerOffers />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/director-offers"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DIRECTOR"]}>
+                    <DirectorOffers />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DANCER"]}>
+                    <NotificationsPage />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/chat"
+              element={isAuthenticated ? <Chat /> : <Navigate to="/" replace />}
+            />
+            <Route
+              path="/applications"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute allowedTypes={["DANCER"]}>
+                    <Applications />
+                  </PrivateRoute>
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/change-password"
+              element={
+                isAuthenticated ? (
+                  <ChangePassword />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+          </>
         </Routes>
       </Router>
     </AuthProvider>

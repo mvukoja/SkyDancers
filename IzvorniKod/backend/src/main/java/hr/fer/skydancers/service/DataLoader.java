@@ -2,16 +2,30 @@ package hr.fer.skydancers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import hr.fer.skydancers.model.Admin;
 import hr.fer.skydancers.model.Dance;
+import hr.fer.skydancers.model.Portfolio;
+import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.repository.DanceRepository;
+import hr.fer.skydancers.repository.PortfolioRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
 	@Autowired
 	private DanceRepository danceRepository;
+	
+	@Autowired
+	private PortfolioRepository portfolioRepository;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -49,5 +63,20 @@ public class DataLoader implements CommandLineRunner {
 			suvremeni.setName("Suvremeni");
 			danceRepository.save(suvremeni);
 		}
+		if(!userService.get("admin").isPresent()) {
+			Admin admin = new Admin();
+			admin.setConfirmed(true);
+			admin.setUsername("admin");
+			admin.setName("Admin");
+			admin.setPassword(passwordEncoder.encode("jedanjeadmin"));
+			admin.setType( new UserType("ADMIN"));
+			admin.setSubscriptionprice(100l);
+			userService.save(admin);
+			
+			Portfolio portfolio = new Portfolio();
+			portfolio.setUser(admin);
+			portfolioRepository.save(portfolio);
+		}
+		
 	}
 }

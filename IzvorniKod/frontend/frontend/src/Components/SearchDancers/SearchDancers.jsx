@@ -41,6 +41,10 @@ const SearchDancers = () => {
 
   const handleSearch = async () => {
     try {
+      if (selectedDanceStyles.length === 0) {
+        alert("Izaberite barem jedan stil plesa.");
+        return;
+      }
       const token = localStorage.getItem("jwtToken");
       setError("");
       const response = await fetch(
@@ -75,7 +79,6 @@ const SearchDancers = () => {
     navigate(`/profile/${username}`);
   };
 
-  // Then update your JSX structure:
   return (
     <div>
       <header className="homepage-header">
@@ -100,6 +103,21 @@ const SearchDancers = () => {
             <label>Donja granica godina:</label>
             <input
               type="number"
+              min={0}
+              onBlur={(e) => {
+                if (e.target.value < 0) {
+                  e.target.value = 0;
+                }
+                if (filters.ageup && parseInt(e.target.value, 10) >= parseInt(filters.ageup, 10)) {
+                  alert("Donja granica mora biti manja od gornje granice.");
+                  e.target.value = "";
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "-" || e.key === "e") {
+                  e.preventDefault();
+                }
+              }}
               name="agedown"
               value={filters.agedown}
               onChange={handleChange}
@@ -110,6 +128,21 @@ const SearchDancers = () => {
             <label>Gornja granica godina:</label>
             <input
               type="number"
+              min={1}
+              onBlur={(e) => {
+                if (e.target.value < 0) {
+                  e.target.value = 0;
+                }
+                if (filters.agedown && parseInt(e.target.value, 10) <= parseInt(filters.agedown, 10)) {
+                  alert("Gornja granica mora biti veća od donje granice.");
+                  e.target.value = "";
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "-" || e.key === "e") {
+                  e.preventDefault();
+                }
+              }}
               name="ageup"
               value={filters.ageup}
               onChange={handleChange}

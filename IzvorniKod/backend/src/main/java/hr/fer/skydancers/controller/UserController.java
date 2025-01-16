@@ -1,8 +1,10 @@
 package hr.fer.skydancers.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -24,9 +26,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import hr.fer.skydancers.dto.ChangePassword;
 import hr.fer.skydancers.dto.DanceStylesRequest;
 import hr.fer.skydancers.dto.DancerSearchDTO;
 import hr.fer.skydancers.dto.InactiveStatusRequest;
@@ -37,6 +41,7 @@ import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.dto.UpdateProfileRequest;
 import hr.fer.skydancers.dto.UserDto;
 import hr.fer.skydancers.enums.UserTypeEnum;
+import hr.fer.skydancers.model.Admin;
 import hr.fer.skydancers.model.Dance;
 import hr.fer.skydancers.model.Dancer;
 import hr.fer.skydancers.model.Director;
@@ -77,7 +82,7 @@ public class UserController {
 
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
-	
+
 	@Autowired
 	private PortfolioRepository portfolioRepository;
 
@@ -113,7 +118,7 @@ public class UserController {
 		user.setEmail(dto.getEmail());
 		user.setOauth(true);
 		user.setFinishedoauth(true);
-		
+
 		Portfolio portfolio = new Portfolio();
 		portfolio.setUser(user);
 		portfolioRepository.save(portfolio);
@@ -147,6 +152,19 @@ public class UserController {
 			if (!userService.get(loginForm.username()).orElse(null).isConfirmed()) {
 				return ResponseEntity.ok("Nedovršena registracija! Provjerite svoj mail!");
 			}
+			MyUser user = userService.get(loginForm.username()).orElse(null);
+			if(user instanceof Dancer && ((Dancer) user).getInactiveuntil() != null) {
+				if(((Dancer) user).getInactiveuntil().isBefore(LocalDate.now())) {
+					((Dancer) user).setInactive(false);
+					((Dancer) user).setInactiveuntil(null);
+				}
+			}
+			else if(user instanceof Director && ((Director) user).getSubscription() != null) {
+				if(((Director) user).getSubscription().isBefore(LocalDate.now())){
+					((Director) user).setSubscription(null);
+					((Director) user).setPaid(false);
+				}	
+			}
 			return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(loginForm.username())));
 		}
 		return ResponseEntity.ok("Invalid credentials");
@@ -157,27 +175,25 @@ public class UserController {
 	public ResponseEntity<String> createDirector(@RequestBody Director user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			user.setConfirmed(true);//temporary
+			user.setConfirmed(true);// temporary
 			userService.put(user);
-			
+
 			Portfolio portfolio = new Portfolio();
 			portfolio.setUser(user);
 			portfolioRepository.save(portfolio);
-			
 
-			/*int otp = new Random().nextInt(100000, 999999);
-			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
-					"SkyDancers\n" + "Dobrodošli!" + "\n"
-							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
-							+ "/" + user.getEmail());
-
-			ForgotPassword fp = new ForgotPassword();
-			fp.setOtp(otp);
-			fp.setExpirDate(LocalDate.now().plusDays(365));
-			fp.setUser(user);
-
-			emailService.sendSimpleMessage(mailBody);
-			forgotPasswordRepository.save(fp);*/
+			/*
+			 * int otp = new Random().nextInt(100000, 999999); MailBody mailBody = new
+			 * MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n" +
+			 * "Dobrodošli!" + "\n" +
+			 * "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/"
+			 * + otp + "/" + user.getEmail());
+			 * 
+			 * ForgotPassword fp = new ForgotPassword(); fp.setOtp(otp);
+			 * fp.setExpirDate(LocalDate.now().plusDays(365)); fp.setUser(user);
+			 * 
+			 * emailService.sendSimpleMessage(mailBody); forgotPasswordRepository.save(fp);
+			 */
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
@@ -189,26 +205,25 @@ public class UserController {
 	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			user.setConfirmed(true);//temporary
+			user.setConfirmed(true);// temporary
 			userService.put(user);
-			
+
 			Portfolio portfolio = new Portfolio();
 			portfolio.setUser(user);
 			portfolioRepository.save(portfolio);
 
-			/*int otp = new Random().nextInt(100000, 999999);
-			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila",
-					"SkyDancers\n" + "Dobrodošli!" + "\n"
-							+ "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/" + otp
-							+ "/" + user.getEmail());
-
-			ForgotPassword fp = new ForgotPassword();
-			fp.setOtp(otp);
-			fp.setExpirDate(LocalDate.now().plusDays(365));
-			fp.setUser(user);
-
-			emailService.sendSimpleMessage(mailBody);
-			forgotPasswordRepository.save(fp);*/
+			/*
+			 * int otp = new Random().nextInt(100000, 999999); MailBody mailBody = new
+			 * MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n" +
+			 * "Dobrodošli!" + "\n" +
+			 * "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/"
+			 * + otp + "/" + user.getEmail());
+			 * 
+			 * ForgotPassword fp = new ForgotPassword(); fp.setOtp(otp);
+			 * fp.setExpirDate(LocalDate.now().plusDays(365)); fp.setUser(user);
+			 * 
+			 * emailService.sendSimpleMessage(mailBody); forgotPasswordRepository.save(fp);
+			 */
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
@@ -250,6 +265,9 @@ public class UserController {
 		dto.setSurname(user.getSurname());
 		dto.setType(user.getType());
 		dto.setOauth(user.isOauth());
+		dto.setLocation(user.getLocation());
+		dto.setAge(user.getAge());
+		dto.setGender(user.getGender());
 		if (user instanceof Dancer) {
 			dto.setDanceStyles(((Dancer) user).getDancestyles());
 			dto.setInactive(((Dancer) user).isInactive());
@@ -307,10 +325,8 @@ public class UserController {
 	}
 
 	// Ažurira profil trenutnog korisnika
-	@PutMapping("/update-profile")
-	public UserDto updateProfile(@RequestBody UpdateProfileRequest updateRequest) {
-
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@PutMapping("/update-profile/{username}")
+	public UserDto updateProfile(@RequestBody UpdateProfileRequest updateRequest, @PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
 
 		if (user == null) {
@@ -346,13 +362,9 @@ public class UserController {
 	}
 
 	// Ažurira plesne stilove korisnika
-	@PutMapping("/update-dance-styles")
-	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest) {
-
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+	@PutMapping("/update-dance-styles/{username}")
+	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest, @PathVariable String username) {
 		Dancer user = (Dancer) userService.get(username).orElse(null);
-
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 		}
@@ -401,39 +413,100 @@ public class UserController {
 		if (!(user instanceof Director)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
+		if (!((Director) user).isPaid()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+		}
 		List<Dancer> list = userService.getByAgeAndGenderAndDanceStyle(dto.getAgeup(), dto.getAgedown(),
 				dto.getGender(), dto.getDancestyles());
-		
-		if(list == null)
+
+		if (list == null)
 			return ResponseEntity.ok(null);
-		
+
 		List<UserDto> dtoo = new LinkedList<>();
 		list.forEach(el -> {
 			UserDto d = modelMapper.map(el, UserDto.class);
 			dtoo.add(d);
 		});
-		
-		
+
 		return ResponseEntity.ok(dtoo);
 	}
-	
+
 	@GetMapping("/searchuser/{username}")
-	public ResponseEntity<List<UserDto>> searchUser(@PathVariable String username){
-		if(username == null)
+	public ResponseEntity<List<UserDto>> searchUser(@PathVariable String username) {
+		if (username == null)
 			return ResponseEntity.ok(null);
-			
+
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(usname).orElse(null);
+
+		if (user instanceof Director) {
+			if (!((Director) user).isPaid()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+			}
+		}
+
 		List<MyUser> list = userService.getByNameLike(username);
-		
-		if(list == null)
+
+		if (list == null)
 			return ResponseEntity.ok(null);
-		
+
 		List<UserDto> dto = new LinkedList<>();
 		list.forEach(el -> {
 			UserDto d = modelMapper.map(el, UserDto.class);
 			dto.add(d);
 		});
-		
-		return ResponseEntity.ok(dto);
-	}	
 
+		return ResponseEntity.ok(dto);
+	}
+	
+	@PostMapping("/changepassword")
+	public ResponseEntity<String> changePassword(
+			@RequestBody ChangePassword changePassword) {
+		if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
+			return ResponseEntity.ok("Lozinke nisu iste!");
+		}
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(usname).orElse(null);
+		String encodedPassword = passwordEncoder.encode(changePassword.password());
+		userService.updatePassword(user.getEmail(), encodedPassword);
+		return ResponseEntity.ok("Lozinka je promijenjena!");
+	}
+
+	@GetMapping("/getmytype")
+	public ResponseEntity<String> getMyType(){
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(usname).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(user.getType().getType().toString());
+	}
+	
+	@GetMapping("/changesubscriptionprice")
+	public ResponseEntity<String> changePrice(@RequestParam Long price){
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(usname).orElse(null);
+		
+		if(!(user instanceof Admin))
+			return ResponseEntity.badRequest().build();
+		
+		((Admin)user).setSubscriptionprice(price);
+		userService.save(user);
+		return ResponseEntity.ok("Success");
+	}
+	
+	@GetMapping("/delete/{username}")
+	public ResponseEntity<String> deleteUser(@PathVariable String username){
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser user = userService.get(usname).orElse(null);
+		
+		if(!(user instanceof Admin))
+			return ResponseEntity.badRequest().build();
+		
+		MyUser removal = userService.get(username).orElse(null);
+		if(removal == null)
+			return ResponseEntity.badRequest().build();
+		
+		userService.remove(removal.getId());
+		return ResponseEntity.ok("Success");
+	}
 }

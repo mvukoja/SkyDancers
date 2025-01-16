@@ -100,8 +100,10 @@ const AuditionInfo = () => {
             throw new Error("Nije moguće učitati stanje");
           }
           const data = await response.json();
+          console.log(data);
+          console.log(getUsernameFromToken());
           const matchedApplication = data.find(
-            (app) => app.applicant.name === getUsernameFromToken()
+            (app) => app.applicant.username === getUsernameFromToken()
           );
           if (matchedApplication) {
             setConfirmationMessage(matchedApplication.status);
@@ -307,16 +309,21 @@ const AuditionInfo = () => {
                 <strong>Rok prijave:</strong>{" "}
                 {new Date(audition.deadline).toLocaleString()}
               </p>
-              {profileData?.type?.type === "DANCER" && !confirmationMessage && (
+              {profileData?.type?.type === "DANCER" && (subscribed < audition.positions) && !confirmationMessage && (
                 <div className="application">
-                  <button
-                    onClick={() => handleApplication()}
-                    className="apply-audition"
-                  >
-                    Prijavi se na audiciju
-                  </button>
+                  {new Date(audition.deadline) > new Date() ? (
+                    <button
+                      onClick={() => handleApplication()}
+                      className="apply-audition"
+                    >
+                      Prijavi se na audiciju
+                    </button>
+                  ) : (
+                    <p>Rok prijave je istekao!</p>
+                  )}
                 </div>
               )}
+
               {profileData?.type?.type === "DANCER" && confirmationMessage && (
                 <div className="confirmation-message">
                   <span

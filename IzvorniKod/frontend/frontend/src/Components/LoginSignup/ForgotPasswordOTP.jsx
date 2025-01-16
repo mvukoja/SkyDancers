@@ -14,7 +14,7 @@ const ForgotPasswordOTP = ({ email, onOTPVerified }) => {
             });
             const result = await response.text();
             if (result === "Success!") {
-                onOTPVerified(); // Move to password reset page
+                onOTPVerified();
             } else {
                 setMessage('Neispravan kod. Molimo pokušajte ponovno.');
             }

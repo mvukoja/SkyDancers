@@ -217,3 +217,29 @@
   font-weight: bold;
   text-align: center;
 }
+.portfolio-item img,
+.portfolio-item video {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.portfolio-item button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--warning-color);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 20%;
+  font-size: 14px;
+  transition: background-color var(--transition-speed);
+}
+
+.portfolio-item button:hover {
+  background-color: #c0392b;
+}

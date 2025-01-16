@@ -37,7 +37,7 @@ public class OfferController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@PostMapping("/make")
@@ -62,16 +62,16 @@ public class OfferController {
 		offer.setCreatedAt(LocalDateTime.now());
 		offer.setState("U tijeku");
 		directOfferRepository.save(offer);
-		
+
 		DirectOfferDTO dtoo = new DirectOfferDTO();
-		
+
 		dtoo.setCreatedAt(offer.getCreatedAt());
 		dtoo.setDancername(dancer.getUsername());
 		dtoo.setDirectorname(username);
 		dtoo.setId(offer.getId());
 		dtoo.setMessage(offer.getMessage());
 		dtoo.setState("PENDING");
-		
+
 		return ResponseEntity.ok(dtoo);
 	}
 
@@ -83,18 +83,18 @@ public class OfferController {
 		if (!(user instanceof Director)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
-		
+
 		List<DirectOffer> offers = directOfferRepository.findAllByDirectorId(user.getId());
-		
+
 		List<DirectOfferDTO> dto = new LinkedList<>();
-		
+
 		offers.forEach(el -> {
 			DirectOfferDTO d = modelMapper.map(el, DirectOfferDTO.class);
 			d.setDancername(el.getDancer().getUsername());
 			d.setDirectorname(el.getDirector().getUsername());
 			dto.add(d);
 		});
-		
+
 		return ResponseEntity.ok(dto);
 	}
 
@@ -107,76 +107,76 @@ public class OfferController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
 		List<DirectOffer> offers = directOfferRepository.findAllByDancerId(user.getId());
-		
+
 		List<DirectOfferDTO> dto = new LinkedList<>();
-		
+
 		offers.forEach(el -> {
 			DirectOfferDTO d = modelMapper.map(el, DirectOfferDTO.class);
 			d.setDancername(el.getDancer().getUsername());
 			d.setDirectorname(el.getDirector().getUsername());
 			dto.add(d);
 		});
-		
+
 		return ResponseEntity.ok(dto);
 	}
-	
+
 	@GetMapping("/delete/{id}")
-	public ResponseEntity<String> deleteOffer(@PathVariable Integer id){
+	public ResponseEntity<String> deleteOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 
 		if (!(user instanceof Director)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
-		
+
 		DirectOffer off = directOfferRepository.findById(id).orElse(null);
-		if(off == null)
+		if (off == null)
 			return ResponseEntity.badRequest().build();
-		
-		if(!off.getDirector().getUsername().equals(user.getUsername()))
+
+		if (!off.getDirector().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
-		
+
 		directOfferRepository.delete(off);
 		return ResponseEntity.ok("Success");
 	}
-	
+
 	@GetMapping("/accept/{id}")
-	public ResponseEntity<String> acceptOffer(@PathVariable Integer id){
+	public ResponseEntity<String> acceptOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 
 		if (!(user instanceof Dancer)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
-		
+
 		DirectOffer off = directOfferRepository.findById(id).orElse(null);
-		if(off == null)
+		if (off == null)
 			return ResponseEntity.badRequest().build();
-		
-		if(!off.getDancer().getUsername().equals(user.getUsername()))
+
+		if (!off.getDancer().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
-		
+
 		off.setState("Prihvaćena");
 		directOfferRepository.save(off);
 		return ResponseEntity.ok("Success");
 	}
-	
+
 	@GetMapping("/deny/{id}")
-	public ResponseEntity<String> denyOffer(@PathVariable Integer id){
+	public ResponseEntity<String> denyOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 
 		if (!(user instanceof Dancer)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
 		}
-		
+
 		DirectOffer off = directOfferRepository.findById(id).orElse(null);
-		if(off == null)
+		if (off == null)
 			return ResponseEntity.badRequest().build();
-		
-		if(!off.getDancer().getUsername().equals(user.getUsername()))
+
+		if (!off.getDancer().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
-		
+
 		off.setState("Odbijena");
 		directOfferRepository.save(off);
 		return ResponseEntity.ok("Success");

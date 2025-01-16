@@ -67,7 +67,8 @@ header {
   margin-left: 15px;
 }
 
-.login button, .logout button {
+.login button,
+.logout button {
   color: white;
   border: none;
   background-color: #4c009d;
@@ -80,43 +81,49 @@ header {
   transition: background-color 0.3s ease;
 }
 
-.login button:hover, .logout button:hover {
+.login button:hover,
+.logout button:hover {
   background-color: #37077a;
 }
 
-#welcome{
-  margin-top: 200px;
+#welcome {
+  margin-top: 150px;
   color: #fff;
   margin-bottom: 50px;
   text-align: center;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4); /* Adds shadow to text */
 }
 
-
 .welcome-message {
   position: fixed;
   top: 50%;
-  left: 25%;  /* 25% from the left side */
-  transform: translate(-50%, -50%);  /* Center the message horizontally and vertically */
-  width: 32%;  /* Adjust width for a centered but not too wide layout */
-  background-color: rgba(255, 255, 255, 0.8);  /* Slight background blur */
+  left: 25%; /* 25% from the left side */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Center the message horizontally and vertically */
+  width: 32%; /* Adjust width for a centered but not too wide layout */
+  background-color: rgba(255, 255, 255, 0.8); /* Slight background blur */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-size: 1.2rem;
-  color: #333;  /* Darker text color for readability */
-  z-index: 3;  /* Ensure it appears over other content */
-  
+  color: #333; /* Darker text color for readability */
+  z-index: 3; /* Ensure it appears over other content */
+
   /* Fading border effect */
-  border: 1px solid rgba(0, 0, 0, 0.1);  /* Soft border color */
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));  /* Fading effect on the border */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Soft border color */
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0)
+  ); /* Fading effect on the border */
 }
 
 .welcome-message p {
   margin: 10px 0;
 }
-
 
 .director-notice {
   position: relative;
@@ -133,24 +140,24 @@ header {
 }
 
 .button-group {
-  margin-top: 90px;
+  margin-top: 10px;
   display: flex;
-  flex-direction: column;  /* Stack buttons in a column */
-  justify-content: flex-start;  /* Align buttons to the top of the container */
+  flex-direction: column; /* Stack buttons in a column */
+  justify-content: flex-start; /* Align buttons to the top of the container */
   align-items: center;
   position: fixed;
   top: 50%;
-  right: 15%;
-  transform: translateY(-50%);  /* Vertically center */
-  width: 25%;  /* Buttons take up 1/4 of the screen width */
+  right: 10%;
+  transform: translateY(-50%); /* Vertically center */
+  width: 25%; /* Buttons take up 1/4 of the screen width */
 }
 
 .navigation-button {
   flex: 0 1 auto;
-  width: 100%;  /* Make buttons take full width of the container */
-  height: 80px;  /* Fixed height for all buttons */
-  font-size: 1.6rem;  /* Adjust font size */
-  padding: 10px 0;  /* Padding for better text alignment */
+  width: 100%; /* Make buttons take full width of the container */
+  height: 80px; /* Fixed height for all buttons */
+  font-size: 1.6rem; /* Adjust font size */
+  padding: 10px 0; /* Padding for better text alignment */
   border: 3px solid #4c009d;
   border-radius: 8px;
   background-color: #e6d5f2;
@@ -158,15 +165,13 @@ header {
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-bottom: 20px;  /* Space between buttons */
+  margin-bottom: 20px; /* Space between buttons */
 }
 
 .navigation-button:hover {
   background-color: #d1b3f2;
   transform: scale(1.05);
 }
-
-
 
 /* Media query for responsiveness */
 @media (max-width: 768px) {
@@ -189,4 +194,22 @@ header {
     width: 100%;
     margin-right: 0;
   }
+}
+
+.price-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.price-popup2 {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }

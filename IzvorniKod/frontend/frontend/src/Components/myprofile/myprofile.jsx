@@ -7,6 +7,18 @@ import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
 
+// Definicija dostupnih vrsta plesa
+const danceStylesList = [
+  "Balet",
+  "Jazz",
+  "Hip-Hop",
+  "Salsa",
+  "Tango",
+  "Valcer",
+  "Breakdance",
+  "Suvremeni",
+];
+
 const MyProfile = ({ onLogout }) => {
   // Inicijalizacija stanja komponente
   const [profileData, setProfileData] = useState(null); // Pohranjuje podatke korisničkog profila
@@ -23,18 +35,6 @@ const MyProfile = ({ onLogout }) => {
   const [videos, setVideos] = useState([]);
 
   const navigate = useNavigate(); // Hook za navigaciju između ruta
-
-  // Definicija dostupnih vrsta plesa
-  const danceStylesList = [
-    "Balet",
-    "Jazz",
-    "Hip-Hop",
-    "Salsa",
-    "Tango",
-    "Valcer",
-    "Breakdance",
-    "Suvremeni",
-  ];
 
   const handlePayment = async () => {
     try {
@@ -145,7 +145,7 @@ const MyProfile = ({ onLogout }) => {
         setIsInactive(data.inactive || false); // Postavi status neaktivnosti
         setInactiveUntil(data.inactiveUntil || ""); // Postavi datum neaktivnosti
       } catch (error) {
-        alert("Your token has expired, please login again.");
+        alert("Vaša prijava je istekla, molimo prijavite se ponovo.");
         onLogout();
         console.error("Greška pri dohvaćanju podataka profila:", error);
       }
@@ -181,7 +181,7 @@ const MyProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/users/update-profile",
+        `http://localhost:8080/users/update-profile/${getUsernameFromToken()}`,
         {
           method: "PUT",
           headers: {
@@ -244,7 +244,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        "http://localhost:8080/portfolio/updatedescription",
+        `http://localhost:8080/portfolio/updatedescription/${getUsernameFromToken()}`,
         {
           method: "POST",
           headers: {
@@ -271,7 +271,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `http://localhost:8080/portfolio/deletephoto?photoname=${name}`,
+        `http://localhost:8080/portfolio/deletephoto/${getUsernameFromToken()}?photoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -296,7 +296,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `http://localhost:8080/portfolio/deletevideo?photoname=${name}`,
+        `http://localhost:8080/portfolio/deletevideo/${getUsernameFromToken()}?photoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -350,7 +350,7 @@ const MyProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/users/update-dance-styles",
+        `http://localhost:8080/users/update-dance-styles/${getUsernameFromToken()}`,
         {
           method: "PUT",
           headers: {
@@ -413,7 +413,11 @@ const MyProfile = ({ onLogout }) => {
   }
 
   const handleDescriptionChange = (e) => {
-    setDescriptionchange(e.target.value); // Update state as user types in the input field
+    setDescriptionchange(e.target.value);
+  };
+
+  const handlePasswordToggle = () => {
+    navigate("/change-password");
   };
 
   return (
@@ -438,11 +442,15 @@ const MyProfile = ({ onLogout }) => {
         {profileData?.type.type === "DIRECTOR" && (
           <div className="payment-section">
             {profileData?.paid === false ? (
-              <><button className="payment-button" onClick={handlePayment}>
-              Plati članarinu
-            </button>
-            <p>Da biste koristili ovu aplikaciju potrebno je platiti godišnju članarinu.</p>
-            </>  
+              <>
+                <button className="payment-button" onClick={handlePayment}>
+                  Plati članarinu
+                </button>
+                <p>
+                  Da biste koristili ovu aplikaciju potrebno je platiti godišnju
+                  članarinu.
+                </p>
+              </>
             ) : (
               <p className="subscription-info">
                 Vaša direktorska članarina traje do:{" "}
@@ -527,30 +535,51 @@ const MyProfile = ({ onLogout }) => {
             <p>
               <strong>Ime:</strong> {profileData.name}
             </p>
-            <p>
-              <strong>Prezime:</strong> {profileData.surname}
-            </p>
-            <p>
-              <strong>Lokacija:</strong>{" "}
-              {profileData.location ? profileData.location : "Nije uneseno"}
-            </p>
-            <p>
-              <strong>Dob:</strong>{" "}
-              {profileData.age ? profileData.age : "Nije uneseno"}
-            </p>
-            <p>
-              <strong>Spol:</strong>{" "}
-              {profileData.gender ? profileData.gender : "Nije uneseno"}
-            </p>
-            <p>
-              <strong>Email:</strong> {profileData.email}
-            </p>
+            {profileData.type.type !== "ADMIN" && (
+              <>
+                <p>
+                  <strong>Prezime:</strong> {profileData.surname}
+                </p>
+                <p>
+                  <strong>Lokacija:</strong>{" "}
+                  {profileData.location ? profileData.location : "Nije uneseno"}
+                </p>
+                <p>
+                  <strong>Dob:</strong>{" "}
+                  {profileData.age ? profileData.age : "Nije uneseno"}
+                </p>
+                <p>
+                  <strong>Spol:</strong>{" "}
+                  {profileData.gender ? profileData.gender : "Nije uneseno"}
+                </p>
+                <p>
+                  <strong>Email:</strong> {profileData.email}
+                </p>
+                <p>
+                  <strong>Aktivnost:</strong>{" "}
+                  {profileData.inactive === false
+                    ? "Aktivan"
+                    : "Neaktivan do " +
+                      new Date(profileData.inactiveUntil).toLocaleString()}
+                </p>
+              </>
+            )}
             <p>
               <strong>Tip korisnika:</strong>{" "}
-              {profileData.type.type === "DANCER" ? "Plesač" : "Direktor"}
+              {profileData.type.type === "DANCER"
+                ? "Plesač"
+                : profileData.type.type === "DIRECTOR"
+                ? "Direktor"
+                : "Admin"}
             </p>
             {/* Dugme za prelazak u način uređivanja */}
-            <button onClick={handleEditToggle}>Uredi Profil</button>
+            {profileData.type.type !== "ADMIN" && (
+              <>
+                <button onClick={handleEditToggle}>Uredi Profil</button>
+                {"    "}
+                <button onClick={handlePasswordToggle}>Promjena lozinke</button>
+              </>
+            )}
           </div>
         )}
 
@@ -608,110 +637,116 @@ const MyProfile = ({ onLogout }) => {
         )}
 
         {/* Sekcija za upravljanje portfoliom */}
-        <div className="portfolio-section">
-          <h3>Moj Portfolio</h3>
-          <button className="buttons" onClick={handlePortfolioEditToggle}>
-            Uredi portfolio
-          </button>
-          <hr />
-          {/* Input za upload slike ili videozapisa */}
-          {isEditingPortfolio ? (
-            <>
-              <input
-                name="description"
-                type="text"
-                placeholder={description}
-                value={descriptionchange}
-                onChange={handleDescriptionChange}
-              />
-              <p>Fotografije:</p>
-              <input
-                type="file"
-                accept="image/*"
-                name="photos"
-                multiple
-                onChange={handleFileSelect}
-              />
-              <p>Videozapisi:</p>
-              <input
-                type="file"
-                name="videos"
-                accept="video/*"
-                multiple
-                onChange={handleFileSelect}
-              />
-              <button onClick={handleSubmit}>Spremi Portfolio</button>
-            </>
-          ) : (
-            <></>
-          )}
-          <p className="portfolio-description">
-            {description ? description : "Nemate uneseno ništa u portfolio"}
-          </p>
-          <br />
-          <br />
-          <hr />
-          <br />
-          <div className="portfolio-items">
-            {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
-            {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
-            {portfolioItems.photos.length > 0 ? (
-              portfolioItems.photos.map((photo, index) => (
-                <div key={index} className="portfolio-item">
-                  <a
-                    href={`http://localhost:8080${photo}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={`http://localhost:8080${photo}`}
-                      alt={`Portfolio Photo ${index + 1}`}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "300px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </a>
-                  <button
-                    onClick={() =>
-                      handleDeletePortfolioPhoto(photo.split("uploads/")[1])
-                    }
-                  >
-                    X
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p>Nemate spremljene slike.</p>
-            )}
+        {profileData.type.type !== "ADMIN" && (
+          <>
+            <div className="portfolio-section">
+              <h3>Moj Portfolio</h3>
+              <button className="buttons" onClick={handlePortfolioEditToggle}>
+                Uredi portfolio
+              </button>
+              <hr />
+              {/* Input za upload slike ili videozapisa */}
+              {isEditingPortfolio ? (
+                <>
+                  <input
+                    name="description"
+                    type="text"
+                    placeholder={description}
+                    value={descriptionchange}
+                    onChange={handleDescriptionChange}
+                  />
+                  <p>Fotografije:</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="photos"
+                    multiple
+                    onChange={handleFileSelect}
+                  />
+                  <p>Videozapisi:</p>
+                  <input
+                    type="file"
+                    name="videos"
+                    accept="video/*"
+                    multiple
+                    onChange={handleFileSelect}
+                  />
+                  <button onClick={handleSubmit}>Spremi Portfolio</button>
+                </>
+              ) : (
+                <></>
+              )}
+              <p className="portfolio-description">
+                {description ? description : "Nemate uneseno ništa u portfolio"}
+              </p>
+              <br />
+              <br />
+              <hr />
+              <br />
+              <div className="portfolio-items">
+                {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
+                {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
+                {portfolioItems.photos.length > 0 ? (
+                  portfolioItems.photos.map((photo, index) => (
+                    <div key={index} className="portfolio-item">
+                      <a
+                        href={`http://localhost:8080${photo}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={`http://localhost:8080${photo}`}
+                          alt={`Portfolio Photo ${index + 1}`}
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "300px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </a>
+                      <button
+                        onClick={() =>
+                          handleDeletePortfolioPhoto(photo.split("uploads/")[1])
+                        }
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p>Nemate spremljene slike.</p>
+                )}
 
-            {portfolioItems.videos.length > 0 ? (
-              portfolioItems.videos.map((video, index) => (
-                <div key={index} className="portfolio-item">
-                  <video
-                    src={`http://localhost:8080${video}`}
-                    controls
-                    style={{ maxWidth: "100%", maxHeight: "300px" }}
-                  >
-                    <button
-                      onClick={() =>
-                        handleDeletePortfolioVideo(video.split("uploads/")[1])
-                      }
-                    >
-                      X
-                    </button>
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ))
-            ) : (
-              <p>Nemate spremljene videozapise.</p>
-            )}
+                {portfolioItems.videos.length > 0 ? (
+                  portfolioItems.videos.map((video, index) => (
+                    <div key={index} className="portfolio-item">
+                      <video
+                        src={`http://localhost:8080${video}`}
+                        controls
+                        style={{ maxWidth: "100%", maxHeight: "300px" }}
+                      >
+                        <button
+                          onClick={() =>
+                            handleDeletePortfolioVideo(
+                              video.split("uploads/")[1]
+                            )
+                          }
+                        >
+                          X
+                        </button>
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ))
+                ) : (
+                  <p>Nemate spremljene videozapise.</p>
+                )}
 
-            {/* Dugme za brisanje portfolio stavke */}
-          </div>
-        </div>
+                {/* Dugme za brisanje portfolio stavke */}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Dugme za odjavu korisnika */}
         <button className="logout-button" onClick={onLogout}>

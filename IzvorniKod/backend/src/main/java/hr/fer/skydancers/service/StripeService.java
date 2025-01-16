@@ -15,6 +15,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import hr.fer.skydancers.dto.PaymentRequest;
 import hr.fer.skydancers.dto.StripeResponse;
 import hr.fer.skydancers.model.Director;
+import hr.fer.skydancers.model.Admin;
 import hr.fer.skydancers.model.Payment;
 import hr.fer.skydancers.repository.PaymentRepository;
 
@@ -37,7 +38,7 @@ public class StripeService {
 				.builder().setName(req.getName()).build();
 
 		SessionCreateParams.LineItem.PriceData priceData = SessionCreateParams.LineItem.PriceData.builder()
-				.setCurrency("EUR").setUnitAmount(req.getAmount()).setProductData(prod).build();
+				.setCurrency("EUR").setUnitAmount(((Admin) userService.get("admin").orElse(null)).getSubscriptionprice()).setProductData(prod).build();
 
 		SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder().setQuantity(1L)
 				.setPriceData(priceData).build();

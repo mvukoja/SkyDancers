@@ -58,7 +58,7 @@ const Homepage = ({ onLogout }) => {
 
         setProfileData(data); // Postavi podatke profila u stanje
       } catch (error) {
-        alert("Your token has expired, please login again.");
+        alert("Vaša prijava je istekla, molimo prijavite se ponovo.");
         onLogout();
         console.error("Greška pri dohvaćanju podataka profila:", error);
       }
@@ -121,8 +121,81 @@ const Homepage = ({ onLogout }) => {
     }
   };
 
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  // Function to handle opening the popup
+  const openPopup = () => {
+    setIsPopupVisible(true);
+  };
+
+  // Function to handle closing the popup
+  const closePopup = () => {
+    setIsPopupVisible(false);
+    setInputValue(""); // Clear input when closing
+  };
+
+  // Function to handle input change
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  // Function to handle form submission
+  const handleSubscriptionPrice = async () => {
+    if (inputValue) {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(
+          `http://localhost:8080/users/changesubscriptionprice?price=${inputValue}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const text = await response.text();
+        if (text === "Success") {
+          alert("Iznos uspješno promijenjen!");
+        }
+      } catch (error) {
+        console.error("Error submitting number:", error);
+      }
+      closePopup();
+    } else {
+      alert("Unesite valjan broj.");
+    }
+  };
+
   return (
     <div className="homepage-container">
+      <div>
+        {isPopupVisible && (
+          <div className="price-popup">
+            <div className="price-popup2">
+              <h3>Unesite iznos (EUR)</h3>
+              <h3>
+                Napomena: (1000 = 10.00€) <br />
+                tj. cijenu navesti u centima{" "}
+              </h3>
+              <input
+                type="number"
+                value={inputValue}
+                onChange={handleInputChange}
+                style={{ marginBottom: "10px", padding: "8px" }}
+              />
+              <div>
+                <button
+                  onClick={handleSubscriptionPrice}
+                  style={{ marginRight: "10px" }}
+                >
+                  Spremi
+                </button>
+                <button onClick={closePopup}>Nazad</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
       <div className="background-image-container"></div>
       <header className="homepage-header">
         <a href="/" className="logo">
@@ -158,17 +231,24 @@ const Homepage = ({ onLogout }) => {
       )}
 
       <div className="content-container">
-        <h1 id="welcome">Dance Hub</h1>
-        <div className="welcome-message">
-          <h1 className="welcome-heading">
-            <strong>Dobrodošli na SkyDancers!</strong>
-          </h1>
-          <p>
-            Vaša platforma za povezivanje plesača i direktora u plesnoj
-            industriji.
-          </p>
-        </div>
+        {!isPopupVisible && (
+          <>
+            <h1 id="welcome">Dance Hub</h1>
+            <h1 style={{ color: "#fff" }}>Dobrodošli {profileData?.name}.</h1>
+          </>
+        )}
 
+        {!isPopupVisible && (
+          <div className="welcome-message">
+            <h1 className="welcome-heading">
+              <strong>Dobrodošli na SkyDancers!</strong>
+            </h1>
+            <p>
+              Vaša platforma za povezivanje plesača i direktora u plesnoj
+              industriji.
+            </p>
+          </div>
+        )}
         {profileData?.type.type === "DIRECTOR" ? (
           <div className="button-group">
             {profileData?.paid === true && (
@@ -245,7 +325,16 @@ const Homepage = ({ onLogout }) => {
             </button>
           </div>
         ) : (
-          <p>Molimo prijavite se za pristup funkcionalnostima.</p>
+          profileData?.type.type === "ADMIN" &&
+          !isPopupVisible && (
+            <>
+              <div className="button-group">
+                <button className="navigation-button" onClick={openPopup}>
+                  Namještanje godišnje pretplate za direktore
+                </button>
+              </div>
+            </>
+          )
         )}
       </div>
     </div>

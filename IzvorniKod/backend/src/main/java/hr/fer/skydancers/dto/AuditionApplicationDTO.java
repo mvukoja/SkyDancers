@@ -3,13 +3,12 @@ package hr.fer.skydancers.dto;
 import java.time.LocalDateTime;
 
 public class AuditionApplicationDTO {
-	
-	
+
 	private Integer id;
 	private Integer auditionId;
 	private String status;
 	private LocalDateTime datetime;
-	
+
 	private UserDto applicant;
 
 	public AuditionApplicationDTO() {
@@ -65,9 +64,5 @@ public class AuditionApplicationDTO {
 	public void setApplicant(UserDto applicant) {
 		this.applicant = applicant;
 	}
-
-	
-
-	
 
 }

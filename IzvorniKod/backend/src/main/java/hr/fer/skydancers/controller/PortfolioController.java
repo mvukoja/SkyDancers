@@ -44,15 +44,16 @@ public class PortfolioController {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
-	@PostMapping("/updatedescription")
-	public ResponseEntity<PortfolioDTO> updatePortfolioDescription(@RequestBody(required = false) String description) {
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@PostMapping("/updatedescription/{username}")
+	public ResponseEntity<PortfolioDTO> updatePortfolioDescription(@RequestBody(required = false) String description, @PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
 
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
 			return ResponseEntity.badRequest().build();
-		if(description == null)
+		if (description == null)
 			description = "";
 		portfolio.setDescription(description);
 		portfolioRepository.save(portfolio);
@@ -67,6 +68,8 @@ public class PortfolioController {
 			@RequestParam(value = "videos", required = false) List<MultipartFile> videos) throws IOException {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
 			return ResponseEntity.badRequest().build();
@@ -95,6 +98,8 @@ public class PortfolioController {
 	@GetMapping("/get/{username}")
 	public ResponseEntity<PortfolioDTO> getPortfolio(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
 
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
@@ -105,10 +110,12 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
-	@DeleteMapping("/deletephoto")
-	public ResponseEntity<PortfolioDTO> deletePhoto(@RequestParam String photoname) throws UnsupportedEncodingException {
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@DeleteMapping("/deletephoto/{username}")
+	public ResponseEntity<PortfolioDTO> deletePhoto(@RequestParam String photoname, @PathVariable String username)
+			throws UnsupportedEncodingException {
 		MyUser user = userService.get(username).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
 			return ResponseEntity.badRequest().build();
@@ -125,11 +132,13 @@ public class PortfolioController {
 		dto.setUsername(user.getUsername());
 		return ResponseEntity.ok(dto);
 	}
-	
-	@DeleteMapping("/deletevideo")
-	public ResponseEntity<PortfolioDTO> deleteVideo(@RequestParam String videoname) throws UnsupportedEncodingException {
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+	@DeleteMapping("/deletevideo/{username}")
+	public ResponseEntity<PortfolioDTO> deleteVideo(@RequestParam String videoname, @PathVariable String username)
+			throws UnsupportedEncodingException {
 		MyUser user = userService.get(username).orElse(null);
+		if(user == null)
+			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
 			return ResponseEntity.badRequest().build();

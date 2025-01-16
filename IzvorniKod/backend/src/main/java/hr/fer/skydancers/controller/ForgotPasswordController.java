@@ -27,13 +27,13 @@ public class ForgotPasswordController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
 
@@ -46,45 +46,53 @@ public class ForgotPasswordController {
 		int otp = otpGenerator();
 		MailBody mailBody = new MailBody(email, "SkyDancers: Zaboravljena lozinka",
 				"Ovo je OTP za vašu zaboravljenu lozinku: " + otp);
-		
+
 		ForgotPassword fp = new ForgotPassword();
 		fp.setOtp(otp);
 		fp.setExpirDate(LocalDate.now().plusDays(1));
 		fp.setUser(user);
-		
+
 		emailService.sendSimpleMessage(mailBody);
 		forgotPasswordRepository.save(fp);
-		
+
 		return ResponseEntity.ok("Email poslan");
 	}
-	
+
 	@PostMapping("/verifyotp/{otp}/{email}")
-	public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email){
+	public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
 		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElse(null);
-		
-		if(fp == null) {
+
+		if (fp == null) {
 			return ResponseEntity.ok("Neispravan kod!");
 		}
-		
-		if(fp.getExpirDate().isBefore(LocalDate.now())) {
+
+		if (fp.getExpirDate().isBefore(LocalDate.now())) {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			return ResponseEntity.ok("OTP je istekao!");
 		}
 		
+		fp.setOtpverified(true);
+		forgotPasswordRepository.save(fp);
+
 		return ResponseEntity.ok("Success!");
-		
+
 	}
-	
+
 	@PostMapping("/changepassword/{email}")
-	public ResponseEntity<String> changePassword(@PathVariable String email, @RequestBody ChangePassword changePassword){
-		if(!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
+	public ResponseEntity<String> changePassword(@PathVariable String email,
+			@RequestBody ChangePassword changePassword) {
+		if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
 			return ResponseEntity.ok("Lozinke nisu iste!");
 		}
-		String encodedPassword = passwordEncoder.encode(changePassword.password());
-		userService.updatePassword(email, encodedPassword);
 		MyUser user = userService.getByMail(email).orElse(null);
 		ForgotPassword fp = forgotPasswordRepository.findByUser(user).orElse(null);
+		if(fp == null)
+			return ResponseEntity.badRequest().build();
+		if(!fp.isOtpverified())
+			return ResponseEntity.ok("Niste potvrdili OTP");
+		String encodedPassword = passwordEncoder.encode(changePassword.password());
+		userService.updatePassword(email, encodedPassword);
 		forgotPasswordRepository.deleteById(fp.getFpid());
 		return ResponseEntity.ok("Lozinka je promijenjena!");
 	}

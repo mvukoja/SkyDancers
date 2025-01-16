@@ -173,6 +173,7 @@ const Chat = () => {
           id: doc.id,
           ...doc.data(),
         }));
+        console.log(messagesData);
         setMessages(messagesData);
         scrollToBottom();
       });
@@ -249,8 +250,6 @@ const Chat = () => {
 
   return (
     <div>
-      {/* Add the header here */}
-
       <header className="homepage-header">
         <a href="/" className="logo">
           <img src={headerlogo} alt="" className="logo-img" />
@@ -290,7 +289,13 @@ const Chat = () => {
                   setUsers([]);
                 }}
               >
-                {user.name} {user.surname} ({user.type.type === "DANCER" ? "PLESAČ" : "DIREKTOR"})
+                {user.username}{":"} {user.name} {user.surname} (
+                {user.type.type === "DANCER"
+                  ? "Plesač"
+                  : user.type.type === "DIRECTOR"
+                  ? "Direktor"
+                  : "Admin"}
+                )
               </div>
             ))}
           </div>
@@ -316,9 +321,7 @@ const Chat = () => {
                     <div className="message-text">{msg.text}</div>
                     <div className="message-meta">
                       <span>{msg.senderName}</span> {" u "}
-                      <span>
-                        {new Date(msg.createdAt).toLocaleTimeString()}
-                      </span>
+                      <span>{new Date(msg.createdAt).toLocaleString()}</span>
                     </div>
                   </div>
                 ))}

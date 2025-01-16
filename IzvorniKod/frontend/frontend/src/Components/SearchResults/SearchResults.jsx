@@ -44,7 +44,7 @@ const SearchResults = () => {
 
         const data = await response.json();
         const filteredData = data.filter(
-          (user) => user.username !== getUsernameFromToken()
+          (user) => user.username !== getUsernameFromToken() && user.username !== "admin"
         );
         setSearchResults(filteredData);
         console.log(data);

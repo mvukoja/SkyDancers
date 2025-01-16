@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import hr.fer.skydancers.dto.AuditionApplicationDTO;
 import hr.fer.skydancers.dto.AuditionDTO;
@@ -75,6 +77,15 @@ public class AuditionController {
 		if (user == null)
 			return ResponseEntity.badRequest().build();
 
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser us = userService.get(usname).orElse(null);
+
+		if (us instanceof Director) {
+			if (!((Director) us).isPaid()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+			}
+		}
+
 		Iterable<Audition> list = auditionService.getByDirector(user);
 		List<AuditionDTO> dto = new LinkedList<>();
 		list.forEach(el -> {
@@ -94,6 +105,8 @@ public class AuditionController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<AuditionDTO> getAudition(@PathVariable Integer id) {
 		Audition aud = auditionService.get(id);
+		if(aud == null)
+			return ResponseEntity.ok(null);
 		AuditionDTO dto = modelMapper.map(aud, AuditionDTO.class);
 		List<String> dances = new LinkedList<>();
 		aud.getStyles().forEach(e -> dances.add(e.getName()));
@@ -229,7 +242,7 @@ public class AuditionController {
 				dto.getStyles());
 		List<AuditionDTO> dtoo = new LinkedList<>();
 		list.forEach(el -> {
-			if (!el.isArchived()) {
+			if (!el.isArchived() && el.getDeadline().isAfter(LocalDateTime.now())) {
 				AuditionDTO aud = modelMapper.map(el, AuditionDTO.class);
 				List<String> dances = new LinkedList<>();
 				el.getStyles().forEach(e -> dances.add(e.getName()));
@@ -240,24 +253,24 @@ public class AuditionController {
 		});
 		return ResponseEntity.ok(dtoo);
 	}
-	
-	//dva filtra su znaci vrsta plesa i lokacija...
+
+	// dva filtra su znaci vrsta plesa i lokacija...
 	@GetMapping("/notifications")
-	public ResponseEntity<List<AuditionDTO>> notificationAuditions(){
+	public ResponseEntity<List<AuditionDTO>> notificationAuditions() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 		if (!(user instanceof Dancer)) {
 			return ResponseEntity.badRequest().build();
 		}
-		
+
 		List<String> dances = new LinkedList<>();
-		((Dancer)user).getDancestyles().forEach(el -> dances.add(el.getName()));
-		
+		((Dancer) user).getDancestyles().forEach(el -> dances.add(el.getName()));
+
 		List<Audition> list = auditionService.getByPreference(user.getLocation(), dances);
-		
+
 		List<AuditionDTO> dtoo = new LinkedList<>();
 		list.forEach(el -> {
-			if (!el.isArchived()) {
+			if (!el.isArchived() && el.getDeadline().isAfter(LocalDateTime.now())) {
 				AuditionDTO aud = modelMapper.map(el, AuditionDTO.class);
 				List<String> dance = new LinkedList<>();
 				el.getStyles().forEach(e -> dance.add(e.getName()));
@@ -268,16 +281,16 @@ public class AuditionController {
 		});
 		return ResponseEntity.ok(dtoo);
 	}
-	
+
 	@GetMapping("/getmyapplications")
-	public ResponseEntity<List<AuditionDTO>> seeMyApplications(){
+	public ResponseEntity<List<AuditionDTO>> seeMyApplications() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
 		if (!(user instanceof Dancer)) {
 			return ResponseEntity.badRequest().build();
 		}
 		List<Audition> list = auditionApplicationRepository.findAuditionsByDancerId(user.getId());
-		if(list == null)
+		if (list == null)
 			return ResponseEntity.badRequest().build();
 		List<AuditionDTO> dtoo = new LinkedList<>();
 		list.forEach(el -> {
@@ -292,7 +305,6 @@ public class AuditionController {
 		});
 		return ResponseEntity.ok(dtoo);
 	}
-	
 
 	@PostMapping("/applytoaudition")
 	public ResponseEntity<AuditionApplicationDTO> applyToAudition(@RequestBody AuditionApplicationDTO dto) {
@@ -302,10 +314,10 @@ public class AuditionController {
 			return ResponseEntity.badRequest().build();
 		}
 		Audition aud = auditionService.get(dto.getAuditionId());
-		
-		if(aud.getSubscribed() == aud.getPositions())
+
+		if (aud.getSubscribed() == aud.getPositions())
 			return ResponseEntity.badRequest().build();
-		
+
 		AuditionApplication auditionApplication = new AuditionApplication();
 		auditionApplication.setAudition(aud);
 		auditionApplication.setDancer((Dancer) user);
@@ -316,10 +328,19 @@ public class AuditionController {
 		auditionApplicationRepository.save(auditionApplication);
 		return ResponseEntity.ok(dto);
 	}
-	
 
 	@GetMapping("/manage/applications/{id}")
 	public ResponseEntity<List<AuditionApplicationDTO>> seeApplications(@PathVariable Integer id) {
+
+		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MyUser uss = userService.get(usname).orElse(null);
+
+		if (uss instanceof Director) {
+			if (!((Director) uss).isPaid()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+			}
+		}
+
 		List<AuditionApplication> auditionApplication = auditionApplicationRepository.findAllByAuditionId(id);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
@@ -342,6 +363,11 @@ public class AuditionController {
 		if (!(user instanceof Director)) {
 			return ResponseEntity.badRequest().build();
 		}
+		if (user instanceof Director) {
+			if (!((Director) user).isPaid()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+			}
+		}
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
@@ -350,7 +376,7 @@ public class AuditionController {
 
 		auditionApplication.setStatus("Prihvaćena");
 		auditionApplicationRepository.save(auditionApplication);
-		
+
 		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
 		aud.setSubscribed(aud.getSubscribed() + 1);
 		auditionService.put(aud);
@@ -363,6 +389,11 @@ public class AuditionController {
 		MyUser user = userService.get(actor).orElse(null);
 		if (!(user instanceof Director)) {
 			return ResponseEntity.badRequest().build();
+		}
+		if (user instanceof Director) {
+			if (!((Director) user).isPaid()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not allowed");
+			}
 		}
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)

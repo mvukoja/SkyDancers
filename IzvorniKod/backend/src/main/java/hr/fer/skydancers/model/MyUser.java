@@ -1,5 +1,8 @@
 package hr.fer.skydancers.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -38,8 +41,8 @@ public class MyUser {
 
 	private boolean confirmed;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "usertype_id")
+	@OneToOne(cascade = CascadeType.PERSIST) // One-to-one relationship
+	@JoinColumn(name = "usertype_id", referencedColumnName = "userid", nullable = false) // Foreign key
 	private UserType type;
 
 	private boolean oauth;
@@ -56,16 +59,20 @@ public class MyUser {
 
 	@OneToOne(mappedBy = "user")
 	private ForgotPassword forgotPassword;
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Portfolio portfolio;
+	private Portfolio portfolio;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
 
 	public MyUser() {
 	}
 
 	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
 			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String gender,
-			Integer age, String location, String contact, ForgotPassword forgotPassword, Portfolio portfolio) {
+			Integer age, String location, String contact, ForgotPassword forgotPassword, Portfolio portfolio,
+			List<Payment> payments) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -83,6 +90,7 @@ public class MyUser {
 		this.contact = contact;
 		this.forgotPassword = forgotPassword;
 		this.portfolio = portfolio;
+		this.payments = payments;
 	}
 
 	public Integer getId() {
@@ -213,9 +221,14 @@ public class MyUser {
 		this.portfolio = portfolio;
 	}
 
-	// Getteri i setteri za nove atribute
-	
+	public List<Payment> getPayments() {
+		return payments;
+	}
 
-	
+	public void setPayments(List<Payment> payments) {
+		this.payments = payments;
+	}
+
+	// Getteri i setteri za nove atribute
 
 }

@@ -14,8 +14,8 @@ const ForgotPasswordEmail = ({ onEmailSent }) => {
             });
             const result = await response.text();
             if (result === "Email poslan") {
-                setMessage('Email s kodom je poslan na vašu adresu.');
-                onEmailSent(email); // Pass email to parent component
+                alert('Email s kodom je poslan na vašu adresu.');
+                onEmailSent(email);
             } else {
                 setMessage('Korisnik s tim emailom ne postoji.');
             }

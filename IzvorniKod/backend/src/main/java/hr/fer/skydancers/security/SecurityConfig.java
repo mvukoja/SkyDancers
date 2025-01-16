@@ -47,8 +47,7 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
 					authorize.requestMatchers("/home", "/users/register/**", "/users/registerdancer", "/users/registerdirector", "/users/authenticate/**",
-							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/audition/getall", "/uploads/**").permitAll();
-					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
+							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/uploads/**").permitAll();
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.anyRequest().authenticated();
 				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())

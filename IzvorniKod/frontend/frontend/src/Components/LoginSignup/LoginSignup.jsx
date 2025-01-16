@@ -146,7 +146,7 @@ const LoginSignup = ({ onLogin }) => {
 
       const token = await response.text();
       if (token === "Invalid credentials") {
-        alert("Invalid credentials!");
+        alert("Pogrešni podaci!");
         return;
       }
       if (token === "Nedovršena registracija! Provjerite svoj mail!") {

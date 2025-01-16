@@ -46,7 +46,10 @@ const CreateAudition = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (selectedDanceStyles.length === 0) {
+      alert("Izaberite barem jedan stil plesa.");
+      return;
+    }
     const auditionData = {
       ...formData,
       positions: parseInt(formData.positions, 10),
@@ -68,7 +71,8 @@ const CreateAudition = () => {
 
       if (response.ok) {
         alert("Audicija uspješno kreirana!");
-        navigate("/");
+        const data = await response.json();
+        navigate(`/audition/${data.id}`);
       } else {
         alert("Došlo je do greške pri kreiranju audicije.");
       }
@@ -104,20 +108,62 @@ const CreateAudition = () => {
               type="datetime-local"
               name="datetime"
               value={formData.datetime}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                const selectedDate = e.target.value;
+                const currentDate = new Date().toISOString().slice(0, 16);
+
+                if (selectedDate < currentDate) {
+                  alert("Datum i vrijeme ne može biti u prošlosti.");
+                  e.target.value = "";
+                  return;
+                }
+                const deadlineValue = formData.deadline;
+                if (
+                  deadlineValue &&
+                  new Date(deadlineValue) > new Date(selectedDate)
+                ) {
+                  alert("Rok prijave mora biti prije događaja.");
+                  e.target.value = "";
+                  return;
+                }
+
+                handleInputChange(e);
+              }}
               required
             />
           </label>
+
           <label>
             Rok prijave:
             <input
               type="datetime-local"
               name="deadline"
               value={formData.deadline}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                const deadlineValue = e.target.value;
+                const currentDate = new Date().toISOString().slice(0, 16);
+
+                if (deadlineValue < currentDate) {
+                  alert("Rok prijave ne može biti u prošlosti.");
+                  e.target.value = "";
+                  return;
+                }
+                const datetimeValue = formData.datetime;
+                if (
+                  datetimeValue &&
+                  new Date(deadlineValue) > new Date(datetimeValue)
+                ) {
+                  alert("Rok prijave mora biti prije događaja.");
+                  e.target.value = "";
+                  return;
+                }
+
+                handleInputChange(e);
+              }}
               required
             />
           </label>
+
           <label>
             Lokacija:
             <input
