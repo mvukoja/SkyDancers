@@ -1,81 +1,148 @@
-import React, { useState, useEffect} from 'react';
-import './OAuthCompletionPage.css';
-import { useNavigate } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import email_icon from "../Assets/email.png";
+import user_icon from "../Assets/person.png";
+import InputField from "../LoginSignup/InputField";
 
 const OAuthCompletionPage = ({ onLogin }) => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [type, setType] = useState("DANCER");
   const navigate = useNavigate();
-  /////
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  var jwt = null;
+  var oauth = null;
   var finished = false;
-  jwt = searchParams.get('jwt');
-  finished = searchParams.get('finished');
-  
-  useEffect(() => {
-    if (!jwt) {
-        navigate('/', { replace: true });
-    }
-  }, [jwt, navigate]);
+  oauth = searchParams.get("oauth");
+  finished = searchParams.get("finished");
 
-  if(finished==="true"){
-      localStorage.setItem('jwtToken', jwt);
-      onLogin();
-  }
+  useEffect(() => {
+    const getJwt = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/users/authenticateoauth",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: oauth,
+          }
+        );
+        if (!response.ok)
+          throw new Error("Failed to complete OAuth registration");
+        const token = await response.text();
+        if (token) {
+          localStorage.setItem("jwtToken", token); // Sprema JWT token u lokalnu pohranu
+          onLogin(); // Poziva funkciju koja postavlja status prijavljenog korisnika
+        }
+      } catch (error) {
+        console.error("Error completing OAuth registration:", error);
+      }
+    };
+    if (!oauth) {
+      navigate("/", { replace: true });
+    }
+    if (finished === "true") {
+      getJwt();
+    }
+  }, [oauth, navigate, finished, onLogin]);
 
   const handleSubmit = async () => {
+    if (!validateForm()) return;
     const data = {
+      username,
       email,
       type,
-      oauth: "true",
+      oauth: oauth,
     };
 
     try {
-      const response = await fetch('http://localhost:8080/users/complete-oauth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "http://localhost:8080/users/complete-oauth",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
-      if (!response.ok) throw new Error("Failed to complete OAuth registration");
-      localStorage.setItem('jwtToken', jwt);
-      onLogin();
+      if (!response.ok)
+        throw new Error("Failed to complete OAuth registration");
+      const text = await response.text();
+      if (text === "Already taken") {
+        alert("Korisničko ime je već zauzeto.");
+        return;
+      }
+      if (text) {
+        localStorage.setItem("jwtToken", text); // Sprema JWT token u lokalnu pohranu
+        onLogin(); // Poziva funkciju koja postavlja status prijavljenog korisnika
+      } else return;
     } catch (error) {
       console.error("Error completing OAuth registration:", error);
     }
   };
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex za provjeru ispravnosti emaila
+    if (!emailRegex.test(email)) {
+      alert("Unesite validnu email adresu.");
+      return false;
+    }
+    if (username.length < 3) {
+      alert("Korisničko ime mora imati barem 3 slova");
+      return false;
+    }
+    if (!email) {
+      alert("Niste unijeli email.");
+      return false;
+    }
+    return true;
+  };
+
   return (
-    <div className="oauth-completion-container">
-      <h2>Complete Your Registration</h2>
-      <p>Please enter additional information to complete your registration.</p>
-      
-      <label>
-        Email:&nbsp;
-        <input
+    <div className="container">
+      <div className="header">
+        <div className="text">{"Registracija"}</div>
+        <div className="underline"></div>
+      </div>
+      <h2>Dovršite GitHub registraciju</h2>
+      <p>
+        <strong>Molimo vas da unesete dodatne informacije.</strong>
+      </p>
+      <div className="inputs">
+        <InputField
+          icon={user_icon}
+          type="text"
+          placeholder="Korisničko ime"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <InputField
+          icon={email_icon}
           type="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
-      </label>
-
-      <label>
-        Account Type:&nbsp;
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="DANCER">Dancer</option>
-          <option value="DIRECTOR">Director</option>
+        <select
+          className="select"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="DANCER">Plesač</option>
+          <option value="DIRECTOR">Direktor</option>
         </select>
-      </label>
-
-      <button onClick={handleSubmit}>Submit</button>
+      </div>
+      <div className="submit-container">
+        <button className="submit" onClick={handleSubmit}>
+          Dovrši
+        </button>
+      </div>
     </div>
   );
 };

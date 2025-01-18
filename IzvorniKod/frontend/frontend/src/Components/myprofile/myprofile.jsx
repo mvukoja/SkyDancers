@@ -437,7 +437,12 @@ const MyProfile = ({ onLogout }) => {
         </div>
       </header>
       <div className="profile-container">
-        <h2>Moj Profil</h2>
+        <div className="profile-header">
+          <h2>Moj profil</h2>
+          <span className="user-type">
+            {profileData.type.type === "DANCER" ? "PLESAČ" : "DIREKTOR"}
+          </span>
+        </div>
 
         {profileData?.type.type === "DIRECTOR" && (
           <div className="payment-section">
@@ -626,7 +631,17 @@ const MyProfile = ({ onLogout }) => {
                   <input
                     type="date"
                     value={inactiveUntil}
-                    onChange={(e) => setInactiveUntil(e.target.value)}
+                    onChange={(e) => {
+                      const currentDate = new Date()
+                        .toISOString()
+                        .split("T")[0];
+                      if (e.target.value <= currentDate) {
+                        alert("Datum mora biti u budućnosti");
+                        e.target.value = "";
+                        return;
+                      }
+                      setInactiveUntil(e.target.value);
+                    }}
                   />
                 </label>
               </div>

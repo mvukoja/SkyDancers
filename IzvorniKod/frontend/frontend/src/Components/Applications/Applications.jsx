@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
-//import "./Applications.css";
 
 const Applications = () => {
   const navigate = useNavigate();

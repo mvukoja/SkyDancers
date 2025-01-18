@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
-import "./Notifications.css";
 
 const NotificationsPage = () => {
   const navigate = useNavigate();

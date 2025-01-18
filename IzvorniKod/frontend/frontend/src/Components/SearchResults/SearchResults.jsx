@@ -12,17 +12,17 @@ const SearchResults = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const getUsernameFromToken = () => {
-      const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
-      if (!token) return null; // Ako token ne postoji, vrati null
-  
-      try {
-        const decodedToken = jwtDecode(token); // Dekodiraj token
-        return decodedToken.sub; // Vratiti korisničko ime iz dekodiranog tokena (prilagoditi prema strukturi tokena)
-      } catch (error) {
-        console.error("Greška pri dekodiranju tokena:", error);
-        return null; // Ako dekodiranje ne uspije, vrati null
-      }
-    };
+    const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
+    if (!token) return null; // Ako token ne postoji, vrati null
+
+    try {
+      const decodedToken = jwtDecode(token); // Dekodiraj token
+      return decodedToken.sub; // Vratiti korisničko ime iz dekodiranog tokena (prilagoditi prema strukturi tokena)
+    } catch (error) {
+      console.error("Greška pri dekodiranju tokena:", error);
+      return null; // Ako dekodiranje ne uspije, vrati null
+    }
+  };
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -44,10 +44,11 @@ const SearchResults = () => {
 
         const data = await response.json();
         const filteredData = data.filter(
-          (user) => user.username !== getUsernameFromToken() && user.username !== "admin"
+          (user) =>
+            user.username !== getUsernameFromToken() &&
+            user.username !== "admin"
         );
         setSearchResults(filteredData);
-        console.log(data);
       } catch (error) {
         console.error("Greška pri dohvaćanju podataka profila:", error);
       }
@@ -61,6 +62,10 @@ const SearchResults = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchInput.trim() !== "") {
+      if (searchInput.length < 3) {
+        alert("Korisničko ime mora imati barem 3 slova");
+        return;
+      }
       navigate(`/search-results/${searchInput.trim()}`);
     }
   };
@@ -73,7 +78,7 @@ const SearchResults = () => {
         </a>
 
         <div className="header-links">
-        <input
+          <input
             type="text"
             placeholder="Pretraga korisnika..."
             value={searchInput}

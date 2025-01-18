@@ -1,29 +1,3 @@
-/* Page Layout */
-.page-wrapper {
-  width: 100%;
-}
-
-/* Add header styles */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #4c009d;
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-
-.chat-page {
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  padding-top: 80px; /* Add padding to account for fixed header */
-}
-
 .chat-container {
   margin-top: 120px;
   max-width: 800px;
@@ -72,82 +46,41 @@ header {
   margin-right: auto;
 }
 
-form {
+.chat-form {
   display: flex;
   gap: 10px;
 }
 
-input {
+.chat-input {
   flex: 1;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #691db9;
   border-radius: 4px;
 }
 
-button {
+.message-button[type="submit"] {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #691db9;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
+  width: 100%;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
-.user-group {
-  margin-bottom: 20px;
+.message-button[type="submit"]:hover {
+  background-color: #37077a;
 }
 
-.users-list{
+.users-list {
   text-align: center;
 }
 
-.chat-main{
-  margin-top: 20px
-}
-.user-group h4 {
-  color: #666;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #eee;
-}
-/* Add these new styles to your existing CSS */
-
-.search-container {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
+.chat-main {
+  margin-top: 20px;
 }
 
-.search-input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.username {
-  font-weight: bold;
-}
-
-.user-details {
-  font-size: 0.8em;
-  color: #666;
-}
-
-/* Update existing styles */
 .user-item {
   padding: 10px 15px;
   border-radius: 8px;
@@ -166,46 +99,33 @@ button:hover {
   margin-top: 10px;
 }
 
-.user-type {
-  font-size: 12px;
-  color: #666;
-}
-
-.user-item.selected .user-type {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.no-results {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
 .messages-container {
-  max-height: 400px; 
-  overflow-y: auto; 
+  max-height: 400px;
+  overflow-y: auto;
   padding-right: 10px;
   margin-bottom: 10px;
 }
 
 .message {
-  margin-bottom: 10px; /* Add spacing between messages */
+  margin-bottom: 10px;
 }
 
 .sent {
-  text-align: right; /* Align sent messages to the right */
+  text-align: right;
+  width: 65%;
 }
 
 .received {
-  text-align: left; 
+  text-align: left;
+  width: 65%;
 }
 
-.sent > .message-text{
+.sent > .message-text {
   color: #fff;
 }
 
 .message-text {
-  color:rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
   font-size: 1rem;
   padding: 8px;
   border-radius: 5px;
@@ -213,5 +133,5 @@ button:hover {
 
 .message-meta {
   font-size: 0.8rem;
-  color: #f13535
+  color: #f13535;
 }

@@ -30,7 +30,8 @@ public interface UserRepository extends JpaRepository<MyUser, Integer> {
 	Optional<List<Dancer>> findByAgeAndGenderAndDanceStyles(Integer ageup, Integer agedown, String gender,
 			List<String> danceStyles);
 
-	
 	@Query("SELECT u FROM MyUser u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', ?1, '%'))")
 	Optional<List<MyUser>> findByNameLike(String username);
+
+	Optional<MyUser> findByOauth(String oauth);
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { db } from "../../firebase-config";
 import {
   collection,
@@ -21,7 +21,7 @@ const Chat = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const messagesEndRef = useRef(null);
 
-  const getCurrentUserId = async () => {
+  const getCurrentUserId = useCallback(async () => {
     const currentUser = getCurrentUser();
     if (!currentUser || !currentUser.sub) {
       console.error("No current user found.");
@@ -61,7 +61,7 @@ const Chat = () => {
       console.error("Error fetching current user ID:", error);
       return null;
     }
-  };
+  }, []);
 
   const getCurrentUser = () => {
     const token = localStorage.getItem("jwtToken");
@@ -173,7 +173,6 @@ const Chat = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(messagesData);
         setMessages(messagesData);
         scrollToBottom();
       });
@@ -185,7 +184,7 @@ const Chat = () => {
     };
 
     fetchMessages();
-  }, [selectedUser]);
+  }, [selectedUser, getCurrentUserId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -209,8 +208,6 @@ const Chat = () => {
       ]
         .sort()
         .join("_");
-      console.log(currentUserId);
-      console.log(selectedUser.type.userid);
 
       const messageData = {
         text: String(newMessage),
@@ -273,6 +270,7 @@ const Chat = () => {
             placeholder="Pretraga korisnika..."
             value={searchTerm}
             onChange={handleSearchChange}
+            className="chat-input"
           />
           <div className="search-results">
             {users.map((user) => (
@@ -289,7 +287,8 @@ const Chat = () => {
                   setUsers([]);
                 }}
               >
-                {user.username}{":"} {user.name} {user.surname} (
+                {user.username}
+                {":"} {user.name} {user.surname} (
                 {user.type.type === "DANCER"
                   ? "Plesač"
                   : user.type.type === "DIRECTOR"
@@ -327,14 +326,17 @@ const Chat = () => {
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-              <form onSubmit={handleSubmit}>
+              <form className="chat-form" onSubmit={handleSubmit}>
                 <input
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Napišite svoju poruku..."
+                  className="chat-input"
                 />
-                <button type="submit">Pošalji</button>
+                <button className="message-button" type="submit">
+                  Pošalji
+                </button>
               </form>
             </>
           ) : (

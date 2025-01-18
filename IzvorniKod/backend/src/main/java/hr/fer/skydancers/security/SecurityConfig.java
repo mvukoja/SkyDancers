@@ -1,5 +1,6 @@
 package hr.fer.skydancers.security;
 
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +26,6 @@ import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
-import hr.fer.skydancers.webtoken.JwtService;
 
 @Configuration
 @EnableWebSecurity
@@ -37,26 +37,27 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-	@Autowired
-	private JwtService jwtService;
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.configure(http))
+		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configure(http))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
-					authorize.requestMatchers("/home", "/users/register/**", "/users/registerdancer", "/users/registerdirector", "/users/authenticate/**",
-							"/users/payment/**", "/forgotpassword/**", "/forgotpassword", "/uploads/**").permitAll();
+					authorize
+							.requestMatchers("/home", "/users/register/**", "/users/complete-oauth",
+									"/users/authenticateoauth", "/users/registerdancer", "/users/registerdirector",
+									"/users/authenticate", "/users/payment/**", "/forgotpassword/**", "/uploads/**")
+							.permitAll();
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.anyRequest().authenticated();
 				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
 					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
-					String userId = customOAuth2User.getAttribute("id").toString() + "_"
-							+ customOAuth2User.getAttribute("login") + "_oauth";
+					String userId = customOAuth2User.getAttribute("id").toString()
+							+ Base64.getEncoder()
+									.encodeToString(customOAuth2User.getAttribute("id").toString().getBytes())
+							+ "_" + customOAuth2User.getAttribute("login") + "_oauth";
 
-					Optional<MyUser> existingUser = userService.get(userId);
+					Optional<MyUser> existingUser = userService.getOauth(userId);
 					if (existingUser.isEmpty()) {
 						MyUser user = new MyUser();
 						String name = customOAuth2User.getAttribute("name");
@@ -66,9 +67,9 @@ public class SecurityConfig {
 						} catch (Exception e) {
 							user.setName(name);
 						}
-						user.setUsername(userId);
+						user.setUsername(passwordEncoder().encode(UUID.randomUUID().toString()));
 						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
-						user.setOauth(true);
+						user.setOauth(userId);
 						user.setFinishedoauth(false);
 						user.setType(new UserType());
 						userService.put(user);
@@ -77,9 +78,8 @@ public class SecurityConfig {
 					if (!existingUser.isEmpty() && existingUser.get().isFinishedoauth()) {
 						finished = true;
 					}
-					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
 					response.sendRedirect(
-							"http://localhost:3000/oauth-completion?jwt=" + token + "&finished=" + finished);
+							"http://localhost:3000/oauth-completion?oauth=" + userId + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

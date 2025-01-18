@@ -1,6 +1,7 @@
 package hr.fer.skydancers.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -43,6 +44,13 @@ public class ForgotPasswordController {
 		if (user == null) {
 			return ResponseEntity.ok("Korisnik ne postoji!");
 		}
+		if (user.isOauth() != null) {
+			return ResponseEntity.ok("Github login");
+		}
+
+		List<ForgotPassword> prevfp = forgotPasswordRepository.findByUser(user).orElse(null);
+		prevfp.forEach(el -> forgotPasswordRepository.delete(el));
+
 		int otp = otpGenerator();
 		MailBody mailBody = new MailBody(email, "SkyDancers: Zaboravljena lozinka",
 				"Ovo je OTP za vašu zaboravljenu lozinku: " + otp);
@@ -71,7 +79,6 @@ public class ForgotPasswordController {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			return ResponseEntity.ok("OTP je istekao!");
 		}
-		
 		fp.setOtpverified(true);
 		forgotPasswordRepository.save(fp);
 
@@ -86,10 +93,10 @@ public class ForgotPasswordController {
 			return ResponseEntity.ok("Lozinke nisu iste!");
 		}
 		MyUser user = userService.getByMail(email).orElse(null);
-		ForgotPassword fp = forgotPasswordRepository.findByUser(user).orElse(null);
-		if(fp == null)
+		ForgotPassword fp = forgotPasswordRepository.findByUser(user).orElse(null).get(0);
+		if (fp == null)
 			return ResponseEntity.badRequest().build();
-		if(!fp.isOtpverified())
+		if (!fp.isOtpverified())
 			return ResponseEntity.ok("Niste potvrdili OTP");
 		String encodedPassword = passwordEncoder.encode(changePassword.password());
 		userService.updatePassword(email, encodedPassword);

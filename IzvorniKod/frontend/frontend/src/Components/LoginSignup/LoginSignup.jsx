@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginSignup.css";
 import user_icon from "../Assets/person.png";
 import email_icon from "../Assets/email.png";
@@ -20,10 +20,27 @@ const LoginSignup = ({ onLogin }) => {
 
   // Funkcija za validaciju unesenih podataka u formi
   const validateForm = () => {
+    // Provjera da li su sva obavezna polja popunjena
+    if (
+      isRegistering &&
+      (!username || !name || !surname || !email || !password)
+    ) {
+      alert("Popunite sva polja.");
+      return false;
+    } else if (!isRegistering && (!username || !password)) {
+      alert("Popunite sva polja.");
+      return false;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex za provjeru ispravnosti emaila
     if (isRegistering && !emailRegex.test(email)) {
       // Provjerava da li je email ispravan tijekom registracije
       alert("Unesite validnu email adresu.");
+      return false;
+    }
+
+    if (username.length < 3) {
+      alert("Korisničko ime mora imati barem 3 slova");
       return false;
     }
 
@@ -37,18 +54,6 @@ const LoginSignup = ({ onLogin }) => {
     if (password.length < 8) {
       // Provjerava da li je lozinka dovoljno dugačka
       alert("Lozinka mora biti duga barem 8 znakova.");
-      return false;
-    }
-
-    // Provjera da li su sva obavezna polja popunjena
-    if (
-      isRegistering &&
-      (!username || !name || !surname || !email || !password)
-    ) {
-      alert("Popunite sva polja.");
-      return false;
-    } else if (!isRegistering && (!username || !password)) {
-      alert("Popunite sva polja.");
       return false;
     }
 
@@ -66,7 +71,6 @@ const LoginSignup = ({ onLogin }) => {
       email,
       password,
       type,
-      oauth: "false",
       finishedoauth: "true",
     };
     if (data.type === "DIRECTOR") {
@@ -145,6 +149,10 @@ const LoginSignup = ({ onLogin }) => {
       if (!response.ok) throw new Error("Login failed"); // Ako prijava ne uspije, baci grešku
 
       const token = await response.text();
+      if (token === "Github login") {
+        alert("Prijavite se preko GitHuba!");
+        return;
+      }
       if (token === "Invalid credentials") {
         alert("Pogrešni podaci!");
         return;
@@ -171,6 +179,22 @@ const LoginSignup = ({ onLogin }) => {
   const handleGitHubLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+        if (isRegistering) {
+          handleRegister();
+        } else {
+          handleLogin();
+        }
+      }
+    };
+    window.addEventListener("keypress", handleKeyPress);
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+    };
+  }, [isRegistering, username, name, surname, email, password]);
 
   if (showForgotPassword) {
     return <>{showForgotPassword && <ForgotPassword />}</>;
@@ -271,14 +295,19 @@ const LoginSignup = ({ onLogin }) => {
         {/* Gumbi za OAuth prijavu putem GitHub-a */}
         <div className="oauth-buttons">
           <button className="submit" onClick={handleGitHubLogin}>
-            Prijava s GitHub-om
+            <img
+              src="../../github-mark.svg"
+              alt=""
+              style={{ width: "25px", height: "25px" }}
+            />
+            &nbsp; Prijava s GitHub-om
           </button>
         </div>
       </div>
       {!isRegistering && (
         <>
           <button
-            className="forgot-password"
+            className="forgot-password submit"
             onClick={() => setShowForgotPassword(true)}
           >
             Zaboravili ste lozinku?

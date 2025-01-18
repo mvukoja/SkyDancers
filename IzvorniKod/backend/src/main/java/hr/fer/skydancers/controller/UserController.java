@@ -48,6 +48,7 @@ import hr.fer.skydancers.model.Director;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.model.Portfolio;
+import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
 import hr.fer.skydancers.repository.PortfolioRepository;
@@ -112,36 +113,51 @@ public class UserController {
 
 	// Završava OAuth registraciju korisnika
 	@PostMapping("/complete-oauth")
-	public MyUser completeOauth(@RequestBody OauthRegDto dto) {
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		MyUser user = userService.get(username).orElse(null);
-		user.setEmail(dto.getEmail());
-		user.setOauth(true);
-		user.setFinishedoauth(true);
-
-		Portfolio portfolio = new Portfolio();
-		portfolio.setUser(user);
-		portfolioRepository.save(portfolio);
-
-		if (dto.getType().equals(UserTypeEnum.DANCER)) {
-			Dancer dancer = modelMapper.map(user, Dancer.class);
-			dancer.getType().setType(dto.getType());
-			userService.remove(user.getId());
-			userService.put(dancer);
-			return dancer;
-		} else {
-			Director director = modelMapper.map(user, Director.class);
-			director.getType().setType(dto.getType());
-			userService.remove(user.getId());
-			userService.put(director);
-			return director;
+	public ResponseEntity<String> completeOauth(@RequestBody OauthRegDto dto) {
+		if (userService.get(dto.getUsername()).orElse(null) != null) {
+			return ResponseEntity.ok("Already taken");
 		}
+
+		if (userService.getOauth(dto.getOauth()).isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
+		MyUser user = userService.getOauth(dto.getOauth()).orElse(null);
+		user.setUsername(dto.getUsername());
+		user.setEmail(dto.getEmail());
+		user.setFinishedoauth(true);
+		user.setConfirmed(true);
+
+		if (dto.getType().getType().equals(UserTypeEnum.DANCER)) {
+			user.getType().setType(UserTypeEnum.DANCER);
+			Dancer dancer = modelMapper.map(user, Dancer.class);
+			userService.remove(user.getId());
+			userService.save(dancer);
+			dancer = (Dancer) userService.get(dto.getUsername()).orElse(null);
+			Portfolio portfolio = new Portfolio();
+			portfolio.setUser(dancer);
+			portfolioRepository.save(portfolio);
+		} else {
+			user.getType().setType(UserTypeEnum.DIRECTOR);
+			Director director = modelMapper.map(user, Director.class);
+			userService.remove(user.getId());
+			userService.save(director);
+			director = (Director) userService.get(dto.getUsername()).orElse(null);
+			Portfolio portfolio = new Portfolio();
+			portfolio.setUser(director);
+			portfolioRepository.save(portfolio);
+		}
+		String token = jwtService.generateToken(userService.loadUserByUsername(user.getUsername()));
+		return ResponseEntity.ok(token);
 	}
 
 	// Autentificira korisnika i generira JWT token
 	@PostMapping("/authenticate")
 	public ResponseEntity<String> authenticateAndGetToken(@RequestBody LoginForm loginForm) {
 		Authentication auth;
+		if (userService.get(loginForm.username()).orElse(null) != null
+				&& userService.get(loginForm.username()).orElse(null).isOauth() != null) {
+			return ResponseEntity.ok("Github login");
+		}
 		try {
 			auth = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(loginForm.username(), loginForm.password()));
@@ -153,21 +169,40 @@ public class UserController {
 				return ResponseEntity.ok("Nedovršena registracija! Provjerite svoj mail!");
 			}
 			MyUser user = userService.get(loginForm.username()).orElse(null);
-			if(user instanceof Dancer && ((Dancer) user).getInactiveuntil() != null) {
-				if(((Dancer) user).getInactiveuntil().isBefore(LocalDate.now())) {
+			if (user instanceof Dancer && ((Dancer) user).getInactiveuntil() != null) {
+				if (((Dancer) user).getInactiveuntil().isBefore(LocalDate.now())) {
 					((Dancer) user).setInactive(false);
 					((Dancer) user).setInactiveuntil(null);
 				}
-			}
-			else if(user instanceof Director && ((Director) user).getSubscription() != null) {
-				if(((Director) user).getSubscription().isBefore(LocalDate.now())){
+			} else if (user instanceof Director && ((Director) user).getSubscription() != null) {
+				if (((Director) user).getSubscription().isBefore(LocalDate.now())) {
 					((Director) user).setSubscription(null);
 					((Director) user).setPaid(false);
-				}	
+				}
 			}
 			return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(loginForm.username())));
 		}
 		return ResponseEntity.ok("Invalid credentials");
+	}
+
+	@PostMapping("/authenticateoauth")
+	public ResponseEntity<String> authenticateOauth(@RequestBody String oauth) {
+		MyUser user = userService.getOauth(oauth).orElse(null);
+		if (user == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		if (user instanceof Dancer && ((Dancer) user).getInactiveuntil() != null) {
+			if (((Dancer) user).getInactiveuntil().isBefore(LocalDate.now())) {
+				((Dancer) user).setInactive(false);
+				((Dancer) user).setInactiveuntil(null);
+			}
+		} else if (user instanceof Director && ((Director) user).getSubscription() != null) {
+			if (((Director) user).getSubscription().isBefore(LocalDate.now())) {
+				((Director) user).setSubscription(null);
+				((Director) user).setPaid(false);
+			}
+		}
+		return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(user.getUsername())));
 	}
 
 	// Registrira novog korisnika
@@ -176,6 +211,7 @@ public class UserController {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setConfirmed(true);// temporary
+			user.setOauth(null);
 			userService.put(user);
 
 			Portfolio portfolio = new Portfolio();
@@ -206,6 +242,7 @@ public class UserController {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setConfirmed(true);// temporary
+			user.setOauth(null);
 			userService.put(user);
 
 			Portfolio portfolio = new Portfolio();
@@ -293,7 +330,6 @@ public class UserController {
 		}
 
 		UserDto dto = new UserDto();
-
 		dto.setEmail(user.getEmail());
 		dto.setUsername(username);
 		dto.setName(user.getName());
@@ -313,15 +349,6 @@ public class UserController {
 			dto.setSubscription(((Director) user).getSubscription());
 		}
 		return dto;
-	}
-
-	// Briše korisnika prema ID-u
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Integer id) {
-		MyUser user = userService.get(id);
-		if (user == null)
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		userService.remove(id);
 	}
 
 	// Ažurira profil trenutnog korisnika
@@ -363,7 +390,8 @@ public class UserController {
 
 	// Ažurira plesne stilove korisnika
 	@PutMapping("/update-dance-styles/{username}")
-	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest, @PathVariable String username) {
+	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest,
+			@PathVariable String username) {
 		Dancer user = (Dancer) userService.get(username).orElse(null);
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -458,54 +486,56 @@ public class UserController {
 
 		return ResponseEntity.ok(dto);
 	}
-	
+
 	@PostMapping("/changepassword")
-	public ResponseEntity<String> changePassword(
-			@RequestBody ChangePassword changePassword) {
+	public ResponseEntity<String> changePassword(@RequestBody ChangePassword changePassword) {
 		if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
 			return ResponseEntity.ok("Lozinke nisu iste!");
 		}
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(usname).orElse(null);
+		if (user.isOauth() != null) {
+			return ResponseEntity.ok("Github login");
+		}
 		String encodedPassword = passwordEncoder.encode(changePassword.password());
 		userService.updatePassword(user.getEmail(), encodedPassword);
 		return ResponseEntity.ok("Lozinka je promijenjena!");
 	}
 
 	@GetMapping("/getmytype")
-	public ResponseEntity<String> getMyType(){
+	public ResponseEntity<String> getMyType() {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(usname).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 		return ResponseEntity.ok(user.getType().getType().toString());
 	}
-	
+
 	@GetMapping("/changesubscriptionprice")
-	public ResponseEntity<String> changePrice(@RequestParam Long price){
+	public ResponseEntity<String> changePrice(@RequestParam Long price) {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(usname).orElse(null);
-		
-		if(!(user instanceof Admin))
+
+		if (!(user instanceof Admin))
 			return ResponseEntity.badRequest().build();
-		
-		((Admin)user).setSubscriptionprice(price);
+
+		((Admin) user).setSubscriptionprice(price);
 		userService.save(user);
 		return ResponseEntity.ok("Success");
 	}
-	
+
 	@GetMapping("/delete/{username}")
-	public ResponseEntity<String> deleteUser(@PathVariable String username){
+	public ResponseEntity<String> deleteUser(@PathVariable String username) {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(usname).orElse(null);
-		
-		if(!(user instanceof Admin))
+
+		if (!(user instanceof Admin))
 			return ResponseEntity.badRequest().build();
-		
+
 		MyUser removal = userService.get(username).orElse(null);
-		if(removal == null)
+		if (removal == null)
 			return ResponseEntity.badRequest().build();
-		
+
 		userService.remove(removal.getId());
 		return ResponseEntity.ok("Success");
 	}

@@ -117,6 +117,10 @@ const Homepage = ({ onLogout }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchInput.trim() !== "") {
+      if (searchInput.length < 3) {
+        alert("Korisničko ime mora imati barem 3 slova");
+        return;
+      }
       navigate(`/search-results/${searchInput.trim()}`);
     }
   };
@@ -181,15 +185,9 @@ const Homepage = ({ onLogout }) => {
                 type="number"
                 value={inputValue}
                 onChange={handleInputChange}
-                style={{ marginBottom: "10px", padding: "8px" }}
               />
               <div>
-                <button
-                  onClick={handleSubscriptionPrice}
-                  style={{ marginRight: "10px" }}
-                >
-                  Spremi
-                </button>
+                <button onClick={handleSubscriptionPrice}>Spremi</button>
                 <button onClick={closePopup}>Nazad</button>
               </div>
             </div>
@@ -202,15 +200,21 @@ const Homepage = ({ onLogout }) => {
           <img src={headerlogo} alt="" className="logo-img" />
         </a>
         <div className="header-links">
-          <input
-            type="text"
-            placeholder="Pretraga korisnika..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="search-bar"
-            id="usersearch"
-          />
+          {((profileData?.type.type === "DIRECTOR" &&
+            profileData?.paid === true) ||
+            profileData?.type.type !== "DIRECTOR") && (
+            <>
+              <input
+                type="text"
+                placeholder="Pretraga korisnika..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="search-bar"
+                id="usersearch"
+              />
+            </>
+          )}
           <Link to="/myprofile" className="login">
             <button>Moj profil</button>
           </Link>
@@ -234,7 +238,7 @@ const Homepage = ({ onLogout }) => {
         {!isPopupVisible && (
           <>
             <h1 id="welcome">Dance Hub</h1>
-            <h1 style={{ color: "#fff" }}>Dobrodošli {profileData?.name}.</h1>
+            <h1 id="welcome2">Dobrodošli {profileData?.name}.</h1>
           </>
         )}
 

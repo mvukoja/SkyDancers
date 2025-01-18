@@ -32,6 +32,7 @@ import { AuthProvider } from "./Components/AuthContext";
 import AuditionInfo from "./Components/AuditionInfo/AuditionInfo.jsx";
 import Applications from "./Components/Applications/Applications.jsx";
 import ChangePassword from "./Components/myprofile/ChangePassword.jsx";
+import "./global.css";
 // Definicija glavne App komponente
 function App() {
   // Stanje koje prati je li korisnik autentificiran
@@ -249,7 +250,11 @@ function App() {
             <Route
               path="/profile/:username"
               element={
-                isAuthenticated ? <UserProfile onLogout={handleLogout}/> : <Navigate to="/" replace />
+                isAuthenticated ? (
+                  <UserProfile onLogout={handleLogout} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
               }
             />
             <Route
@@ -320,6 +325,7 @@ function App() {
                 )
               }
             />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         </Routes>
       </Router>

@@ -14,7 +14,7 @@ public class UserDto {
 	private String surname;
 	private String email;
 	private UserType type;
-	private boolean oauth;
+	private String oauth;
 	private String username;
 	private String location;
 	private Integer age;
@@ -28,7 +28,7 @@ public class UserDto {
 	public UserDto() {
 	}
 
-	public UserDto(String name, String surname, String email, UserType type, boolean oauth, String username,
+	public UserDto(String name, String surname, String email, UserType type, String oauth, String username,
 			String location, Integer age, String gender, boolean paid, LocalDate subscription, List<Dance> danceStyles,
 			boolean inactive, LocalDate inactiveUntil) {
 		super();
@@ -105,7 +105,6 @@ public class UserDto {
 		this.inactiveUntil = inactiveUntil;
 	}
 
-	// Postojeći getteri i setteri za ime, prezime, email, tip korisnika i oauth
 	public String getName() {
 		return name;
 	}
@@ -138,11 +137,11 @@ public class UserDto {
 		this.type = type;
 	}
 
-	public boolean isOauth() {
+	public String isOauth() {
 		return oauth;
 	}
 
-	public void setOauth(boolean oauth) {
+	public void setOauth(String oauth) {
 		this.oauth = oauth;
 	}
 

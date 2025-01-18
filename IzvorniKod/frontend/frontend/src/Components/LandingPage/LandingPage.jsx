@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './LandingPage.css';
-import headerlogo from '../Assets/header-logo.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./LandingPage.css";
+import headerlogo from "../Assets/header-logo.png";
 
 function LandingPage() {
   return (
@@ -17,8 +17,6 @@ function LandingPage() {
           </Link>
         </div>
       </header>
-      <main>
-      </main>
     </div>
   );
 }

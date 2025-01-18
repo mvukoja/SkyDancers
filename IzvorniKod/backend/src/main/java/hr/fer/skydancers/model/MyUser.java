@@ -45,7 +45,7 @@ public class MyUser {
 	@JoinColumn(name = "usertype_id", referencedColumnName = "userid", nullable = false) // Foreign key
 	private UserType type;
 
-	private boolean oauth;
+	private String oauth;
 
 	private boolean finishedoauth;
 
@@ -62,15 +62,15 @@ public class MyUser {
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Portfolio portfolio;
-	
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Payment> payments = new ArrayList<>();
+	private List<Payment> payments = new ArrayList<>();
 
 	public MyUser() {
 	}
 
 	public MyUser(Integer id, @NotEmpty String username, @NotEmpty String name, String surname, String email,
-			String password, boolean confirmed, UserType type, boolean oauth, boolean finishedoauth, String gender,
+			String password, boolean confirmed, UserType type, String oauth, boolean finishedoauth, String gender,
 			Integer age, String location, String contact, ForgotPassword forgotPassword, Portfolio portfolio,
 			List<Payment> payments) {
 		super();
@@ -157,11 +157,11 @@ public class MyUser {
 		this.type = type;
 	}
 
-	public boolean isOauth() {
+	public String isOauth() {
 		return oauth;
 	}
 
-	public void setOauth(boolean oauth) {
+	public void setOauth(String oauth) {
 		this.oauth = oauth;
 	}
 
@@ -228,7 +228,4 @@ public class MyUser {
 	public void setPayments(List<Payment> payments) {
 		this.payments = payments;
 	}
-
-	// Getteri i setteri za nove atribute
-
 }

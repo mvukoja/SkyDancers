@@ -1,43 +1,8 @@
-.profile-container {
-  margin-top: 120px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  max-width: 1200px;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-.profile-header h2 {
-  margin: 0;
-  color: #333;
-  font-size: 2rem;
-}
-
-.user-type {
-  background-color: #4caf50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-}
-
-.chatbutton{
+.chatbutton {
   text-align: center;
 }
 
-.chatbutton button{
+.chatbutton button {
   margin-right: 10px;
   margin-bottom: 10px;
   padding: 10px 20px;
@@ -57,29 +22,10 @@
   margin-bottom: 2rem;
 }
 
-.profile-details {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-}
-
 .profile-details h3,
-.dance-styles h3,
-.portfolio-section h3 {
+.dance-styles h3 {
   color: #333;
   margin-bottom: 1rem;
-}
-
-.profile-details p {
-  margin: 0.8rem 0;
-  font-size: 1.1rem;
-  line-height: 1.5;
-}
-
-.dance-styles-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
 }
 
 .dance-style-tag {
@@ -88,19 +34,6 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
-}
-
-.portfolio-section {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 2px solid #f0f0f0;
-}
-
-.portfolio-description {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
 }
 
 .portfolio-description h4 {
@@ -153,11 +86,6 @@
   .profile-sections {
     grid-template-columns: 1fr;
   }
-
-  .profile-container {
-    padding: 1rem;
-    margin: 1rem;
-  }
 }
 
 .modal-overlay {
@@ -188,13 +116,13 @@
   margin-bottom: 10px;
 }
 
-.send-offer-section{
+.send-offer-section {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.send-offer-section button{
+.send-offer-section button {
   margin-right: 10px;
   padding: 10px 20px;
   background-color: var(--secondary-color);
@@ -208,7 +136,6 @@
 
 .send-offer-section button:hover {
   background-color: #2980b9;
-
 }
 
 .confirmation-message {
@@ -216,30 +143,4 @@
   color: green;
   font-weight: bold;
   text-align: center;
-}
-.portfolio-item img,
-.portfolio-item video {
-  width: 100%;
-  height: auto;
-  border-radius: var(--border-radius);
-  object-fit: cover;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.portfolio-item button {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background-color: var(--warning-color);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 20%;
-  font-size: 14px;
-  transition: background-color var(--transition-speed);
-}
-
-.portfolio-item button:hover {
-  background-color: #c0392b;
 }

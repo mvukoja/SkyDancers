@@ -59,7 +59,6 @@ const CreateAudition = () => {
 
     try {
       const token = localStorage.getItem("jwtToken");
-      console.log(auditionData);
       const response = await fetch("http://localhost:8080/audition/create", {
         method: "POST",
         headers: {
