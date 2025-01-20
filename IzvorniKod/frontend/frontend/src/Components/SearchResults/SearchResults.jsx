@@ -103,7 +103,7 @@ const SearchResults = () => {
           <div className="results-section">
             <ul className="results-list">
               {searchResults.map((user) => (
-                <li key={user.type.userid} className="result-item">
+                <li key={user.id} className="result-item">
                   <div className="user-info">
                     <p>
                       <strong id="username">{user.username}</strong>

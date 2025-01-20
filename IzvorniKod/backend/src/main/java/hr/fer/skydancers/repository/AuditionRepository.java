@@ -18,7 +18,7 @@ public interface AuditionRepository extends JpaRepository<Audition, Integer> {
 	@Query("select aud from Audition aud where aud.user = ?1")
 	Optional<List<Audition>> findByDirector(MyUser user);
 
-	@Query("SELECT a FROM Audition a " + "JOIN a.styles d " + "WHERE DATE(a.datetime) = :datetime "
+	@Query("SELECT a FROM Audition a " + "JOIN a.styles d " + "WHERE DATE(a.datetime) <= :datetime "
 			+ "AND a.wage >= :wage " + "AND lower(trim(a.location)) = lower(trim(:location)) " + "AND NOT EXISTS ( "
 			+ "    SELECT 1 FROM a.styles ds " + "    WHERE ds.name NOT IN :styles " + "    AND ds.name = d.name "
 			+ ") " + "AND EXISTS ( " + "    SELECT 1 FROM a.styles ds " + "    WHERE ds.name IN :styles "

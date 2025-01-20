@@ -52,7 +52,7 @@ const Chat = () => {
 
       const data = await response.json();
       if (data && data.length > 0) {
-        return data[0].type.userid;
+        return data[0].id;
       } else {
         console.error("Current user not found in the response data.");
         return null;
@@ -121,7 +121,7 @@ const Chat = () => {
       }
       const filteredUsers = Array.isArray(data)
         ? data.filter(
-            (user) => user.type.userid !== currentUser && !user.inactive
+            (user) => user.id !== currentUser && !user.inactive
           )
         : [];
 
@@ -163,7 +163,7 @@ const Chat = () => {
         where(
           "participants",
           "==",
-          [currentUser, String(selectedUser.type.userid)].sort().join("_")
+          [currentUser, String(selectedUser.id)].sort().join("_")
         ),
         orderBy("createdAt", "asc")
       );
@@ -204,7 +204,7 @@ const Chat = () => {
       const currentUserId = await getCurrentUserId();
       const participantString = [
         String(currentUserId),
-        String(selectedUser.type.userid),
+        String(selectedUser.id),
       ]
         .sort()
         .join("_");
@@ -214,7 +214,7 @@ const Chat = () => {
         createdAt: new Date().toISOString(),
         senderId: String(currentUserId),
         senderName: String(currentUser.sub),
-        receiverId: String(selectedUser.type.userid),
+        receiverId: String(selectedUser.id),
         receiverName: `${selectedUser.name} ${selectedUser.surname}`,
         participants: participantString,
       };
@@ -275,9 +275,9 @@ const Chat = () => {
           <div className="search-results">
             {users.map((user) => (
               <div
-                key={user.type.userid}
+                key={user.id}
                 className={`user-item ${
-                  selectedUser?.type?.userid === user.type.userid
+                  selectedUser?.type?.userid === user.id
                     ? "selected"
                     : ""
                 }`}

@@ -15,6 +15,7 @@ const AuditionInfo = () => {
   const [showNoApplicationsMessage, setShowNoApplicationsMessage] =
     useState(false);
   const [subscribed, setSubscribed] = useState(0);
+  const [showApplications, setShowApplications] = useState(false);
 
   const getUsernameFromToken = () => {
     const token = localStorage.getItem("jwtToken");
@@ -241,6 +242,16 @@ const AuditionInfo = () => {
     }
   };
 
+  const toggleApplicationsVisibility = () => {
+    setShowApplications(!showApplications);
+  };
+
+  useEffect(() => {
+    if (showApplications) {
+      handleApplicationDirector();
+    }
+  }, [showApplications]);
+
   return (
     <div>
       <header>
@@ -270,7 +281,7 @@ const AuditionInfo = () => {
                 </Link>
               </p>
               <span className="subscribed-count">
-                Prijavljeni: {subscribed || 0}/{audition.positions}
+                Primljeni: {subscribed || 0}/{audition.positions}
               </span>
             </div>
             <div className="notification-details">
@@ -351,10 +362,12 @@ const AuditionInfo = () => {
                       </p>
                     )}
                     <button
-                      onClick={() => handleApplicationDirector()}
+                      onClick={toggleApplicationsVisibility}
                       className="apply-audition"
                     >
-                      Pregled prijava na audiciju
+                      {showApplications
+                        ? "Sakrij prijave"
+                        : "Pregled prijava na audiciju"}
                     </button>
                     {audition.archived === false && (
                       <>
@@ -368,91 +381,95 @@ const AuditionInfo = () => {
                       </>
                     )}
                   </div>
-                  {applicationsLoaded &&
-                    applications.length === 0 &&
-                    showNoApplicationsMessage && <p>Nemate prijave.</p>}
-
-                  {applications.length > 0 && (
+                  {showApplications && (
                     <>
-                      <p>
-                        <strong>Ukupno prijava: </strong>
-                        {applications.length}
-                      </p>
-                      <ul>
-                        {applications.map((application) => (
-                          <div
-                            key={application.id}
-                            className="notification-item"
-                          >
-                            <div className="notification-header">
-                              <div className="audition-header">
-                                <h3>Prijava #{application.id}</h3>
-                              </div>
-                            </div>
-                            <div className="notification-details">
-                              <p>
-                                <strong>Autor: </strong>
-                                <Link
-                                  to={`/profile/${application.applicant.username}`}
-                                >
-                                  {application.applicant.username}
-                                </Link>
-                              </p>
-                              <p>
-                                <strong>Lokacija:</strong>{" "}
-                                {application.applicant.location}
-                              </p>
-                              <p>
-                                <strong>Dob:</strong>{" "}
-                                {application.applicant.age}
-                              </p>
-                              <p>
-                                <strong>Stilovi:</strong>{" "}
-                                {application.applicant.danceStyles
-                                  .map((style) => style.name)
-                                  .join(", ")}
-                              </p>
-                              <p>
-                                <strong>Datum i vrijeme:</strong>{" "}
-                                {new Date(
-                                  application.datetime
-                                ).toLocaleString()}
-                              </p>
-                              <p>
-                                <strong>Stanje prijave:</strong>{" "}
-                                {application.status}
-                              </p>
-                              {audition.archived === false &&
-                                application.status === "U tijeku" && (
-                                  <div className="offer-actions">
-                                    <button
-                                      onClick={() =>
-                                        handleAcceptResponse(
-                                          application.id,
-                                          "Prihvaćena"
-                                        )
-                                      }
-                                      className="accept-button"
-                                    >
-                                      Prihvati
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handleDenyResponse(
-                                          application.id,
-                                          "Odbijena"
-                                        )
-                                      }
-                                      className="reject-button"
-                                    >
-                                      Odbij
-                                    </button>
+                      {applicationsLoaded &&
+                        applications.length === 0 &&
+                        showNoApplicationsMessage && <p>Nemate prijave.</p>}
+
+                      {applications.length > 0 && (
+                        <>
+                          <p>
+                            <strong>Ukupno prijava: </strong>
+                            {applications.length}
+                          </p>
+                          <ul>
+                            {applications.map((application) => (
+                              <div
+                                key={application.id}
+                                className="notification-item"
+                              >
+                                <div className="notification-header">
+                                  <div className="audition-header">
+                                    <h3>Prijava #{application.id}</h3>
                                   </div>
-                                )}
-                            </div>
-                          </div>
-                        ))}
-                      </ul>
+                                </div>
+                                <div className="notification-details">
+                                  <p>
+                                    <strong>Autor: </strong>
+                                    <Link
+                                      to={`/profile/${application.applicant.username}`}
+                                    >
+                                      {application.applicant.username}
+                                    </Link>
+                                  </p>
+                                  <p>
+                                    <strong>Lokacija:</strong>{" "}
+                                    {application.applicant.location}
+                                  </p>
+                                  <p>
+                                    <strong>Dob:</strong>{" "}
+                                    {application.applicant.age}
+                                  </p>
+                                  <p>
+                                    <strong>Stilovi:</strong>{" "}
+                                    {application.applicant.danceStyles
+                                      .map((style) => style.name)
+                                      .join(", ")}
+                                  </p>
+                                  <p>
+                                    <strong>Datum i vrijeme:</strong>{" "}
+                                    {new Date(
+                                      application.datetime
+                                    ).toLocaleString()}
+                                  </p>
+                                  <p>
+                                    <strong>Stanje prijave:</strong>{" "}
+                                    {application.status}
+                                  </p>
+                                  {audition.archived === false &&
+                                    application.status === "U tijeku" && (
+                                      <div className="offer-actions">
+                                        <button
+                                          onClick={() =>
+                                            handleAcceptResponse(
+                                              application.id,
+                                              "Prihvaćena"
+                                            )
+                                          }
+                                          className="accept-button"
+                                        >
+                                          Prihvati
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            handleDenyResponse(
+                                              application.id,
+                                              "Odbijena"
+                                            )
+                                          }
+                                          className="reject-button"
+                                        >
+                                          Odbij
+                                        </button>
+                                      </div>
+                                    )}
+                                </div>
+                              </div>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                     </>
                   )}
                 </>

@@ -296,6 +296,7 @@ public class UserController {
 		if (user == null)
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		UserDto dto = new UserDto();
+		dto.setId(user.getId());
 		dto.setUsername(user.getUsername());
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
@@ -330,6 +331,7 @@ public class UserController {
 		}
 
 		UserDto dto = new UserDto();
+		dto.setId(user.getId());
 		dto.setEmail(user.getEmail());
 		dto.setUsername(username);
 		dto.setName(user.getName());
@@ -370,6 +372,7 @@ public class UserController {
 		userService.save(user);
 
 		UserDto dto = new UserDto();
+		dto.setId(user.getId());
 		dto.setEmail(user.getEmail());
 		dto.setUsername(username);
 		dto.setName(user.getName());
@@ -405,7 +408,7 @@ public class UserController {
 				throw new IllegalArgumentException("DanceStyle not found: " + name);
 			}
 		}
-
+		
 		user.setDancestyles(dances);
 		userService.save(user);
 		UserDto dto = new UserDto();

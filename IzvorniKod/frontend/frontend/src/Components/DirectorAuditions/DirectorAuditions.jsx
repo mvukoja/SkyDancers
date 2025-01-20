@@ -136,7 +136,7 @@ const DirectorAuditions = () => {
                     Detaljnije
                   </button>
                   <span className="subscribed-count">
-                    Prijavljeni: {audition.subscribed || 0}/{audition.positions}
+                    Primljeni: {audition.subscribed || 0}/{audition.positions}
                   </span>
                 </div>
                 <div className="audition-details">

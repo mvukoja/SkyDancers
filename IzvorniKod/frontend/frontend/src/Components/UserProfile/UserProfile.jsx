@@ -129,7 +129,7 @@ const UserProfile = ({ onLogout }) => {
       };
 
       const body = {
-        dancerid: profileData.type.userid,
+        dancerid: profileData.id,
         message: offerMessage,
       };
 
@@ -551,7 +551,7 @@ const UserProfile = ({ onLogout }) => {
               <button
                 onClick={() =>
                   startChatWithUser(
-                    profileData.type.userid,
+                    profileData.id,
                     profileData.username
                   )
                 }

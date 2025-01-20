@@ -130,7 +130,7 @@ const SearchAuditions = () => {
 
         <form onSubmit={handleSearch} className="audition-form">
           <div className="form-group">
-            <label>Datum i vrijeme:</label>
+            <label>Datum i vrijeme (do):</label>
             <input
               type="date"
               value={searchCriteria.datetime}
@@ -225,7 +225,7 @@ const SearchAuditions = () => {
                       Detaljnije
                     </button>
                     <span className="subscribed-count">
-                      Prijavljeni: {audition.subscribed || 0}/
+                      Primljeni: {audition.subscribed || 0}/
                       {audition.positions}
                     </span>
                   </div>

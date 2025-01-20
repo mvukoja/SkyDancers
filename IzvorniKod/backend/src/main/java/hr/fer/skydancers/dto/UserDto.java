@@ -10,6 +10,7 @@ import hr.fer.skydancers.model.UserType;
 
 public class UserDto {
 
+	private Integer id;
 	private String name;
 	private String surname;
 	private String email;
@@ -28,10 +29,11 @@ public class UserDto {
 	public UserDto() {
 	}
 
-	public UserDto(String name, String surname, String email, UserType type, String oauth, String username,
+	public UserDto(Integer id, String name, String surname, String email, UserType type, String oauth, String username,
 			String location, Integer age, String gender, boolean paid, LocalDate subscription, List<Dance> danceStyles,
 			boolean inactive, LocalDate inactiveUntil) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -41,11 +43,24 @@ public class UserDto {
 		this.location = location;
 		this.age = age;
 		this.gender = gender;
-		this.setPaid(paid);
-		this.setSubscription(subscription);
+		this.paid = paid;
+		this.subscription = subscription;
 		this.danceStyles = danceStyles;
 		this.inactive = inactive;
 		this.inactiveUntil = inactiveUntil;
+	}
+
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getOauth() {
+		return oauth;
 	}
 
 	// Getteri i setteri za sve atribute

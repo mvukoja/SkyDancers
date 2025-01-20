@@ -80,7 +80,7 @@ const NotificationsPage = () => {
                       Detaljnije
                     </button>
                     <span className="subscribed-count">
-                      Prijavljeni: {notification.subscribed || 0}/
+                      Primljeni: {notification.subscribed || 0}/
                       {notification.positions}
                     </span>
                   </div>
