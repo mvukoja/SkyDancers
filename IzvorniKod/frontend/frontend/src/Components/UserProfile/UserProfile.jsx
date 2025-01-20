@@ -390,7 +390,11 @@ const UserProfile = ({ onLogout }) => {
             {profileData.name} {profileData.surname}
           </h2>
           <span className="user-type">
-            {profileData.type.type === "DANCER" ? "PLESAČ" : "DIREKTOR"}
+            {profileData.type.type === "DANCER"
+              ? "Plesač"
+              : profileData.type.type === "DIRECTOR"
+              ? "Direktor"
+              : "Admin"}
           </span>
         </div>
         <div className="profile-sections">
@@ -550,10 +554,7 @@ const UserProfile = ({ onLogout }) => {
             <>
               <button
                 onClick={() =>
-                  startChatWithUser(
-                    profileData.id,
-                    profileData.username
-                  )
+                  startChatWithUser(profileData.id, profileData.username)
                 }
               >
                 Započni chat

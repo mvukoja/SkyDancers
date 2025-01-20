@@ -44,9 +44,7 @@ const SearchResults = () => {
 
         const data = await response.json();
         const filteredData = data.filter(
-          (user) =>
-            user.username !== getUsernameFromToken() &&
-            user.username !== "admin"
+          (user) => user.username !== getUsernameFromToken()
         );
         setSearchResults(filteredData);
       } catch (error) {
@@ -121,7 +119,11 @@ const SearchResults = () => {
                     </p>
                     <p>
                       <strong>Vrsta korisnika:</strong>{" "}
-                      {user.type.type === "DANCER" ? "Plesač" : "Direktor"}
+                      {user.type.type === "DANCER"
+                        ? "Plesač"
+                        : user.type.type === "DIRECTOR"
+                        ? "Direktor"
+                        : "Admin"}
                     </p>
                     {user.type.type === "DANCER" && (
                       <p>
