@@ -107,7 +107,7 @@ class SkydancersApplicationTests {
 
         Audition audition = new Audition(); 
         Dancer dancer = new Dancer(); 
-        LocalDateTime datetime = LocalDateTime.of(2025, 1, 31, 12, 30, 0, 0); // Set a test datetime
+        LocalDateTime datetime = LocalDateTime.of(2025, 1, 31, 12, 30, 0, 0); 
         String status = "Pending"; 
         AuditionApplication application = new AuditionApplication(1, datetime, status, audition, dancer);
 
