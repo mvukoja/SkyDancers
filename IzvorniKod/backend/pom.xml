@@ -97,6 +97,11 @@
   			<version>28.2.0</version>
 		</dependency>
 		<dependency>
+  			<groupId>org.junit.jupiter</groupId>
+  			<artifactId>junit-jupiter</artifactId>
+  			<version>5.10.5</version>
+		</dependency>
+		<dependency>
 		<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
