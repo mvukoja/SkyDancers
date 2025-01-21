@@ -148,7 +148,7 @@ const Applications = () => {
                       Detaljnije
                     </button>
                     <span className="subscribed-count">
-                      Prijavljeni: {application.subscribed || 0}/
+                      Primljeni: {application.subscribed || 0}/
                       {application.positions}
                     </span>
                   </div>

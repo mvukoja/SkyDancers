@@ -178,7 +178,7 @@ header {
 
 .notifications-page {
   max-width: 1200px;
-  min-width: 700px;
+  min-width: 450px;
   width: 80%;
   margin: auto auto;
   padding: 30px;
@@ -516,13 +516,28 @@ header {
   gap: 20px;
 }
 
+.portfolio-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.photo-grid,
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.portfolio-item {
+  position: relative;
+  width: 300px;
+}
+
 @media (max-width: 768px) {
   .profile-container {
     padding: 20px;
-  }
-  .header-links {
-    flex-direction: column;
-    align-items: flex-start;
   }
   .search-bar {
     width: 100%;

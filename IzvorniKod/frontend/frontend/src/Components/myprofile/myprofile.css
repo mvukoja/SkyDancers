@@ -122,17 +122,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
   background-color: #2980b9;
 }
 
-.portfolio-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-}
-
-.portfolio-item {
-  position: relative;
-  width: 300px;
-}
-
 .dance-styles-section h3 {
   margin-bottom: 20px;
   color: var(--primary-color);

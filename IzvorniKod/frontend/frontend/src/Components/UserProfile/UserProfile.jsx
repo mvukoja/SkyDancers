@@ -297,7 +297,7 @@ const UserProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `http://localhost:8080/portfolio/deletevideo/${username}?photoname=${name}`,
+        `http://localhost:8080/portfolio/deletevideo/${username}?videoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -673,13 +673,15 @@ const UserProfile = ({ onLogout }) => {
                   <>
                     <div className="video-grid">
                       {portfolioData.videos.map((video, index) => (
-                        <div key={index} className="video-item">
+                        <div key={index} className="portfolio-item video-item">
                           <video controls>
                             <source
                               src={`http://localhost:8080${video}`}
                               type="video/mp4"
                             />
-                            {myType === "ADMIN" && (
+                            Your browser does not support the video tag.
+                          </video>
+                          {myType === "ADMIN" && (
                               <button
                                 onClick={() =>
                                   handleDeletePortfolioVideo(
@@ -690,8 +692,6 @@ const UserProfile = ({ onLogout }) => {
                                 X
                               </button>
                             )}
-                            Your browser does not support the video tag.
-                          </video>
                         </div>
                       ))}
                     </div>

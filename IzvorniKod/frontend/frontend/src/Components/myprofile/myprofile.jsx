@@ -296,7 +296,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `http://localhost:8080/portfolio/deletevideo/${getUsernameFromToken()}?photoname=${name}`,
+        `http://localhost:8080/portfolio/deletevideo/${getUsernameFromToken()}?videoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -701,6 +701,7 @@ const MyProfile = ({ onLogout }) => {
               <div className="portfolio-items">
                 {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
                 {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
+                <div className="photo-grid">
                 {portfolioItems.photos.length > 0 ? (
                   portfolioItems.photos.map((photo, index) => (
                     <div key={index} className="portfolio-item">
@@ -731,15 +732,15 @@ const MyProfile = ({ onLogout }) => {
                 ) : (
                   <p>Nemate spremljene slike.</p>
                 )}
-
-                {portfolioItems.videos.length > 0 ? (
-                  portfolioItems.videos.map((video, index) => (
-                    <div key={index} className="portfolio-item">
-                      <video
-                        src={`http://localhost:8080${video}`}
-                        controls
-                        style={{ maxWidth: "100%", maxHeight: "300px" }}
-                      >
+                
+                </div>
+                <div className="video-grid">
+                  {portfolioItems.videos.length > 0 ? (
+                    portfolioItems.videos.map((video, index) => (
+                      <div key={index} className="portfolio-item video-item">
+                        <video src={`http://localhost:8080${video}`} controls>
+                          Your browser does not support the video tag.
+                        </video>
                         <button
                           onClick={() =>
                             handleDeletePortfolioVideo(
@@ -749,14 +750,12 @@ const MyProfile = ({ onLogout }) => {
                         >
                           X
                         </button>
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  ))
-                ) : (
-                  <p>Nemate spremljene videozapise.</p>
-                )}
-
+                      </div>
+                    ))
+                  ) : (
+                    <p>Nemate spremljene videozapise.</p>
+                  )}
+                </div>
                 {/* Dugme za brisanje portfolio stavke */}
               </div>
             </div>

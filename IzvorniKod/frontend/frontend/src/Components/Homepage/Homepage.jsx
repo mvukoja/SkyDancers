@@ -319,7 +319,7 @@ const Homepage = ({ onLogout }) => {
                 alt=""
                 style={{ width: "25px", height: "25px" }}
               />{" "}
-              Audicije po vašim preferencijama ({notificationCount})
+              Audicije po preferencijama ({notificationCount})
             </button>
             <button
               className="navigation-button"

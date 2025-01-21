@@ -168,6 +168,10 @@ const AuditionInfo = () => {
   };
 
   const handleAcceptResponse = async (audId, state) => {
+    if (subscribed >= audition.positions) {
+      alert("Audicija je već popunjena");
+      return;
+    }
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
@@ -190,12 +194,19 @@ const AuditionInfo = () => {
       const updatedSubscribed = subscribed + 1;
       setApplications(updatedApplications);
       setSubscribed(updatedSubscribed);
+      if (updatedSubscribed >= audition.positions) {
+        window.href.location = `/audition/${audId}`;
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleDenyResponse = async (audId, state) => {
+    if (subscribed >= audition.positions) {
+      alert("Audicija je već popunjena");
+      return;
+    }
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
@@ -318,6 +329,9 @@ const AuditionInfo = () => {
                 <strong>Rok prijave:</strong>{" "}
                 {new Date(audition.deadline).toLocaleString()}
               </p>
+              <p><strong style={{color: "red"}}>
+              {subscribed === audition.positions && ("Audicija je popunjena")}
+                </strong></p>
               {profileData?.type?.type === "DANCER" &&
                 subscribed < audition.positions &&
                 !confirmationMessage && (
@@ -401,7 +415,7 @@ const AuditionInfo = () => {
                               >
                                 <div className="notification-header">
                                   <div className="audition-header">
-                                    <h3>Prijava #{application.id}</h3>
+                                    <h3>Prijava</h3>
                                   </div>
                                 </div>
                                 <div className="notification-details">
@@ -437,7 +451,7 @@ const AuditionInfo = () => {
                                     <strong>Stanje prijave:</strong>{" "}
                                     {application.status}
                                   </p>
-                                  {audition.archived === false &&
+                                  {audition.archived === false && subscribed < audition.positions &&
                                     application.status === "U tijeku" && (
                                       <div className="offer-actions">
                                         <button

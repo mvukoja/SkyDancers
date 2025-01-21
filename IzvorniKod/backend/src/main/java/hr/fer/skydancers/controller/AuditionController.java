@@ -371,13 +371,17 @@ public class AuditionController {
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
+		
+		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
+		if (aud.getSubscribed() == aud.getPositions())
+			return ResponseEntity.badRequest().build();
+			
 		if (!auditionApplication.getAudition().getUser().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
 
 		auditionApplication.setStatus("Prihvaćena");
 		auditionApplicationRepository.save(auditionApplication);
 
-		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
 		aud.setSubscribed(aud.getSubscribed() + 1);
 		auditionService.put(aud);
 		return ResponseEntity.ok("Succesful!");
@@ -397,6 +401,10 @@ public class AuditionController {
 		}
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
+			return ResponseEntity.badRequest().build();
+		
+		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
+		if (aud.getSubscribed() == aud.getPositions())
 			return ResponseEntity.badRequest().build();
 
 		if (!auditionApplication.getAudition().getUser().getUsername().equals(user.getUsername()))
