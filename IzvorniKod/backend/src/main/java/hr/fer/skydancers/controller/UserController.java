@@ -393,7 +393,7 @@ public class UserController {
 
 	// Ažurira plesne stilove korisnika
 	@PutMapping("/update-dance-styles/{username}")
-	public static UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest,
+	public UserDto updateDanceStyles(@RequestBody DanceStylesRequest danceStylesRequest,
 			@PathVariable String username) {
 		Dancer user = (Dancer) userService.get(username).orElse(null);
 		if (user == null) {

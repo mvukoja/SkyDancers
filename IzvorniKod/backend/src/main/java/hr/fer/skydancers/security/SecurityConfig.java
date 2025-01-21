@@ -26,6 +26,7 @@ import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -49,7 +50,15 @@ public class SecurityConfig {
 							.permitAll();
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.anyRequest().authenticated();
-				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
+				}).exceptionHandling(exceptionHandling -> 
+			    exceptionHandling
+		        .accessDeniedHandler((request, response, accessDeniedException) -> {
+		            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		        })
+		        .authenticationEntryPoint((request, response, authException) -> {
+		            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		        }))
+				.formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
 					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
 					String userId = customOAuth2User.getAttribute("id").toString()
