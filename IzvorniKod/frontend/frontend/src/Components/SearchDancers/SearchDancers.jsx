@@ -50,7 +50,7 @@ const SearchDancers = () => {
       const token = localStorage.getItem("jwtToken");
       setError("");
       const response = await fetch(
-        "http://localhost:8080/users/searchdancers",
+        "https://skydancers-back.onrender.com/users/searchdancers",
         {
           method: "POST",
           headers: {

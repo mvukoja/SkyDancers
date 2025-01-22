@@ -26,8 +26,8 @@ const DirectorAuditions = () => {
         const decodedToken = jwtDecode(token);
         const username = decodedToken.sub;
         const url = showArchived
-          ? `http://localhost:8080/audition/archived/${username}`
-          : `http://localhost:8080/audition/getdirectors/${username}`;
+          ? `https://skydancers-back.onrender.com/audition/archived/${username}`
+          : `https://skydancers-back.onrender.com/audition/getdirectors/${username}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {

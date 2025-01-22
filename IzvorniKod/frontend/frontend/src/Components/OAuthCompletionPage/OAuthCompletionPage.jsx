@@ -24,7 +24,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
     const getJwt = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/users/authenticateoauth",
+          "https://skydancers-back.onrender.com/users/authenticateoauth",
           {
             method: "POST",
             headers: {
@@ -64,7 +64,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/users/complete-oauth",
+        "https://skydancers-back.onrender.com/users/complete-oauth",
         {
           method: "POST",
           headers: {

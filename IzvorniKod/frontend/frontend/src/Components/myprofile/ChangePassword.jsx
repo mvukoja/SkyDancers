@@ -21,7 +21,7 @@ const ChangePassword = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/users/changepassword`,
+        `https://skydancers-back.onrender.com/users/changepassword`,
         {
           method: "POST",
           headers: {

@@ -37,7 +37,7 @@ const AuditionInfo = () => {
     const fetchUser = async () => {
       const token = localStorage.getItem("jwtToken");
       try {
-        const response = await fetch("http://localhost:8080/users/myprofile", {
+        const response = await fetch("https://skydancers-back.onrender.com/users/myprofile", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ const AuditionInfo = () => {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            `http://localhost:8080/audition/get/${id}`,
+            `https://skydancers-back.onrender.com/audition/get/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -94,7 +94,7 @@ const AuditionInfo = () => {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            `http://localhost:8080/audition/manage/applications/${id}`,
+            `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -129,7 +129,7 @@ const AuditionInfo = () => {
         auditionId: id,
       };
       const response = await fetch(
-        `http://localhost:8080/audition/applytoaudition`,
+        `https://skydancers-back.onrender.com/audition/applytoaudition`,
         {
           method: "POST",
           headers: {
@@ -153,7 +153,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/audition/manage/applications/${id}`,
+        `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
         {
           method: "GET",
           headers: {
@@ -183,7 +183,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/audition/manage/allow/${audId}`,
+        `https://skydancers-back.onrender.com/audition/manage/allow/${audId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -219,7 +219,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/audition/manage/deny/${audId}`,
+        `https://skydancers-back.onrender.com/audition/manage/deny/${audId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -246,7 +246,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/audition/archive/${id}`,
+        `https://skydancers-back.onrender.com/audition/archive/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

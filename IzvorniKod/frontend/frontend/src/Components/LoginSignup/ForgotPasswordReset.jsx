@@ -19,7 +19,7 @@ const ForgotPasswordReset = ({ email }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/forgotpassword/changepassword/${email}`,
+        `https://skydancers-back.onrender.com/forgotpassword/changepassword/${email}`,
         {
           method: "POST",
           headers: {

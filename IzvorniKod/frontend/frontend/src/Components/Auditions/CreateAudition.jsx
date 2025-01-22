@@ -61,7 +61,7 @@ const CreateAudition = () => {
 
     try {
       const token = localStorage.getItem("jwtToken");
-      const response = await fetch("http://localhost:8080/audition/create", {
+      const response = await fetch("https://skydancers-back.onrender.com/audition/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

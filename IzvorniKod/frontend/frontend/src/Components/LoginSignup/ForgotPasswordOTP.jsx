@@ -12,7 +12,7 @@ const ForgotPasswordOTP = ({ email, onOTPVerified }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8080/forgotpassword/verifyotp/${otp}/${email}`,
+        `https://skydancers-back.onrender.com/forgotpassword/verifyotp/${otp}/${email}`,
         {
           method: "POST",
         }

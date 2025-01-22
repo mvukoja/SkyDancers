@@ -106,7 +106,8 @@ public class UserController {
 	public ResponseEntity<String> handleSuccess(@PathVariable String sessionId, @PathVariable String username) {
 		try {
 			if (stripeService.processPaymentSuccess(sessionId, username))
-				return ResponseEntity.status(302).header("Location", "http://localhost:3000/payment/success").build();
+				return ResponseEntity.status(302).header("Location", "https://skydancers.onrender.com/payment/success")
+						.build();
 			else
 				return ResponseEntity.badRequest().body("Greška pri procesiranju plaćanja!");
 		} catch (Exception e) {
@@ -222,18 +223,19 @@ public class UserController {
 			portfolio.setUser(user);
 			portfolioRepository.save(portfolio);
 
-			/*
-			 * int otp = new Random().nextInt(100000, 999999); MailBody mailBody = new
-			 * MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n" +
-			 * "Dobrodošli!" + "\n" +
-			 * "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/"
-			 * + otp + "/" + user.getEmail());
-			 * 
-			 * ForgotPassword fp = new ForgotPassword(); fp.setOtp(otp);
-			 * fp.setExpirDate(LocalDate.now().plusDays(365)); fp.setUser(user);
-			 * 
-			 * emailService.sendSimpleMessage(mailBody); forgotPasswordRepository.save(fp);
-			 */
+			int otp = new Random().nextInt(100000, 999999);
+			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
+					+ "Dobrodošli!" + "\n"
+					+ "Ovo je link za dovršetak vaše registracije: https://skydancers-back.onrender.com/users/register/"
+					+ otp + "/" + user.getEmail());
+
+			ForgotPassword fp = new ForgotPassword();
+			fp.setOtp(otp);
+			fp.setExpirDate(LocalDate.now().plusDays(365));
+			fp.setUser(user);
+
+			emailService.sendSimpleMessage(mailBody);
+			forgotPasswordRepository.save(fp);
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
@@ -254,18 +256,19 @@ public class UserController {
 			portfolio.setUser(user);
 			portfolioRepository.save(portfolio);
 
-			/*
-			 * int otp = new Random().nextInt(100000, 999999); MailBody mailBody = new
-			 * MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n" +
-			 * "Dobrodošli!" + "\n" +
-			 * "Ovo je link za dovršetak vaše registracije: http://localhost:8080/users/register/"
-			 * + otp + "/" + user.getEmail());
-			 * 
-			 * ForgotPassword fp = new ForgotPassword(); fp.setOtp(otp);
-			 * fp.setExpirDate(LocalDate.now().plusDays(365)); fp.setUser(user);
-			 * 
-			 * emailService.sendSimpleMessage(mailBody); forgotPasswordRepository.save(fp);
-			 */
+			int otp = new Random().nextInt(100000, 999999);
+			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
+					+ "Dobrodošli!" + "\n"
+					+ "Ovo je link za dovršetak vaše registracije: https://skydancers-back.onrender.com/users/register/"
+					+ otp + "/" + user.getEmail());
+
+			ForgotPassword fp = new ForgotPassword();
+			fp.setOtp(otp);
+			fp.setExpirDate(LocalDate.now().plusDays(365));
+			fp.setUser(user);
+
+			emailService.sendSimpleMessage(mailBody);
+			forgotPasswordRepository.save(fp);
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
@@ -283,7 +286,7 @@ public class UserController {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			user.setConfirmed(true);
 			userService.save(user);
-			return ResponseEntity.status(302).header("Location", "http://localhost:3000/login").build();
+			return ResponseEntity.status(302).header("Location", "https://skydancers.onrender.com/login").build();
 		} else {
 			return ResponseEntity.ok("Niste dovršili potvrdu registracije!");
 		}

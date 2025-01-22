@@ -31,7 +31,7 @@ const SearchResults = () => {
       const token = localStorage.getItem("jwtToken");
       try {
         const response = await fetch(
-          `http://localhost:8080/users/searchuser/${username}`,
+          `https://skydancers-back.onrender.com/users/searchuser/${username}`,
           {
             method: "GET",
             headers: {

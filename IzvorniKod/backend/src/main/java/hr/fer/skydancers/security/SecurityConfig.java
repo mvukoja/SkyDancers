@@ -89,7 +89,7 @@ public class SecurityConfig {
 						finished = true;
 					}
 					response.sendRedirect(
-							"http://localhost:3000/oauth-completion?oauth=" + userId + "&finished=" + finished);
+							"https://skydancers.onrender.com/oauth-completion?oauth=" + userId + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

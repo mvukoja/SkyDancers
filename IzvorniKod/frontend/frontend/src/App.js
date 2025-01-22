@@ -67,7 +67,7 @@ function App() {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            "http://localhost:8080/users/getmytype",
+            "https://skydancers-back.onrender.com/users/getmytype",
             {
               headers: {
                 Authorization: `Bearer ${token}`,

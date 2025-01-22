@@ -47,10 +47,10 @@ public class StripeService {
 				.setPriceData(priceData).build();
 
 		SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.PAYMENT)
-				.setSuccessUrl("http://localhost:8080/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom
+				.setSuccessUrl("https://skydancers.onrender.com/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom
 																														// success
 																														// URL
-				.setCancelUrl("http://localhost:3000/payment/cancel").addLineItem(lineItem).build();
+				.setCancelUrl("https://skydancers.onrender.com/payment/cancel").addLineItem(lineItem).build();
 
 		try {
 			Session session = Session.create(params);

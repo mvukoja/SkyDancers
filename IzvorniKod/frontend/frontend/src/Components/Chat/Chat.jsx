@@ -38,7 +38,7 @@ const Chat = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/users/searchuser/${currentUser.sub}`,
+        `https://skydancers-back.onrender.com/users/searchuser/${currentUser.sub}`,
         {
           method: "GET",
           headers: {
@@ -101,7 +101,7 @@ const Chat = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/users/searchuser/${username}`,
+        `https://skydancers-back.onrender.com/users/searchuser/${username}`,
         {
           method: "GET",
           headers: {

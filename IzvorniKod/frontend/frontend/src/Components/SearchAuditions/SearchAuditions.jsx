@@ -62,7 +62,7 @@ const SearchAuditions = () => {
       };
 
       const response = await fetch(
-        "http://localhost:8080/audition/searchauditions",
+        "https://skydancers-back.onrender.com/audition/searchauditions",
         {
           method: "POST",
           headers: {

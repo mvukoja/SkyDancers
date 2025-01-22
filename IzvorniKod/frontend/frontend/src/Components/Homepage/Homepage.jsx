@@ -37,7 +37,7 @@ const Homepage = ({ onLogout }) => {
       let username = getUsernameFromToken(); // Pokušaj izdvojiti korisničko ime iz tokena
 
       try {
-        const response = await fetch("http://localhost:8080/users/myprofile", {
+        const response = await fetch("https://skydancers-back.onrender.com/users/myprofile", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
@@ -74,7 +74,7 @@ const Homepage = ({ onLogout }) => {
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          "http://localhost:8080/audition/notifications",
+          "https://skydancers-back.onrender.com/audition/notifications",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ const Homepage = ({ onLogout }) => {
     const fetchOffers = async (type) => {
       try {
         const token = localStorage.getItem("jwtToken");
-        const response = await fetch(`http://localhost:8080/offer/${type}`, {
+        const response = await fetch(`https://skydancers-back.onrender.com/offer/${type}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -150,7 +150,7 @@ const Homepage = ({ onLogout }) => {
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          `http://localhost:8080/users/changesubscriptionprice?price=${inputValue}`,
+          `https://skydancers-back.onrender.com/users/changesubscriptionprice?price=${inputValue}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

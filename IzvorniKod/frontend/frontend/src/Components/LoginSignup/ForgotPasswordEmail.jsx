@@ -13,7 +13,7 @@ const ForgotPasswordEmail = ({ onEmailSent }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8080/forgotpassword/verifymail/${email}`,
+        `https://skydancers-back.onrender.com/forgotpassword/verifymail/${email}`,
         {
           method: "POST",
         }

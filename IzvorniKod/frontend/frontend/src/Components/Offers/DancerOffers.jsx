@@ -13,7 +13,7 @@ const DancerOffers = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/offer/accept/${offerId}`,
+        `https://skydancers-back.onrender.com/offer/accept/${offerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,7 +41,7 @@ const DancerOffers = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://localhost:8080/offer/deny/${offerId}`,
+        `https://skydancers-back.onrender.com/offer/deny/${offerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +69,7 @@ const DancerOffers = () => {
     const fetchOffers = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
-        const response = await fetch("http://localhost:8080/offer/dancer", {
+        const response = await fetch("https://skydancers-back.onrender.com/offer/dancer", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

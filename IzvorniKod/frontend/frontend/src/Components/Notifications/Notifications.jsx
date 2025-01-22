@@ -15,7 +15,7 @@ const NotificationsPage = () => {
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          "http://localhost:8080/audition/notifications",
+          "https://skydancers-back.onrender.com/audition/notifications",
           {
             headers: {
               Authorization: `Bearer ${token}`,

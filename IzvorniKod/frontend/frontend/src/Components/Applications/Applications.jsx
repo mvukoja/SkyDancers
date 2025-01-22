@@ -34,7 +34,7 @@ const Applications = () => {
         }
 
         const response = await fetch(
-          "http://localhost:8080/audition/getmyapplications",
+          "https://skydancers-back.onrender.com/audition/getmyapplications",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const Applications = () => {
         const checkApplication = async (id) => {
           try {
             const response = await fetch(
-              `http://localhost:8080/audition/manage/applications/${id}`,
+              `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
               {
                 headers: {
                   "Content-Type": "application/json",
