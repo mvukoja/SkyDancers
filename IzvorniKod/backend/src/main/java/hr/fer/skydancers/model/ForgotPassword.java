@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+//Ova klasa predstavlja Zaboravljenu lozinku
 @Entity
 @Table(name = "forgotpassword")
 public class ForgotPassword {
@@ -18,15 +19,15 @@ public class ForgotPassword {
 	private Integer fpid;
 
 	@Column(nullable = false)
-	private Integer otp;
+	private Integer otp; // OTP kod
 
 	@Column(nullable = false)
-	private LocalDate expirdate;
+	private LocalDate expirdate; // datum isteka
 
 	@OneToOne
-	private MyUser user;
-	
-	private boolean otpverified;
+	private MyUser user; // korisnik
+
+	private boolean otpverified; // je li potvrđen OTP
 
 	public ForgotPassword() {
 	}

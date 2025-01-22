@@ -12,6 +12,7 @@ import hr.fer.skydancers.model.Dancer;
 import hr.fer.skydancers.model.MyUser;
 import jakarta.transaction.Transactional;
 
+//Ovaj interface predstavlja repozitorij za korisnike
 @Repository
 public interface UserRepository extends JpaRepository<MyUser, Integer> {
 	Optional<MyUser> findByEmail(String email);

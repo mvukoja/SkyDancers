@@ -10,6 +10,7 @@ import hr.fer.skydancers.model.Audition;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.AuditionRepository;
 
+//Ova klasa predstavlja servis za upravljanje audicijama
 @Service
 public class AuditionService {
 	

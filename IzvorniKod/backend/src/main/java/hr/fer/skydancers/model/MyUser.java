@@ -31,40 +31,40 @@ public class MyUser {
 	private String username;
 
 	@NotEmpty
-	private String name;
+	private String name; // ime
 
-	private String surname;
+	private String surname; // prezime
 
-	private String email;
+	private String email; // mail
 
-	private String password;
+	private String password; // lozinka
 
-	private boolean confirmed;
+	private boolean confirmed; // stanje potvrde registracije
 
-	@OneToOne(cascade = CascadeType.PERSIST) // One-to-one relationship
-	@JoinColumn(name = "usertype_id", referencedColumnName = "userid", nullable = false) // Foreign key
-	private UserType type;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "usertype_id", referencedColumnName = "userid", nullable = false)
+	private UserType type; // tip korisnika
 
-	private String oauth;
+	private String oauth; // oauth identifikator
 
-	private boolean finishedoauth;
+	private boolean finishedoauth; // je li završena oauth registracija
 
-	private String gender;
+	private String gender; // spol
 
-	private Integer age;
+	private Integer age; // dob
 
-	private String location;
+	private String location; // lokacija
 
-	private String contact;
+	private String contact; // kontakt broj
 
 	@OneToOne(mappedBy = "user")
-	private ForgotPassword forgotPassword;
+	private ForgotPassword forgotPassword; // zaboravljena lozinka
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private Portfolio portfolio;
+	private Portfolio portfolio; // vlastiti portfolio
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Payment> payments = new ArrayList<>();
+	private List<Payment> payments = new ArrayList<>(); // plaćanja
 
 	public MyUser() {
 	}

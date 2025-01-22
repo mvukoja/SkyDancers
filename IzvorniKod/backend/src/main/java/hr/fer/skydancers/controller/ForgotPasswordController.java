@@ -22,6 +22,7 @@ import hr.fer.skydancers.repository.ForgotPasswordRepository;
 import hr.fer.skydancers.service.EmailService;
 import hr.fer.skydancers.service.UserService;
 
+//Glavni kontroler vezan uz funkciju zaboravljena lozinka
 @RestController
 @RequestMapping("/forgotpassword")
 public class ForgotPasswordController {
@@ -38,6 +39,7 @@ public class ForgotPasswordController {
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
 
+	// Funkcija za potvrdu tj. pronalazak korisnika po mailu
 	@PostMapping("/verifymail/{email}")
 	public ResponseEntity<String> verifyEmail(@PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
@@ -66,6 +68,7 @@ public class ForgotPasswordController {
 		return ResponseEntity.ok("Email poslan");
 	}
 
+	// Funkcija za potvrdu OTP koda dobivenog mailom
 	@PostMapping("/verifyotp/{otp}/{email}")
 	public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
@@ -83,9 +86,9 @@ public class ForgotPasswordController {
 		forgotPasswordRepository.save(fp);
 
 		return ResponseEntity.ok("Success!");
-
 	}
 
+	// Funkcija za promjenu lozinke nakon potvrde
 	@PostMapping("/changepassword/{email}")
 	public ResponseEntity<String> changePassword(@PathVariable String email,
 			@RequestBody ChangePassword changePassword) {
@@ -104,6 +107,7 @@ public class ForgotPasswordController {
 		return ResponseEntity.ok("Lozinka je promijenjena!");
 	}
 
+	// Funkcija za generiranje random koda
 	private Integer otpGenerator() {
 		Random random = new Random();
 		return random.nextInt(100000, 999999);

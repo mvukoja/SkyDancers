@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+//Ova klasa predstavlja Audiciju
 @Entity
 @Table(name = "audition")
 public class Audition {
@@ -23,14 +24,19 @@ public class Audition {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	// Vrijeme kreiranja
 	private LocalDateTime creation;
 
+	// Vrijeme audicije
 	private LocalDateTime datetime;
 
+	// Rok prijave
 	private LocalDateTime deadline;
 
+	// Lokacija
 	private String location;
 
+	// Opis
 	private String description;
 
 	// broj mjesta ukupno
@@ -39,13 +45,15 @@ public class Audition {
 	// broj prijavljenih
 	private Integer subscribed;
 
+	// Plaća
 	private Integer wage;
-	
+
+	// Stanje arhiviranosti
 	private boolean archived;
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "audition_dance", joinColumns = @JoinColumn(name = "audition_id"), inverseJoinColumns = @JoinColumn(name = "dance_id"))
-	private List<Dance> styles;
+	private List<Dance> styles; // plesni stilovi
 
 	@OneToMany(mappedBy = "audition")
 	private List<AuditionApplication> applications;// prijave na ovu audiciju

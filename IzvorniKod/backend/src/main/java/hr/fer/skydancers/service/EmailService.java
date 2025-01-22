@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import hr.fer.skydancers.dto.MailBody;
 
+//Ova klasa predstavlja servis za slanje mailova
 @Service
 public class EmailService {
 

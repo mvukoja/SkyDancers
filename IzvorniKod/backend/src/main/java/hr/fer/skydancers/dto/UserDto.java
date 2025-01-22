@@ -50,7 +50,6 @@ public class UserDto {
 		this.inactiveUntil = inactiveUntil;
 	}
 
-	
 	public Integer getId() {
 		return id;
 	}

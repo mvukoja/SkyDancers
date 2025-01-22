@@ -34,6 +34,7 @@ import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.service.AuditionService;
 import hr.fer.skydancers.service.UserService;
 
+//Glavni kontroler svih ruta vezanih za audicije
 @RestController
 @RequestMapping("/audition")
 @CrossOrigin
@@ -53,6 +54,7 @@ public class AuditionController {
 	@Autowired
 	private AuditionApplicationRepository auditionApplicationRepository;
 
+	// Funkcija za dohvat svih audicija
 	@GetMapping("/getall")
 	public ResponseEntity<List<AuditionDTO>> getAll() {
 		Iterable<Audition> list = auditionService.get();
@@ -70,6 +72,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za dohvat audicija direktora po njegovom username
 	@GetMapping("/getdirectors/{username}")
 	public ResponseEntity<List<AuditionDTO>> getAllDirectorsAuditions(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
@@ -102,10 +105,11 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za dohvat audicije po njenom ID
 	@GetMapping("/get/{id}")
 	public ResponseEntity<AuditionDTO> getAudition(@PathVariable Integer id) {
 		Audition aud = auditionService.get(id);
-		if(aud == null)
+		if (aud == null)
 			return ResponseEntity.ok(null);
 		AuditionDTO dto = modelMapper.map(aud, AuditionDTO.class);
 		List<String> dances = new LinkedList<>();
@@ -115,6 +119,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za arhiviranje audicije po njenom ID
 	@GetMapping("/archive/{id}")
 	public ResponseEntity<String> archiveAudition(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -132,6 +137,7 @@ public class AuditionController {
 		return ResponseEntity.ok("Successful!");
 	}
 
+	// Funkcija za dohvat arhiviranih audicija direktora po njegovom username
 	@GetMapping("/archived/{username}")
 	public ResponseEntity<List<AuditionDTO>> getArchived(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
@@ -154,6 +160,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za kreiranje nove audicije
 	@PostMapping("/create")
 	public ResponseEntity<AuditionDTO> createAudition(@RequestBody AuditionDTO audition) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -183,6 +190,7 @@ public class AuditionController {
 		return ResponseEntity.ok(audition);
 	}
 
+	// Funkcija za ažuriranje podataka o audiciji
 	@PostMapping("/update/{id}")
 	public ResponseEntity<AuditionDTO> updateAudition(@RequestBody AuditionDTO dto, @PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -217,6 +225,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za brisanje audicije
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<String> deleteAudition(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -231,6 +240,7 @@ public class AuditionController {
 			return ResponseEntity.ok("Doesn't exist!");
 	}
 
+	// Funkcija za pretragu audicija po filtrima
 	@PostMapping("/searchauditions")
 	public ResponseEntity<List<AuditionDTO>> searchAuditions(@RequestBody AuditionSearchDTO dto) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -254,7 +264,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dtoo);
 	}
 
-	// dva filtra su znaci vrsta plesa i lokacija...
+	// Funkcija za dohvat audicija po plesačevim preferencijama
 	@GetMapping("/notifications")
 	public ResponseEntity<List<AuditionDTO>> notificationAuditions() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -282,6 +292,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dtoo);
 	}
 
+	// Dohvat plesačevih prijava na audicije
 	@GetMapping("/getmyapplications")
 	public ResponseEntity<List<AuditionDTO>> seeMyApplications() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -306,6 +317,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dtoo);
 	}
 
+	// Funkcija za prijavljivanje na audiciju
 	@PostMapping("/applytoaudition")
 	public ResponseEntity<AuditionApplicationDTO> applyToAudition(@RequestBody AuditionApplicationDTO dto) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -329,6 +341,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za pregled svih prijava na audiciju po njenom ID
 	@GetMapping("/manage/applications/{id}")
 	public ResponseEntity<List<AuditionApplicationDTO>> seeApplications(@PathVariable Integer id) {
 
@@ -356,6 +369,7 @@ public class AuditionController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za prihvat prijave na audiciju po ID-u prijave
 	@GetMapping("/manage/allow/{id}")
 	public ResponseEntity<String> allowDancerAudition(@PathVariable Integer id) {
 		String actor = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -371,11 +385,11 @@ public class AuditionController {
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
-		
+
 		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
 		if (aud.getSubscribed() == aud.getPositions())
 			return ResponseEntity.badRequest().build();
-			
+
 		if (!auditionApplication.getAudition().getUser().getUsername().equals(user.getUsername()))
 			return ResponseEntity.badRequest().build();
 
@@ -387,6 +401,7 @@ public class AuditionController {
 		return ResponseEntity.ok("Succesful!");
 	}
 
+	// Funkcija za odbijanje prijave na audiciju po ID-u prijave
 	@GetMapping("/manage/deny/{id}")
 	public ResponseEntity<String> denyDancerAudition(@PathVariable Integer id) {
 		String actor = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -402,7 +417,7 @@ public class AuditionController {
 		AuditionApplication auditionApplication = auditionApplicationRepository.findById(id).orElse(null);
 		if (auditionApplication == null)
 			return ResponseEntity.badRequest().build();
-		
+
 		Audition aud = auditionService.get(auditionApplication.getAudition().getId());
 		if (aud.getSubscribed() == aud.getPositions())
 			return ResponseEntity.badRequest().build();

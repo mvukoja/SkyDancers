@@ -2,14 +2,19 @@ package hr.fer.skydancers.dto;
 
 import java.util.List;
 
+//DTO za prijenos podataka o pretrazi plesača
 public class DancerSearchDTO {
 
+	// Gornja granica godina
 	private Integer ageup;
 
+	// Donja granica godina
 	private Integer agedown;
 
+	// Spol
 	private String gender;
 
+	// Plesni stilovi
 	private List<String> dancestyles;
 
 	public DancerSearchDTO(Integer ageup, Integer agedown, String gender, List<String> dancestyles) {

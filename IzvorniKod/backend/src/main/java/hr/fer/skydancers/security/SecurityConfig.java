@@ -28,6 +28,7 @@ import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 
+//Ova klasa predstavlja konfiguraciju sigurnosnih postavki aplikacije
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

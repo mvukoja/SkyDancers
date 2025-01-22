@@ -2,16 +2,22 @@ package hr.fer.skydancers.dto;
 
 import java.util.List;
 
+//DTO za prijenos podataka o portfoliu
 public class PortfolioDTO {
 
+	// ID portfolia
 	private Integer id;
 
+	// Opis
 	private String description;
 
+	// URL-ovi slika
 	private List<String> photos;
 
+	// URL-ovi videa
 	private List<String> videos;
 
+	// Ime vlasnika
 	private String username;
 
 	public PortfolioDTO(Integer id, String description, List<String> photos, List<String> videos, String username) {

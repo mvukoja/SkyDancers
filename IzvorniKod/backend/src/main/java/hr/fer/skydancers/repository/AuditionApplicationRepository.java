@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import hr.fer.skydancers.model.Audition;
 import hr.fer.skydancers.model.AuditionApplication;
 
+//Ovaj interface predstavlja repozitorij za prijave na audicije
 @Repository
 public interface AuditionApplicationRepository extends JpaRepository<AuditionApplication, Integer> {
 	@Query("SELECT DISTINCT a.audition FROM AuditionApplication a " + "WHERE a.dancer.id = :dancerId")

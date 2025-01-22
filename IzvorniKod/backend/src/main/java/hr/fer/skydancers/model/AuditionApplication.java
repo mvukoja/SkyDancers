@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+//Ova klasa predstavlja prijavu na audiciju
 @Entity
 public class AuditionApplication {
 
@@ -16,17 +17,19 @@ public class AuditionApplication {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	// Vrijeme prijave
 	private LocalDateTime datetime;
 
+	// Stanje prijave
 	private String status;
 
 	@ManyToOne
 	@JoinColumn(name = "audition_id")
-	private Audition audition; // The audition this application belongs to
+	private Audition audition; // Kojoj audiciji pripada prijava
 
 	@ManyToOne
 	@JoinColumn(name = "dancer_id")
-	private Dancer dancer; // The dancer who applied
+	private Dancer dancer; // Plesač koji se prijavio
 
 	public AuditionApplication() {
 		super();

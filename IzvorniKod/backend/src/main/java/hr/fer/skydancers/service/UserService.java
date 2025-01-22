@@ -13,6 +13,7 @@ import hr.fer.skydancers.model.Dancer;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.UserRepository;
 
+//Ova klasa predstavlja servis za korisnike
 @Service
 public class UserService implements UserDetailsService {
 

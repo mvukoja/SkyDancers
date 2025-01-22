@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+//Ova klasa predstavlja direktne ponude
 @Entity
 public class DirectOffer {
 
@@ -19,20 +20,20 @@ public class DirectOffer {
 
 	@ManyToOne
 	@JoinColumn(name = "director_id", nullable = false)
-	private Director director;
+	private Director director; // direktor
 
 	@ManyToOne
 	@JoinColumn(name = "dancer_id", nullable = false)
-	private Dancer dancer;
+	private Dancer dancer; // plesač
 
 	@Column(nullable = false)
-	private String message;
+	private String message; // poruka
 
 	@Column(nullable = false)
-	private LocalDateTime createdAt;
+	private LocalDateTime createdAt; // vrijeme kreiranja
 
 	@Column
-	private String state;
+	private String state; // stanje
 
 	public DirectOffer(Long id, Director director, Dancer dancer, String message, LocalDateTime createdAt,
 			String state) {

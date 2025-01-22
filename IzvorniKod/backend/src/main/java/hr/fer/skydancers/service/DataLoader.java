@@ -12,12 +12,13 @@ import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.repository.PortfolioRepository;
 
+//Ova klasa učitava predodređene podatke pri pokretanju aplikacije
 @Component
 public class DataLoader implements CommandLineRunner {
 
 	@Autowired
 	private DanceRepository danceRepository;
-	
+
 	@Autowired
 	private PortfolioRepository portfolioRepository;
 
@@ -63,20 +64,20 @@ public class DataLoader implements CommandLineRunner {
 			suvremeni.setName("Suvremeni");
 			danceRepository.save(suvremeni);
 		}
-		if(!userService.get("admin").isPresent()) {
+		if (!userService.get("admin").isPresent()) {
 			Admin admin = new Admin();
 			admin.setConfirmed(true);
 			admin.setUsername("admin");
 			admin.setName("Admin");
 			admin.setPassword(passwordEncoder.encode("jedanjeadmin"));
-			admin.setType( new UserType("ADMIN"));
+			admin.setType(new UserType("ADMIN"));
 			admin.setSubscriptionprice(100l);
 			userService.save(admin);
-			
+
 			Portfolio portfolio = new Portfolio();
 			portfolio.setUser(admin);
 			portfolioRepository.save(portfolio);
 		}
-		
+
 	}
 }

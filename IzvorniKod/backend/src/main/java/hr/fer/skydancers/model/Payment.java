@@ -10,24 +10,25 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+//Ova klasa predstavlja plaćanja direktora
 @Entity
 @Table(name = "payment")
 public class Payment {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
 	@ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-	private MyUser user;
-	
-	private LocalDate date;
-	
-	private Integer amount;
-	
-	private LocalDate expiration;
-	
+	@JoinColumn(name = "user_id", nullable = false)
+	private MyUser user; // korisnik
+
+	private LocalDate date; // datum
+
+	private Integer amount; // iznos
+
+	private LocalDate expiration; // datum isteka
+
 	public Payment() {
 	}
 
@@ -79,7 +80,5 @@ public class Payment {
 	public void setExpiration(LocalDate expiration) {
 		this.expiration = expiration;
 	}
-	
-	
-	
+
 }

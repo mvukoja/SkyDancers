@@ -1,51 +1,58 @@
 package hr.fer.skydancers.dto;
 
+//DTO za prijenos podataka o plaćanju
 public class StripeResponse {
-    private String status;
-    private String message;
-    private String sessionId;
-    private String sessionUrl;
+	// Status plaćanja
+	private String status;
 
-    public StripeResponse() {
-    }
+	// Poruka
+	private String message;
 
-    public StripeResponse(String status, String message, String sessionId, String sessionUrl) {
-        this.status = status;
-        this.message = message;
-        this.sessionId = sessionId;
-        this.sessionUrl = sessionUrl;
-    }
+	// ID sjednice
+	private String sessionId;
 
-    public String getStatus() {
-        return status;
-    }
+	// Link sjednice
+	private String sessionUrl;
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public StripeResponse() {
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public StripeResponse(String status, String message, String sessionId, String sessionUrl) {
+		this.status = status;
+		this.message = message;
+		this.sessionId = sessionId;
+		this.sessionUrl = sessionUrl;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getSessionId() {
-        return sessionId;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public String getSessionUrl() {
-        return sessionUrl;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    public void setSessionUrl(String sessionUrl) {
-        this.sessionUrl = sessionUrl;
-    }
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public String getSessionUrl() {
+		return sessionUrl;
+	}
+
+	public void setSessionUrl(String sessionUrl) {
+		this.sessionUrl = sessionUrl;
+	}
 }
-

@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 
 import hr.fer.skydancers.model.DirectOffer;
 
+//Ovaj interface predstavlja repozitorij za direktne ponude
 @Repository
 public interface DirectOfferRepository extends JpaRepository<DirectOffer, Integer> {
 
-    @Query("SELECT o FROM DirectOffer o WHERE o.director.id = :directorId")
-    List<DirectOffer> findAllByDirectorId(@Param("directorId") Integer directorId);
+	@Query("SELECT o FROM DirectOffer o WHERE o.director.id = :directorId")
+	List<DirectOffer> findAllByDirectorId(@Param("directorId") Integer directorId);
 
-    @Query("SELECT o FROM DirectOffer o WHERE o.dancer.id = :dancerId")
-    List<DirectOffer> findAllByDancerId(@Param("dancerId") Integer dancerId);
+	@Query("SELECT o FROM DirectOffer o WHERE o.dancer.id = :dancerId")
+	List<DirectOffer> findAllByDancerId(@Param("dancerId") Integer dancerId);
 }

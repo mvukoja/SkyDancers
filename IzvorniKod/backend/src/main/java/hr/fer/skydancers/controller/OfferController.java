@@ -27,6 +27,7 @@ import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.DirectOfferRepository;
 import hr.fer.skydancers.service.UserService;
 
+//Glavni kontroler vezan uz direktne ponude
 @RestController
 @RequestMapping("/offer")
 @CrossOrigin
@@ -40,6 +41,7 @@ public class OfferController {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
+	// Funkcija za kreiranje direktne ponude
 	@PostMapping("/make")
 	public ResponseEntity<DirectOfferDTO> makeOffer(@RequestBody OfferDTO dto) {
 
@@ -75,6 +77,7 @@ public class OfferController {
 		return ResponseEntity.ok(dtoo);
 	}
 
+	// Funkcija za dohvat direktnih ponuda direktora
 	@GetMapping("/director")
 	public ResponseEntity<List<DirectOfferDTO>> getOffersByDirector() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -98,6 +101,7 @@ public class OfferController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za dohvat direktnih ponuda plesača
 	@GetMapping("/dancer")
 	public ResponseEntity<List<DirectOfferDTO>> getOffersByDancer() {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -120,6 +124,7 @@ public class OfferController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za brisanje direktnih ponuda
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<String> deleteOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -140,6 +145,7 @@ public class OfferController {
 		return ResponseEntity.ok("Success");
 	}
 
+	// Funkcija plesaču za prihvat direktnih ponuda
 	@GetMapping("/accept/{id}")
 	public ResponseEntity<String> acceptOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -161,6 +167,7 @@ public class OfferController {
 		return ResponseEntity.ok("Success");
 	}
 
+	// Funkcija plesaču za odbijanje direktnih ponuda
 	@GetMapping("/deny/{id}")
 	public ResponseEntity<String> denyOffer(@PathVariable Integer id) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

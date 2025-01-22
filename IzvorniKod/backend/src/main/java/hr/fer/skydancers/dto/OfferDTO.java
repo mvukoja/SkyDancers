@@ -1,9 +1,12 @@
 package hr.fer.skydancers.dto;
 
+//DTO za prijenos podataka o kreiranju direktne ponude
 public class OfferDTO {
 
+	// ID plesača
 	private Integer dancerid;
-	
+
+	// Poruka
 	private String message;
 
 	public OfferDTO(Integer dancerid, String message) {
@@ -27,6 +30,5 @@ public class OfferDTO {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
 }

@@ -31,6 +31,7 @@ import hr.fer.skydancers.model.Portfolio;
 import hr.fer.skydancers.repository.PortfolioRepository;
 import hr.fer.skydancers.service.UserService;
 
+//Glavni kontroler vezan uz portfolio korisnika
 @RestController
 @RequestMapping("/portfolio")
 @CrossOrigin
@@ -44,10 +45,12 @@ public class PortfolioController {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
+	// Funkcija za ažuriranje teksta u portfoliu
 	@PostMapping("/updatedescription/{username}")
-	public ResponseEntity<PortfolioDTO> updatePortfolioDescription(@RequestBody(required = false) String description, @PathVariable String username) {
+	public ResponseEntity<PortfolioDTO> updatePortfolioDescription(@RequestBody(required = false) String description,
+			@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
@@ -62,13 +65,14 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za upload datoteka u portfoliu
 	@PostMapping("/uploadfile")
 	public ResponseEntity<PortfolioDTO> uploadFile(
 			@RequestParam(value = "photos", required = false) List<MultipartFile> photos,
 			@RequestParam(value = "videos", required = false) List<MultipartFile> videos) throws IOException {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MyUser user = userService.get(username).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
@@ -95,10 +99,11 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za dohvat portfolia korisnika po njegovom username
 	@GetMapping("/get/{username}")
 	public ResponseEntity<PortfolioDTO> getPortfolio(@PathVariable String username) {
 		MyUser user = userService.get(username).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
@@ -110,11 +115,12 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za brisanje slika iz portfolia
 	@DeleteMapping("/deletephoto/{username}")
 	public ResponseEntity<PortfolioDTO> deletePhoto(@RequestParam String photoname, @PathVariable String username)
 			throws UnsupportedEncodingException {
 		MyUser user = userService.get(username).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
@@ -133,11 +139,12 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za brisanje videa iz portfolia
 	@DeleteMapping("/deletevideo/{username}")
 	public ResponseEntity<PortfolioDTO> deleteVideo(@RequestParam String videoname, @PathVariable String username)
 			throws UnsupportedEncodingException {
 		MyUser user = userService.get(username).orElse(null);
-		if(user == null)
+		if (user == null)
 			return ResponseEntity.badRequest().build();
 		Portfolio portfolio = portfolioRepository.findById(user.getPortfolio().getId()).orElse(null);
 		if (portfolio == null)
@@ -156,6 +163,7 @@ public class PortfolioController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za brisanje datoteka iz file systema
 	private void deleteFileFromSystem(String photoName) {
 		Path filePath = Paths.get("uploads/" + photoName);
 		try {
@@ -165,6 +173,7 @@ public class PortfolioController {
 		}
 	}
 
+	// Funkcija za spremanje datoteka na file system
 	private String saveFile(MultipartFile file) throws IOException {
 		File uploadDir = new File("uploads");
 		if (!uploadDir.exists()) {

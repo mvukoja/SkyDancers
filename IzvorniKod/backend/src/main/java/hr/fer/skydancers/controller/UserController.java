@@ -58,6 +58,7 @@ import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtService;
 import hr.fer.skydancers.webtoken.LoginForm;
 
+//Glavni kontroler svih ruta vezanih za korisnike
 @RestController
 @RequestMapping("/users")
 @CrossOrigin
@@ -92,6 +93,7 @@ public class UserController {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
+	// Funkcija za izvršavanje plaćanja od strane direktora
 	@PostMapping("/payment")
 	public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody PaymentRequest productRequest) {
 		StripeResponse stripeResponse = stripeService.checkout(productRequest,
@@ -99,6 +101,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(stripeResponse);
 	}
 
+	// Funkcija za slučaj uspjeha plaćanja od strane direktora
 	@GetMapping("/payment/success/{username}/{sessionId}")
 	public ResponseEntity<String> handleSuccess(@PathVariable String sessionId, @PathVariable String username) {
 		try {
@@ -185,6 +188,7 @@ public class UserController {
 		return ResponseEntity.ok("Invalid credentials");
 	}
 
+	// Autentificira OAuth korisnika i generira JWT token
 	@PostMapping("/authenticateoauth")
 	public ResponseEntity<String> authenticateOauth(@RequestBody String oauth) {
 		MyUser user = userService.getOauth(oauth).orElse(null);
@@ -205,7 +209,7 @@ public class UserController {
 		return ResponseEntity.ok(jwtService.generateToken(userService.loadUserByUsername(user.getUsername())));
 	}
 
-	// Registrira novog korisnika
+	// Registrira novog direktora
 	@PostMapping("/registerdirector")
 	public ResponseEntity<String> createDirector(@RequestBody Director user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
@@ -237,6 +241,7 @@ public class UserController {
 		}
 	}
 
+	// Registrira novog plesača
 	@PostMapping("/registerdancer")
 	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
@@ -268,6 +273,7 @@ public class UserController {
 		}
 	}
 
+	// Funkcija za potvrdu registracije mailom
 	@GetMapping("/register/{otp}/{email}")
 	public ResponseEntity<String> finishReg(@PathVariable Integer otp, @PathVariable String email) {
 		MyUser user = userService.getByMail(email).orElse(null);
@@ -408,7 +414,7 @@ public class UserController {
 				throw new IllegalArgumentException("DanceStyle not found: " + name);
 			}
 		}
-		
+
 		user.setDancestyles(dances);
 		userService.save(user);
 		UserDto dto = new UserDto();
@@ -436,6 +442,7 @@ public class UserController {
 		return dto;
 	}
 
+	// Funkcija za pretragu plesača po filteru
 	@PostMapping("/searchdancers")
 	public ResponseEntity<List<UserDto>> searchDancers(@RequestBody DancerSearchDTO dto) {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -462,6 +469,7 @@ public class UserController {
 		return ResponseEntity.ok(dtoo);
 	}
 
+	// Funkcija za pretragu korisnika po ukucanom inputu
 	@GetMapping("/searchuser/{username}")
 	public ResponseEntity<List<UserDto>> searchUser(@PathVariable String username) {
 		if (username == null)
@@ -490,6 +498,7 @@ public class UserController {
 		return ResponseEntity.ok(dto);
 	}
 
+	// Funkcija za promjenu lozinke
 	@PostMapping("/changepassword")
 	public ResponseEntity<String> changePassword(@RequestBody ChangePassword changePassword) {
 		if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
@@ -505,6 +514,7 @@ public class UserController {
 		return ResponseEntity.ok("Lozinka je promijenjena!");
 	}
 
+	// Funkcija za dohvat tipa korisnika
 	@GetMapping("/getmytype")
 	public ResponseEntity<String> getMyType() {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -514,6 +524,7 @@ public class UserController {
 		return ResponseEntity.ok(user.getType().getType().toString());
 	}
 
+	// Funkcija za promjenu cijene članarine (admin)
 	@GetMapping("/changesubscriptionprice")
 	public ResponseEntity<String> changePrice(@RequestParam Long price) {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -527,6 +538,7 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
+	// Funkcija za brisanje korisnika (admin)
 	@GetMapping("/delete/{username}")
 	public ResponseEntity<String> deleteUser(@PathVariable String username) {
 		String usname = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

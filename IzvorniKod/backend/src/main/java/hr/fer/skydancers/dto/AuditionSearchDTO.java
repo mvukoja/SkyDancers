@@ -3,14 +3,19 @@ package hr.fer.skydancers.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+//DTO za prijenos podataka za pretragu audicija
 public class AuditionSearchDTO {
 
+	// Vrijeme (najkasnije) audicije
 	private LocalDate datetime;
 
+	// Plaća
 	private Integer wage;
 
+	// Lokacija
 	private String location;
 
+	// Stilovi plesa
 	private List<String> styles;
 
 	public AuditionSearchDTO(LocalDate datetime, Integer wage, String location, List<String> styles) {

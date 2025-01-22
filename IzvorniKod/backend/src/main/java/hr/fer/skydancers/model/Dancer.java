@@ -10,19 +10,22 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 
+//Ova klasa predstavlja plesača
 @Entity
 public class Dancer extends MyUser {
 
+	// Stanje neaktivnosti
 	private boolean inactive;
 
+	// Datum do kada je neaktivan
 	private LocalDate inactiveuntil;
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "dancer_dance", joinColumns = @JoinColumn(name = "dancer_id"), inverseJoinColumns = @JoinColumn(name = "dance_id"))
-	private List<Dance> dancestyles;
+	private List<Dance> dancestyles; // stilovi plesa
 
 	@OneToMany(mappedBy = "dancer")
-    private List<AuditionApplication> applications;
+	private List<AuditionApplication> applications; // prijave na audicije
 
 	public Dancer() {
 	}
@@ -67,7 +70,5 @@ public class Dancer extends MyUser {
 	public void setApplications(List<AuditionApplication> applications) {
 		this.applications = applications;
 	}
-
-	
 
 }

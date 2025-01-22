@@ -2,11 +2,16 @@ package hr.fer.skydancers.dto;
 
 import java.time.LocalDateTime;
 
+//DTO za prijenos podataka o prijavama na audiciji
 public class AuditionApplicationDTO {
 
+	// ID prijave
 	private Integer id;
+	// ID audicije
 	private Integer auditionId;
+	// Status prijave
 	private String status;
+	// Vrijeme prijave
 	private LocalDateTime datetime;
 
 	private UserDto applicant;

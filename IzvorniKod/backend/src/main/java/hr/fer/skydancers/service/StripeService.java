@@ -19,15 +19,16 @@ import hr.fer.skydancers.model.Admin;
 import hr.fer.skydancers.model.Payment;
 import hr.fer.skydancers.repository.PaymentRepository;
 
+//Ova klasa predstavlja servis za plaćanja direktora
 @Service
 public class StripeService {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private PaymentRepository paymentRepository;
-	
+
 	@Value("${stripe.secretKey}")
 	private String secretKey;
 
@@ -38,13 +39,17 @@ public class StripeService {
 				.builder().setName(req.getName()).build();
 
 		SessionCreateParams.LineItem.PriceData priceData = SessionCreateParams.LineItem.PriceData.builder()
-				.setCurrency("EUR").setUnitAmount(((Admin) userService.get("admin").orElse(null)).getSubscriptionprice()).setProductData(prod).build();
+				.setCurrency("EUR")
+				.setUnitAmount(((Admin) userService.get("admin").orElse(null)).getSubscriptionprice())
+				.setProductData(prod).build();
 
 		SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder().setQuantity(1L)
 				.setPriceData(priceData).build();
 
 		SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.PAYMENT)
-				.setSuccessUrl("http://localhost:8080/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom success URL
+				.setSuccessUrl("http://localhost:8080/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom
+																														// success
+																														// URL
 				.setCancelUrl("http://localhost:3000/payment/cancel").addLineItem(lineItem).build();
 
 		try {
@@ -62,6 +67,7 @@ public class StripeService {
 			return response;
 		}
 	}
+
 	public boolean processPaymentSuccess(String sessionId, String username) {
 		try {
 			Session session = Session.retrieve(sessionId);
@@ -73,7 +79,7 @@ public class StripeService {
 				payment.setUser(user);
 				payment.setExpiration(LocalDate.now().plusYears(1));
 				paymentRepository.save(payment);
-				
+
 				user.setSubscription(LocalDate.now().plusYears(1));
 				user.setPaid(true);
 				userService.save(user);

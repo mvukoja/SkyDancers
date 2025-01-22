@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import hr.fer.skydancers.model.Dance;
 
+//Ovaj interface predstavlja repozitorij za plesove
 @Repository
 public interface DanceRepository extends JpaRepository<Dance, Integer> {
 	Optional<Dance> findByName(String name);

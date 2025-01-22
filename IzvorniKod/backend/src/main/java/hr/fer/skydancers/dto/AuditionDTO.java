@@ -3,18 +3,25 @@ package hr.fer.skydancers.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//DTO za prijenos podataka o audiciji
 public class AuditionDTO {
 
+	// ID audicije
 	private Integer id;
 
+	// Vrijeme kreiranja
 	private LocalDateTime creation;
 
+	// Vrijeme audicije
 	private LocalDateTime datetime;
 
+	// Rok prijave
 	private LocalDateTime deadline;
 
+	// Lokacija
 	private String location;
 
+	// Opis
 	private String description;
 
 	// broj mjesta ukupno
@@ -23,12 +30,16 @@ public class AuditionDTO {
 	// broj prijavljenih
 	private Integer subscribed;
 
+	// Plaća
 	private Integer wage;
 
+	// Stanje arhiviranosti
 	private boolean archived;
 
+	// Plesni stilovi
 	private List<String> styles;
 
+	// Ime autora (direktora)
 	private String author;
 
 	public AuditionDTO(Integer id, LocalDateTime creation, LocalDateTime datetime, LocalDateTime deadline,

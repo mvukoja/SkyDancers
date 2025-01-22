@@ -8,9 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-
 import java.util.List;
 
+//Ova klasa predstavlja portfolio korisnika
 @Entity
 public class Portfolio {
 
@@ -19,17 +19,17 @@ public class Portfolio {
 	private Integer id;
 
 	@Column(columnDefinition = "TEXT")
-	private String description;
+	private String description; // opis
 
 	@ElementCollection
-	private List<String> photos;
+	private List<String> photos; // slike
 
 	@ElementCollection
-	private List<String> videos;
+	private List<String> videos;// videi
 
 	@OneToOne
 	@JoinColumn(name = "user_id")
-	private MyUser user;
+	private MyUser user; // vlasnik
 
 	public Portfolio() {
 		super();

@@ -5,12 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//Ova klasa predstavlja Ples
 @Entity
 public class Dance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	// Ime plesa
 	private String name;
 
 	public Dance() {
@@ -27,7 +29,6 @@ public class Dance {
 		this.name = name;
 	}
 
-	// Getters and setters
 	public Integer getId() {
 		return id;
 	}
