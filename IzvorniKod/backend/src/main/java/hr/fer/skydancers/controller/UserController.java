@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 
 import hr.fer.skydancers.dto.ChangePassword;
 import hr.fer.skydancers.dto.DanceStylesRequest;
 import hr.fer.skydancers.dto.DancerSearchDTO;
 import hr.fer.skydancers.dto.InactiveStatusRequest;
-import hr.fer.skydancers.dto.MailBody;
 import hr.fer.skydancers.dto.OauthRegDto;
 import hr.fer.skydancers.dto.PaymentRequest;
 import hr.fer.skydancers.dto.StripeResponse;
@@ -89,6 +89,9 @@ public class UserController {
 	private DanceRepository danceRepository;
 
 	private ModelMapper modelMapper = new ModelMapper();
+	
+	@Value("${spring.mail.username}")
+	private String mailSender;
 
 	// Funkcija za izvršavanje plaćanja od strane direktora
 	@PostMapping("/payment")
@@ -220,7 +223,7 @@ public class UserController {
 			portfolioRepository.save(portfolio);
 
 			int otp = new Random().nextInt(100000, 999999);
-			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
+			emailService.sendEmail(mailSender, user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
 					+ "Dobrodošli!" + "\n"
 					+ "Ovo je link za dovršetak vaše registracije: https://skydancers-back.onrender.com/users/register/"
 					+ otp + "/" + user.getEmail());
@@ -230,7 +233,6 @@ public class UserController {
 			fp.setExpirDate(LocalDate.now().plusDays(365));
 			fp.setUser(user);
 
-			emailService.sendSimpleMessage(mailBody);
 			forgotPasswordRepository.save(fp);
 
 			return ResponseEntity.ok("Registration successful!");
@@ -252,7 +254,7 @@ public class UserController {
 			portfolioRepository.save(portfolio);
 
 			int otp = new Random().nextInt(100000, 999999);
-			MailBody mailBody = new MailBody(user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
+			emailService.sendEmail(mailSender, user.getEmail(), "SkyDancers: Potvrda maila", "SkyDancers\n"
 					+ "Dobrodošli!" + "\n"
 					+ "Ovo je link za dovršetak vaše registracije: https://skydancers-back.onrender.com/users/register/"
 					+ otp + "/" + user.getEmail());
@@ -261,8 +263,6 @@ public class UserController {
 			fp.setOtp(otp);
 			fp.setExpirDate(LocalDate.now().plusDays(365));
 			fp.setUser(user);
-
-			emailService.sendSimpleMessage(mailBody);
 			forgotPasswordRepository.save(fp);
 
 			return ResponseEntity.ok("Registration successful!");

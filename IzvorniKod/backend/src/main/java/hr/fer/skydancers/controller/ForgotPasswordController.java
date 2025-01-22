@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hr.fer.skydancers.dto.ChangePassword;
-import hr.fer.skydancers.dto.MailBody;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
@@ -38,6 +38,9 @@ public class ForgotPasswordController {
 
 	@Autowired
 	private ForgotPasswordRepository forgotPasswordRepository;
+	
+	@Value("${spring.mail.username}")
+	private String mailSender;
 
 	// Funkcija za potvrdu tj. pronalazak korisnika po mailu
 	@PostMapping("/verifymail/{email}")
@@ -54,15 +57,12 @@ public class ForgotPasswordController {
 		prevfp.forEach(el -> forgotPasswordRepository.delete(el));
 
 		int otp = otpGenerator();
-		MailBody mailBody = new MailBody(email, "SkyDancers: Zaboravljena lozinka",
-				"Ovo je OTP za vašu zaboravljenu lozinku: " + otp);
+		emailService.sendEmail(mailSender, email, "SkyDancers: Zaboravljena lozinka", "Ovo je OTP za vašu zaboravljenu lozinku: " + otp);
 
 		ForgotPassword fp = new ForgotPassword();
 		fp.setOtp(otp);
 		fp.setExpirDate(LocalDate.now().plusDays(1));
 		fp.setUser(user);
-
-		emailService.sendSimpleMessage(mailBody);
 		forgotPasswordRepository.save(fp);
 
 		return ResponseEntity.ok("Email poslan");
