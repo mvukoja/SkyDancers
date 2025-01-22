@@ -1,7 +1,6 @@
 package hr.fer.skydancers.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +18,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +46,6 @@ import hr.fer.skydancers.model.Director;
 import hr.fer.skydancers.model.ForgotPassword;
 import hr.fer.skydancers.model.MyUser;
 import hr.fer.skydancers.model.Portfolio;
-import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.repository.DanceRepository;
 import hr.fer.skydancers.repository.ForgotPasswordRepository;
 import hr.fer.skydancers.repository.PortfolioRepository;
@@ -215,7 +212,6 @@ public class UserController {
 	public ResponseEntity<String> createDirector(@RequestBody Director user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			user.setConfirmed(true);// temporary
 			user.setOauth(null);
 			userService.put(user);
 
@@ -248,7 +244,6 @@ public class UserController {
 	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
 		if (userService.get(user.getUsername()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			user.setConfirmed(true);// temporary
 			user.setOauth(null);
 			userService.put(user);
 
