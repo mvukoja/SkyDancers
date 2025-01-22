@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -84,6 +85,13 @@ class SkydancersApplicationTests {
         List<Audition> auditions = Arrays.asList(audition1, audition2);
         director = new Director(true, LocalDate.of(2025, 1, 1), auditions);
         
+    }
+
+    @Test
+    public void testNonExistentFunctionality() throws Exception {
+        mockMvc.perform(get("/non-existent-url"))
+            .andExpect(status().isForbidden());
+            
     }
 	
 	@Test
