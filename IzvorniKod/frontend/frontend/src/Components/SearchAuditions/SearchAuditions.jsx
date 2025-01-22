@@ -142,6 +142,7 @@ const SearchAuditions = () => {
                   datetime: e.target.value,
                 }))
               }
+              required
             />
           </div>
 
@@ -151,6 +152,7 @@ const SearchAuditions = () => {
               type="number"
               value={searchCriteria.wage}
               min={0}
+              required
               onBlur={(e) => {
                 if (e.target.value < 0) {
                   e.target.value = 0;
@@ -183,6 +185,7 @@ const SearchAuditions = () => {
                 }))
               }
               placeholder="Unesite lokaciju"
+              required
             />
           </div>
 

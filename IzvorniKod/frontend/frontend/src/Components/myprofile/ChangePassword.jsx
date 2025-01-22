@@ -64,7 +64,7 @@ const ChangePassword = () => {
           </Link>
         </div>
       </header>
-      <div className="container">
+      <div className="container2">
         <div className="header">
           <div className="text">Promjena lozinke</div>
           <div className="underline"></div>

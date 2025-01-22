@@ -230,6 +230,8 @@ const MyProfile = ({ onLogout }) => {
 
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
+      setPhotos([]);
+      setVideos([]);
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -282,6 +284,7 @@ const MyProfile = ({ onLogout }) => {
       }
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
+      window.location.reload();
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -307,6 +310,7 @@ const MyProfile = ({ onLogout }) => {
       }
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioItems(newItem); // Dodaj novu stavku u portfolio*/
+      window.location.reload();
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -327,6 +331,14 @@ const MyProfile = ({ onLogout }) => {
 
   const handleFileSelect = (event) => {
     const files = event.target.files;
+    Array.from(files).forEach((el) => {
+      if (el.size >= 3 * 1024 * 1024) {
+        alert("Izabrali ste preveliku datoteku (LIMIT 3MB)");
+        event.target.value = null;
+        return;
+      }
+    });
+
     if (event.target.name === "photos") {
       setPhotos([...files]);
     } else if (event.target.name === "videos") {
@@ -579,7 +591,11 @@ const MyProfile = ({ onLogout }) => {
               <>
                 <button onClick={handleEditToggle}>Uredi Profil</button>
                 {"    "}
-                <button onClick={handlePasswordToggle}>Promjena lozinke</button>
+                {profileData.oauth === null && (
+                  <button onClick={handlePasswordToggle}>
+                    Promjena lozinke
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -672,7 +688,6 @@ const MyProfile = ({ onLogout }) => {
                     type="file"
                     accept="image/*"
                     name="photos"
-                    multiple
                     onChange={handleFileSelect}
                   />
                   <p>Videozapisi:</p>
@@ -680,7 +695,6 @@ const MyProfile = ({ onLogout }) => {
                     type="file"
                     name="videos"
                     accept="video/*"
-                    multiple
                     onChange={handleFileSelect}
                   />
                   <button onClick={handleSubmit}>Spremi Portfolio</button>

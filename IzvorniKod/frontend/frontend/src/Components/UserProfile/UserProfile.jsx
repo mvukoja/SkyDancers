@@ -294,6 +294,7 @@ const UserProfile = ({ onLogout }) => {
       }
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioData(newItem); // Dodaj novu stavku u portfolio*/
+      window.location.reload();
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -319,6 +320,7 @@ const UserProfile = ({ onLogout }) => {
       }
       const newItem = await response.json(); // Parsiraj odgovor kao JSON
       setPortfolioData(newItem); // Dodaj novu stavku u portfolio*/
+      window.location.reload();
     } catch (error) {
       alert("Your token has expired, please login again.");
       onLogout();
@@ -649,8 +651,8 @@ const UserProfile = ({ onLogout }) => {
               </p>
             </div>
 
-            {portfolioData.photos && portfolioData.photos.length > 0 && (
-              <div className="portfolio-items">
+            <div className="portfolio-items">
+              {portfolioData.photos && portfolioData.photos.length > 0 && (
                 <div className="photo-grid">
                   {portfolioData.photos.map((photo, index) => (
                     <div key={index} className="portfolio-item">
@@ -678,36 +680,36 @@ const UserProfile = ({ onLogout }) => {
                     </div>
                   ))}
                 </div>
-                {portfolioData.videos && portfolioData.videos.length > 0 && (
-                  <>
-                    <div className="video-grid">
-                      {portfolioData.videos.map((video, index) => (
-                        <div key={index} className="portfolio-item video-item">
-                          <video controls>
-                            <source
-                              src={`http://localhost:8080${video}`}
-                              type="video/mp4"
-                            />
-                            Your browser does not support the video tag.
-                          </video>
-                          {myType === "ADMIN" && (
-                              <button
-                                onClick={() =>
-                                  handleDeletePortfolioVideo(
-                                    video.split("uploads/")[1]
-                                  )
-                                }
-                              >
-                                X
-                              </button>
-                            )}
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+              )}
+              {portfolioData.videos && portfolioData.videos.length > 0 && (
+                <>
+                  <div className="video-grid">
+                    {portfolioData.videos.map((video, index) => (
+                      <div key={index} className="portfolio-item video-item">
+                        <video controls>
+                          <source
+                            src={`http://localhost:8080${video}`}
+                            type="video/mp4"
+                          />
+                          Your browser does not support the video tag.
+                        </video>
+                        {myType === "ADMIN" && (
+                          <button
+                            onClick={() =>
+                              handleDeletePortfolioVideo(
+                                video.split("uploads/")[1]
+                              )
+                            }
+                          >
+                            X
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>
