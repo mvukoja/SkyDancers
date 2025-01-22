@@ -4,6 +4,7 @@ import headerlogo from "../Assets/header-logo.png";
 import "./AuditionInfo.css";
 import { jwtDecode } from "jwt-decode";
 
+//Stranica za pregled detaljno audicije
 const AuditionInfo = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,6 +18,7 @@ const AuditionInfo = () => {
   const [subscribed, setSubscribed] = useState(0);
   const [showApplications, setShowApplications] = useState(false);
 
+  //Funkcija za dobivanje username iz JWT tokena
   const getUsernameFromToken = () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) return null;
@@ -31,6 +33,7 @@ const AuditionInfo = () => {
   };
 
   useEffect(() => {
+    //Funkcija za dohvaćanje podataka o trenutnom korisniku
     const fetchUser = async () => {
       const token = localStorage.getItem("jwtToken");
       try {
@@ -56,6 +59,7 @@ const AuditionInfo = () => {
 
   useEffect(() => {
     if (id) {
+      //Funkcija za dohvaćanje podataka o audiciji
       const fetchAudition = async () => {
         try {
           const token = localStorage.getItem("jwtToken");
@@ -84,6 +88,7 @@ const AuditionInfo = () => {
   }, [id]);
 
   useEffect(() => {
+    // Funkcija za provjeru stanja svake prijave (prihvaćena, odbijena, u tijeku)
     if (profileData?.type?.type === "DANCER" && id) {
       const checkApplication = async () => {
         try {
@@ -116,6 +121,7 @@ const AuditionInfo = () => {
     }
   }, [profileData, id]);
 
+  //Funkcija za prijavu na audiciju
   const handleApplication = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -142,6 +148,7 @@ const AuditionInfo = () => {
     }
   };
 
+  //Funkcija za dohvaćanje svih prijava na tu audiciju za direktora
   const handleApplicationDirector = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -167,6 +174,7 @@ const AuditionInfo = () => {
     }
   };
 
+  //Funkcija za prihvaćanje prijave plesača na audiciju od strane direktora
   const handleAcceptResponse = async (audId, state) => {
     if (subscribed >= audition.positions) {
       alert("Audicija je već popunjena");
@@ -202,6 +210,7 @@ const AuditionInfo = () => {
     }
   };
 
+  //Funkcija za odbijanje prijave plesača na audiciju od strane direktora
   const handleDenyResponse = async (audId, state) => {
     if (subscribed >= audition.positions) {
       alert("Audicija je već popunjena");
@@ -232,6 +241,7 @@ const AuditionInfo = () => {
     }
   };
 
+  //Funkcija za arhiviranje audicije od strane direktora
   const handleArchivation = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -329,9 +339,11 @@ const AuditionInfo = () => {
                 <strong>Rok prijave:</strong>{" "}
                 {new Date(audition.deadline).toLocaleString()}
               </p>
-              <p><strong style={{color: "red"}}>
-              {subscribed === audition.positions && ("Audicija je popunjena")}
-                </strong></p>
+              <p>
+                <strong style={{ color: "red" }}>
+                  {subscribed === audition.positions && "Audicija je popunjena"}
+                </strong>
+              </p>
               {profileData?.type?.type === "DANCER" &&
                 subscribed < audition.positions &&
                 !confirmationMessage && (
@@ -451,7 +463,8 @@ const AuditionInfo = () => {
                                     <strong>Stanje prijave:</strong>{" "}
                                     {application.status}
                                   </p>
-                                  {audition.archived === false && subscribed < audition.positions &&
+                                  {audition.archived === false &&
+                                    subscribed < audition.positions &&
                                     application.status === "U tijeku" && (
                                       <div className="offer-actions">
                                         <button

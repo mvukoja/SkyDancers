@@ -4,6 +4,7 @@ import headerlogo from "../Assets/header-logo.png";
 import "./UserProfile.css";
 import { jwtDecode } from "jwt-decode";
 
+//Stranica za pregled profila drugih korisnika
 const danceStylesList = [
   "Balet",
   "Jazz",
@@ -50,6 +51,7 @@ const UserProfile = ({ onLogout }) => {
     if (username === getUsernameFromToken()) {
       navigate("/myprofile");
     }
+    //Dohvat podataka o korisniku
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -96,6 +98,7 @@ const UserProfile = ({ onLogout }) => {
   }, [username, navigate]);
 
   useEffect(() => {
+    //Dohvat tipa korisnika (vas)
     const fetchMytype = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -120,6 +123,7 @@ const UserProfile = ({ onLogout }) => {
     fetchMytype();
   }, [profileData]);
 
+  //Funkcija za slanje direktne ponude
   const handleSendOffer = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -149,6 +153,7 @@ const UserProfile = ({ onLogout }) => {
     }
   };
 
+  //Funkcija za brisanje profila (admin)
   const handleDeleteUser = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -184,6 +189,7 @@ const UserProfile = ({ onLogout }) => {
     return <div>Učitavanje...</div>;
   }
 
+  //Funkcija za započinjanje razgovora
   const startChatWithUser = (userId, userName) => {
     const selectedUser = {
       type: { userid: userId },
@@ -208,6 +214,7 @@ const UserProfile = ({ onLogout }) => {
     });
   };
 
+  //Funkcija za spremanje izmjena (admin)
   const handleSave = async () => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     if (!token) {
@@ -241,6 +248,7 @@ const UserProfile = ({ onLogout }) => {
     }
   };
 
+  //Funkcija za spremanje izmjena portfolia (admin)
   const handleDescription = async () => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
@@ -267,7 +275,7 @@ const UserProfile = ({ onLogout }) => {
     }
   };
 
-  // Funkcija za brisanje slike iz portfolia
+  // Funkcija za brisanje slike iz portfolia (admin)
   const handleDeletePortfolioPhoto = async (name) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
@@ -292,7 +300,7 @@ const UserProfile = ({ onLogout }) => {
       console.error("Greška pri brisanju stavke iz portfolia:", error);
     }
   };
-  // Funkcija za brisanje videa iz portfolia
+  // Funkcija za brisanje videa iz portfolia (admin)
   const handleDeletePortfolioVideo = async (name) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
@@ -318,6 +326,7 @@ const UserProfile = ({ onLogout }) => {
     }
   };
 
+  //Funkcija za spremanje stilova plesova (admin)
   const saveDanceStyles = async () => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
 

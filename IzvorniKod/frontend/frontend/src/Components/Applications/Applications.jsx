@@ -3,12 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
 
+//Stranica za pregled poslanih prijava na audicije od strane plesača
 const Applications = () => {
   const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  //Funkcija za dobivanje username iz JWT tokena
   const getUsernameFromToken = () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) return null;
@@ -23,6 +25,7 @@ const Applications = () => {
   };
 
   useEffect(() => {
+    //Funkcija za dohvaćanje svih prijava
     const fetchApplications = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -30,7 +33,6 @@ const Applications = () => {
           throw new Error("No token found");
         }
 
-        // Fetch applications
         const response = await fetch(
           "http://localhost:8080/audition/getmyapplications",
           {
@@ -48,7 +50,7 @@ const Applications = () => {
         setApplications(applicationsData);
         setLoading(false);
 
-        // Check the status for each application
+        // Funkcija za provjeru stanja svake prijave (prihvaćena, odbijena, u tijeku)
         const checkApplication = async (id) => {
           try {
             const response = await fetch(
@@ -89,8 +91,6 @@ const Applications = () => {
             );
           }
         };
-
-        // Check the application status for each fetched application
         (applicationsData || []).forEach((app) => {
           checkApplication(app.id);
         });

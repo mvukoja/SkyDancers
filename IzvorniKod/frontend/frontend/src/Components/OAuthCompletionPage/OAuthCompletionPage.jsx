@@ -5,6 +5,7 @@ import email_icon from "../Assets/email.png";
 import user_icon from "../Assets/person.png";
 import InputField from "../LoginSignup/InputField";
 
+//Stranica za dovršetak OAuth registracije
 const OAuthCompletionPage = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -19,6 +20,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
   finished = searchParams.get("finished");
 
   useEffect(() => {
+    //Funkcija za dohvat JWT tokena
     const getJwt = async () => {
       try {
         const response = await fetch(
@@ -50,6 +52,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
     }
   }, [oauth, navigate, finished, onLogin]);
 
+  //Funkcija za slanje dodatnih podataka pri registraciji
   const handleSubmit = async () => {
     if (!validateForm()) return;
     const data = {

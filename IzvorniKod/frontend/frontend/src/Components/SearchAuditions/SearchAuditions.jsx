@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./SearchAuditions.css";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za pretragu audicija od strane plesača
 const SearchAuditions = () => {
   const navigate = useNavigate();
   const [searchCriteria, setSearchCriteria] = useState({
@@ -42,6 +43,7 @@ const SearchAuditions = () => {
     });
   };
 
+  //Funkcija za dohvat audicija po kriterijima
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -225,8 +227,7 @@ const SearchAuditions = () => {
                       Detaljnije
                     </button>
                     <span className="subscribed-count">
-                      Primljeni: {audition.subscribed || 0}/
-                      {audition.positions}
+                      Primljeni: {audition.subscribed || 0}/{audition.positions}
                     </span>
                   </div>
                   <div className="audition-details">

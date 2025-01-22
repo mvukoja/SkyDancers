@@ -4,6 +4,7 @@ import "./DirectorAuditions.css";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za prikaz audicija direktora
 const DirectorAuditions = () => {
   const navigate = useNavigate();
   const [auditions, setAuditions] = useState([]);
@@ -12,6 +13,7 @@ const DirectorAuditions = () => {
   const [showArchived, setShowArchived] = useState(false);
 
   useEffect(() => {
+    //Funkcija za dohvat svih audicija
     const fetchAuditions = async () => {
       const token = localStorage.getItem("jwtToken");
       if (!token) {
@@ -55,6 +57,7 @@ const DirectorAuditions = () => {
     fetchAuditions();
   }, [showArchived]);
 
+  //Funkcija za formatiranje datuma
   const formatDate = (dateString) => {
     try {
       if (!dateString) return "N/A";

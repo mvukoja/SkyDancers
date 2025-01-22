@@ -5,6 +5,7 @@ import "./SearchResults.css";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
 
+//Stranica za pretragu drugih korisnika
 const SearchResults = () => {
   const navigate = useNavigate();
   const { username } = useParams();
@@ -25,6 +26,7 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
+    //Dohvat korisnika po ukucanom imenu
     const fetchSearchResults = async () => {
       const token = localStorage.getItem("jwtToken");
       try {
@@ -33,7 +35,7 @@ const SearchResults = () => {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
+              Authorization: `Bearer ${token}`,
             },
           }
         );

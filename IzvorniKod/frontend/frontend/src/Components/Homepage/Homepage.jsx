@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
 
+//Početna stranica ulogiranog korisnika
 const Homepage = ({ onLogout }) => {
   const [profileData, setProfileData] = useState(null);
   const [searchInput, setSearchInput] = useState("");
@@ -68,6 +69,7 @@ const Homepage = ({ onLogout }) => {
   }, [navigate, onLogout]); // Ovisnosti useEffect-a (navigate i onLogout)
 
   useEffect(() => {
+    //Dohvat obavijesti o audicijama po preferencijama
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -89,6 +91,7 @@ const Homepage = ({ onLogout }) => {
       }
     };
 
+    //Dohvat svih direktnih ponuda
     const fetchOffers = async (type) => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -128,23 +131,20 @@ const Homepage = ({ onLogout }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  // Function to handle opening the popup
   const openPopup = () => {
     setIsPopupVisible(true);
   };
 
-  // Function to handle closing the popup
   const closePopup = () => {
     setIsPopupVisible(false);
-    setInputValue(""); // Clear input when closing
+    setInputValue("");
   };
 
-  // Function to handle input change
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  // Function to handle form submission
+  //Funkcija za promjenu cijene članarine od strane admina
   const handleSubscriptionPrice = async () => {
     if (inputValue) {
       try {

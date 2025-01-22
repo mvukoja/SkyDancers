@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za obavijesti o audicijama po preferenciji za plesače
 const NotificationsPage = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
@@ -9,6 +10,7 @@ const NotificationsPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    //Funkcija za dohvat svih obavijesti
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("jwtToken");

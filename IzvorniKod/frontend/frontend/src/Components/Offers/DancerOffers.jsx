@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import "./Offers.css";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za pregled direktnih ponuda plesačima
 const DancerOffers = () => {
   const [offers, setOffers] = useState([]);
   const [error, setError] = useState("");
 
+  //Funkcija za prihvaćanje ponude
   const handleAcceptResponse = async (offerId, state) => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -34,6 +36,7 @@ const DancerOffers = () => {
     }
   };
 
+  //Funkcija za odbijanje ponude
   const handleDenyResponse = async (offerId, state) => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -62,6 +65,7 @@ const DancerOffers = () => {
   };
 
   useEffect(() => {
+    //Funkcija za dohvat svih ponuda
     const fetchOffers = async () => {
       try {
         const token = localStorage.getItem("jwtToken");

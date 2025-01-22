@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./LandingPage.css";
 import headerlogo from "../Assets/header-logo.png";
 
+//Landing stranica za neulogirane korisnike
 function LandingPage() {
   return (
     <div className="landing-container">

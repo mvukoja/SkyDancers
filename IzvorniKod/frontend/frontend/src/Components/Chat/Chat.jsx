@@ -12,6 +12,7 @@ import "./Chat.css";
 import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za chat s drugim korisnicima
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
@@ -21,6 +22,7 @@ const Chat = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const messagesEndRef = useRef(null);
 
+  //Funkcija za dohvaćanje ID trenutnog korisnika
   const getCurrentUserId = useCallback(async () => {
     const currentUser = getCurrentUser();
     if (!currentUser || !currentUser.sub) {
@@ -63,6 +65,7 @@ const Chat = () => {
     }
   }, []);
 
+  //Funkcija za dohvaćanje trenutnog korisnika
   const getCurrentUser = () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) return null;
@@ -83,6 +86,7 @@ const Chat = () => {
     }
   };
 
+  //Funkcija za pretragu korisnika po username
   const searchUsers = async (username) => {
     try {
       if (!username.trim()) {
@@ -120,9 +124,7 @@ const Chat = () => {
         return;
       }
       const filteredUsers = Array.isArray(data)
-        ? data.filter(
-            (user) => user.id !== currentUser && !user.inactive
-          )
+        ? data.filter((user) => user.id !== currentUser && !user.inactive)
         : [];
 
       setUsers(filteredUsers);
@@ -145,12 +147,14 @@ const Chat = () => {
   useEffect(() => {
     if (!selectedUser) return;
 
+    //Funkcija za dohvaćanje ID korisnika
     const fetchCurrentUserId = async () => {
       const userId = await getCurrentUserId();
       setCurrentUserId(userId);
     };
     fetchCurrentUserId();
 
+    //Funkcija za dohvat svih poruka
     const fetchMessages = async () => {
       const currentUser = await getCurrentUserId();
       if (!currentUser) {
@@ -190,6 +194,7 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
+  //Funkcija za slanje poruke
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newMessage.trim() === "" || !selectedUser) return;
@@ -202,10 +207,7 @@ const Chat = () => {
 
     try {
       const currentUserId = await getCurrentUserId();
-      const participantString = [
-        String(currentUserId),
-        String(selectedUser.id),
-      ]
+      const participantString = [String(currentUserId), String(selectedUser.id)]
         .sort()
         .join("_");
 
@@ -277,9 +279,7 @@ const Chat = () => {
               <div
                 key={user.id}
                 className={`user-item ${
-                  selectedUser?.type?.userid === user.id
-                    ? "selected"
-                    : ""
+                  selectedUser?.type?.userid === user.id ? "selected" : ""
                 }`}
                 onClick={() => {
                   setSelectedUser(user);

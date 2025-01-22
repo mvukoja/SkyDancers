@@ -3,10 +3,12 @@ import "./LoginSignup.css";
 import InputField from "./InputField";
 import email_icon from "../Assets/email.png";
 
+//Stranica za unos maila kod zaboravljene lozinke
 const ForgotPasswordEmail = ({ onEmailSent }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
+  //Funkcija za verifikaciju maila
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

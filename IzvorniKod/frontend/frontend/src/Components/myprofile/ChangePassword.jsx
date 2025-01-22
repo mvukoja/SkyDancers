@@ -4,11 +4,13 @@ import InputField from "../LoginSignup/InputField";
 import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
-const ChangePassword = ({ email }) => {
+//Stranica za promjenu lozinke
+const ChangePassword = () => {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  //Funkcija za slanje nove lozinke na backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== repeatPassword) {

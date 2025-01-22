@@ -1,5 +1,3 @@
-// src/Components/MyProfile/MyProfile.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./myprofile.css";
@@ -59,7 +57,6 @@ const MyProfile = ({ onLogout }) => {
       const data = await response.json();
 
       if (data.status === "SUCCESS") {
-        // Redirect to Stripe checkout session URL
         window.location.href = data.sessionUrl;
       } else {
         alert("Došlo je do pogreške prilikom kreiranja sesije plaćanja.");
@@ -702,37 +699,38 @@ const MyProfile = ({ onLogout }) => {
                 {/* Iteracija kroz listu portfolio stavki i prikaz svake */}
                 {/* Prikaz slike ili videozapisa ovisno o tipu stavke */}
                 <div className="photo-grid">
-                {portfolioItems.photos.length > 0 ? (
-                  portfolioItems.photos.map((photo, index) => (
-                    <div key={index} className="portfolio-item">
-                      <a
-                        href={`http://localhost:8080${photo}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={`http://localhost:8080${photo}`}
-                          alt={`Portfolio Photo ${index + 1}`}
-                          style={{
-                            maxWidth: "100%",
-                            maxHeight: "300px",
-                            objectFit: "cover",
-                          }}
-                        />
-                      </a>
-                      <button
-                        onClick={() =>
-                          handleDeletePortfolioPhoto(photo.split("uploads/")[1])
-                        }
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <p>Nemate spremljene slike.</p>
-                )}
-                
+                  {portfolioItems.photos.length > 0 ? (
+                    portfolioItems.photos.map((photo, index) => (
+                      <div key={index} className="portfolio-item">
+                        <a
+                          href={`http://localhost:8080${photo}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={`http://localhost:8080${photo}`}
+                            alt={`Portfolio Photo ${index + 1}`}
+                            style={{
+                              maxWidth: "100%",
+                              maxHeight: "300px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        </a>
+                        <button
+                          onClick={() =>
+                            handleDeletePortfolioPhoto(
+                              photo.split("uploads/")[1]
+                            )
+                          }
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Nemate spremljene slike.</p>
+                  )}
                 </div>
                 <div className="video-grid">
                   {portfolioItems.videos.length > 0 ? (

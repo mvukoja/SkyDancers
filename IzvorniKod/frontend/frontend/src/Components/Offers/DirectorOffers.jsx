@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import "./Offers.css";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za pregled direktnih ponuda koje je direktor poslao
 const DirectorOffers = () => {
   const [offers, setOffers] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    //Funkcija za dohvat svih ponuda
     const fetchOffers = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
@@ -31,6 +33,7 @@ const DirectorOffers = () => {
     fetchOffers();
   }, []);
 
+  //Funkcija za brisanje ponude
   const handleDelete = async (offerId) => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -47,9 +50,7 @@ const DirectorOffers = () => {
       if (!response.ok) {
         throw new Error("Nije moguće ažurirati ponudu");
       }
-      const updatedOffers = offers.filter((item) =>
-        offerId !== item.id
-      );
+      const updatedOffers = offers.filter((item) => offerId !== item.id);
       setOffers(updatedOffers);
     } catch (err) {
       setError(err.message);

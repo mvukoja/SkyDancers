@@ -3,6 +3,7 @@ import "./SearchDancers.css";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za pretragu plesača od strane direktora
 const SearchDancers = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
@@ -39,6 +40,7 @@ const SearchDancers = () => {
     );
   };
 
+  //Funkcija za dohvat plesača po kriterijima
   const handleSearch = async () => {
     try {
       if (selectedDanceStyles.length === 0) {
@@ -108,7 +110,10 @@ const SearchDancers = () => {
                 if (e.target.value < 0) {
                   e.target.value = 0;
                 }
-                if (filters.ageup && parseInt(e.target.value, 10) >= parseInt(filters.ageup, 10)) {
+                if (
+                  filters.ageup &&
+                  parseInt(e.target.value, 10) >= parseInt(filters.ageup, 10)
+                ) {
                   alert("Donja granica mora biti manja od gornje granice.");
                   e.target.value = "";
                 }
@@ -133,7 +138,10 @@ const SearchDancers = () => {
                 if (e.target.value < 0) {
                   e.target.value = 0;
                 }
-                if (filters.agedown && parseInt(e.target.value, 10) <= parseInt(filters.agedown, 10)) {
+                if (
+                  filters.agedown &&
+                  parseInt(e.target.value, 10) <= parseInt(filters.agedown, 10)
+                ) {
                   alert("Gornja granica mora biti veća od donje granice.");
                   e.target.value = "";
                 }

@@ -3,11 +3,13 @@ import "./LoginSignup.css";
 import InputField from "./InputField";
 import password_icon from "../Assets/password.png";
 
+//Stranica za unos nove lozinke kod zaboravljene lozinke
 const ForgotPasswordReset = ({ email }) => {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  //Slanje nove lozinke
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== repeatPassword) {

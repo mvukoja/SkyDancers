@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./CreateAudition.css";
 import headerlogo from "../Assets/header-logo.png";
 
+//Stranica za kreiranje audicije
 const CreateAudition = () => {
   const [formData, setFormData] = useState({
     datetime: "",
@@ -44,6 +45,7 @@ const CreateAudition = () => {
     );
   };
 
+  //Funkcija za kreiranje audicije
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedDanceStyles.length === 0) {
