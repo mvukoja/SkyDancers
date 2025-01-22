@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,6 +40,9 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	@Value("${frontend.url}")
+	private String frontendUrl;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configure(http))
@@ -51,14 +55,12 @@ public class SecurityConfig {
 							.permitAll();
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 					authorize.anyRequest().authenticated();
-				}).exceptionHandling(exceptionHandling -> 
-			    exceptionHandling
-		        .accessDeniedHandler((request, response, accessDeniedException) -> {
-		            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		        })
-		        .authenticationEntryPoint((request, response, authException) -> {
-		            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		        }))
+				}).exceptionHandling(exceptionHandling -> exceptionHandling
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+						}).authenticationEntryPoint((request, response, authException) -> {
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+						}))
 				.formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
 					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -88,8 +90,7 @@ public class SecurityConfig {
 					if (!existingUser.isEmpty() && existingUser.get().isFinishedoauth()) {
 						finished = true;
 					}
-					response.sendRedirect(
-							"https://skydancers.onrender.com/oauth-completion?oauth=" + userId + "&finished=" + finished);
+					response.sendRedirect(frontendUrl + "/oauth-completion?oauth=" + userId + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

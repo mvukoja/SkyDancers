@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pregled poslanih prijava na audicije od strane plesača
 const Applications = () => {
@@ -34,7 +35,7 @@ const Applications = () => {
         }
 
         const response = await fetch(
-          "https://skydancers-back.onrender.com/audition/getmyapplications",
+          `${backendUrl}/audition/getmyapplications`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ const Applications = () => {
         const checkApplication = async (id) => {
           try {
             const response = await fetch(
-              `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
+              `${backendUrl}/audition/manage/applications/${id}`,
               {
                 headers: {
                   "Content-Type": "application/json",

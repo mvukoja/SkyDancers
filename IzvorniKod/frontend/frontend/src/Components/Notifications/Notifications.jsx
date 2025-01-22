@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za obavijesti o audicijama po preferenciji za plesače
 const NotificationsPage = () => {
@@ -15,7 +16,7 @@ const NotificationsPage = () => {
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          "https://skydancers-back.onrender.com/audition/notifications",
+          `${backendUrl}/audition/notifications`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

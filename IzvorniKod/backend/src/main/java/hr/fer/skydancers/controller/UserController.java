@@ -92,6 +92,9 @@ public class UserController {
 	
 	@Value("${spring.mail.username}")
 	private String mailSender;
+	
+	@Value("${frontend.url}")
+	private String frontendUrl;
 
 	// Funkcija za izvršavanje plaćanja od strane direktora
 	@PostMapping("/payment")
@@ -106,7 +109,7 @@ public class UserController {
 	public ResponseEntity<String> handleSuccess(@PathVariable String sessionId, @PathVariable String username) {
 		try {
 			if (stripeService.processPaymentSuccess(sessionId, username))
-				return ResponseEntity.status(302).header("Location", "https://skydancers.onrender.com/payment/success")
+				return ResponseEntity.status(302).header("Location", frontendUrl + "/payment/success")
 						.build();
 			else
 				return ResponseEntity.badRequest().body("Greška pri procesiranju plaćanja!");
@@ -281,9 +284,9 @@ public class UserController {
 			forgotPasswordRepository.deleteById(fp.getFpid());
 			user.setConfirmed(true);
 			userService.save(user);
-			return ResponseEntity.status(302).header("Location", "https://skydancers.onrender.com/login").build();
+			return ResponseEntity.status(302).header("Location", frontendUrl + "/login").build();
 		} else {
-			return ResponseEntity.ok("Niste dovršili potvrdu registracije!");
+			return ResponseEntity.ok("Niste hili potvrdu registracije!");
 		}
 	}
 

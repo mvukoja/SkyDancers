@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Offers.css";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pregled direktnih ponuda plesačima
 const DancerOffers = () => {
@@ -13,7 +14,7 @@ const DancerOffers = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/offer/accept/${offerId}`,
+        `${backendUrl}/offer/accept/${offerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,7 +42,7 @@ const DancerOffers = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/offer/deny/${offerId}`,
+        `${backendUrl}/offer/deny/${offerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +70,7 @@ const DancerOffers = () => {
     const fetchOffers = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
-        const response = await fetch("https://skydancers-back.onrender.com/offer/dancer", {
+        const response = await fetch(`${backendUrl}/offer/dancer`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

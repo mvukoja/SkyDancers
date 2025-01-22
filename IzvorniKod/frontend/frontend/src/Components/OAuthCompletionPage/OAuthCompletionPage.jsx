@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import email_icon from "../Assets/email.png";
 import user_icon from "../Assets/person.png";
 import InputField from "../LoginSignup/InputField";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za dovršetak OAuth registracije
 const OAuthCompletionPage = ({ onLogin }) => {
@@ -24,7 +25,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
     const getJwt = async () => {
       try {
         const response = await fetch(
-          "https://skydancers-back.onrender.com/users/authenticateoauth",
+          `${backendUrl}/users/authenticateoauth`,
           {
             method: "POST",
             headers: {
@@ -64,7 +65,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
 
     try {
       const response = await fetch(
-        "https://skydancers-back.onrender.com/users/complete-oauth",
+        `${backendUrl}/users/complete-oauth`,
         {
           method: "POST",
           headers: {

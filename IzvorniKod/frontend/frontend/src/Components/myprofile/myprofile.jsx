@@ -4,6 +4,7 @@ import "./myprofile.css";
 import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 // Definicija dostupnih vrsta plesa
 const danceStylesList = [
@@ -37,7 +38,7 @@ const MyProfile = ({ onLogout }) => {
   const handlePayment = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
-      const response = await fetch("https://skydancers-back.onrender.com/users/payment", {
+      const response = await fetch(`${backendUrl}/users/payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +94,7 @@ const MyProfile = ({ onLogout }) => {
       let username = getUsernameFromToken(); // Pokušaj izdvojiti korisničko ime iz tokena
 
       try {
-        const response = await fetch("https://skydancers-back.onrender.com/users/myprofile", {
+        const response = await fetch(`${backendUrl}/users/myprofile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`, // Dodaj token u zaglavlje zahtjeva
@@ -114,7 +115,7 @@ const MyProfile = ({ onLogout }) => {
         data.username = username; // Dodaj korisničko ime u podatke profila
 
         const portfolio = await fetch(
-          `https://skydancers-back.onrender.com/portfolio/get/${username}`,
+          `${backendUrl}/portfolio/get/${username}`,
           {
             method: "GET",
             headers: {
@@ -178,7 +179,7 @@ const MyProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/update-profile/${getUsernameFromToken()}`,
+        `${backendUrl}/users/update-profile/${getUsernameFromToken()}`,
         {
           method: "PUT",
           headers: {
@@ -214,7 +215,7 @@ const MyProfile = ({ onLogout }) => {
     }
     try {
       const response = await fetch(
-        "https://skydancers-back.onrender.com/portfolio/uploadfile",
+        `${backendUrl}/portfolio/uploadfile`,
         {
           method: "POST",
           headers: {
@@ -243,7 +244,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/updatedescription/${getUsernameFromToken()}`,
+        `${backendUrl}/portfolio/updatedescription/${getUsernameFromToken()}`,
         {
           method: "POST",
           headers: {
@@ -270,7 +271,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/deletephoto/${getUsernameFromToken()}?photoname=${name}`,
+        `${backendUrl}/portfolio/deletephoto/${getUsernameFromToken()}?photoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -296,7 +297,7 @@ const MyProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/deletevideo/${getUsernameFromToken()}?videoname=${name}`,
+        `${backendUrl}/portfolio/deletevideo/${getUsernameFromToken()}?videoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -359,7 +360,7 @@ const MyProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/update-dance-styles/${getUsernameFromToken()}`,
+        `${backendUrl}/users/update-dance-styles/${getUsernameFromToken()}`,
         {
           method: "PUT",
           headers: {
@@ -393,7 +394,7 @@ const MyProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        "https://skydancers-back.onrender.com/users/update-inactive-status",
+        `${backendUrl}/users/update-inactive-status`,
         {
           method: "PUT",
           headers: {
@@ -717,12 +718,12 @@ const MyProfile = ({ onLogout }) => {
                     portfolioItems.photos.map((photo, index) => (
                       <div key={index} className="portfolio-item">
                         <a
-                          href={`https://skydancers-back.onrender.com${photo}`}
+                          href={`${backendUrl}${photo}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           <img
-                            src={`https://skydancers-back.onrender.com${photo}`}
+                            src={`${backendUrl}${photo}`}
                             alt={`Portfolio Photo ${index + 1}`}
                             style={{
                               maxWidth: "100%",
@@ -750,7 +751,7 @@ const MyProfile = ({ onLogout }) => {
                   {portfolioItems.videos.length > 0 ? (
                     portfolioItems.videos.map((video, index) => (
                       <div key={index} className="portfolio-item video-item">
-                        <video src={`https://skydancers-back.onrender.com${video}`} controls>
+                        <video src={`${backendUrl}${video}`} controls>
                           Your browser does not support the video tag.
                         </video>
                         <button

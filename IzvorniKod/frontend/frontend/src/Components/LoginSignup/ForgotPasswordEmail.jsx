@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 import InputField from "./InputField";
 import email_icon from "../Assets/email.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za unos maila kod zaboravljene lozinke
 const ForgotPasswordEmail = ({ onEmailSent }) => {
@@ -13,7 +14,7 @@ const ForgotPasswordEmail = ({ onEmailSent }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/forgotpassword/verifymail/${email}`,
+        `${backendUrl}/forgotpassword/verifymail/${email}`,
         {
           method: "POST",
         }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./SearchDancers.css";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pretragu plesača od strane direktora
 const SearchDancers = () => {
@@ -50,7 +51,7 @@ const SearchDancers = () => {
       const token = localStorage.getItem("jwtToken");
       setError("");
       const response = await fetch(
-        "https://skydancers-back.onrender.com/users/searchdancers",
+        `${backendUrl}/users/searchdancers`,
         {
           method: "POST",
           headers: {

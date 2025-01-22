@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./CreateAudition.css";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za kreiranje audicije
 const CreateAudition = () => {
@@ -61,7 +62,7 @@ const CreateAudition = () => {
 
     try {
       const token = localStorage.getItem("jwtToken");
-      const response = await fetch("https://skydancers-back.onrender.com/audition/create", {
+      const response = await fetch(`${backendUrl}/audition/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

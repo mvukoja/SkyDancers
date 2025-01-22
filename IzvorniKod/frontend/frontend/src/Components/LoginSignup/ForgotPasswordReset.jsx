@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 import InputField from "./InputField";
 import password_icon from "../Assets/password.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za unos nove lozinke kod zaboravljene lozinke
 const ForgotPasswordReset = ({ email }) => {
@@ -19,7 +20,7 @@ const ForgotPasswordReset = ({ email }) => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/forgotpassword/changepassword/${email}`,
+        `${backendUrl}/forgotpassword/changepassword/${email}`,
         {
           method: "POST",
           headers: {

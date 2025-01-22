@@ -31,6 +31,9 @@ public class StripeService {
 
 	@Value("${stripe.secretKey}")
 	private String secretKey;
+	
+	@Value("${frontend.url}")
+	private String frontendUrl;
 
 	public StripeResponse checkout(PaymentRequest req, String principal) {
 		Stripe.apiKey = secretKey;
@@ -47,10 +50,10 @@ public class StripeService {
 				.setPriceData(priceData).build();
 
 		SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.PAYMENT)
-				.setSuccessUrl("https://skydancers-back.onrender.com//users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom
+				.setSuccessUrl("https://skydancers-back.onrender.com/users/payment/success/" + principal + "/{CHECKOUT_SESSION_ID}") // Custom
 																														// success
 																														// URL
-				.setCancelUrl("https://skydancers.onrender.com/payment/cancel").addLineItem(lineItem).build();
+				.setCancelUrl(frontendUrl + "/payment/cancel").addLineItem(lineItem).build();
 
 		try {
 			Session session = Session.create(params);

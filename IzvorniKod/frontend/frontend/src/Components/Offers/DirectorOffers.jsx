@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Offers.css";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pregled direktnih ponuda koje je direktor poslao
 const DirectorOffers = () => {
@@ -13,7 +14,7 @@ const DirectorOffers = () => {
     const fetchOffers = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
-        const response = await fetch("https://skydancers-back.onrender.com/offer/director", {
+        const response = await fetch(`${backendUrl}/offer/director`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,7 +39,7 @@ const DirectorOffers = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/offer/delete/${offerId}`,
+        `${backendUrl}/offer/delete/${offerId}`,
         {
           headers: {
             "Content-Type": "application/json",

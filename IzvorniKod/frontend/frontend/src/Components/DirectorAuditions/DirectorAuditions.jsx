@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import "./DirectorAuditions.css";
 import { useNavigate, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za prikaz audicija direktora
 const DirectorAuditions = () => {
@@ -26,8 +27,8 @@ const DirectorAuditions = () => {
         const decodedToken = jwtDecode(token);
         const username = decodedToken.sub;
         const url = showArchived
-          ? `https://skydancers-back.onrender.com/audition/archived/${username}`
-          : `https://skydancers-back.onrender.com/audition/getdirectors/${username}`;
+          ? `${backendUrl}/audition/archived/${username}`
+          : `${backendUrl}/audition/getdirectors/${username}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {

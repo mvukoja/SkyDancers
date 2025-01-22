@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./SearchResults.css";
 import headerlogo from "../Assets/header-logo.png";
 import { jwtDecode } from "jwt-decode";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pretragu drugih korisnika
 const SearchResults = () => {
@@ -31,7 +32,7 @@ const SearchResults = () => {
       const token = localStorage.getItem("jwtToken");
       try {
         const response = await fetch(
-          `https://skydancers-back.onrender.com/users/searchuser/${username}`,
+          `${backendUrl}/users/searchuser/${username}`,
           {
             method: "GET",
             headers: {

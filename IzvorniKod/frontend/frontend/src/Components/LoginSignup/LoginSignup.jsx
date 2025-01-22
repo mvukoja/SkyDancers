@@ -5,6 +5,7 @@ import email_icon from "../Assets/email.png";
 import password_icon from "../Assets/password.png";
 import InputField from "./InputField";
 import ForgotPassword from "./ForgotPassword";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 // Komponenta za Login i Signup funkcionalnosti
 const LoginSignup = ({ onLogin }) => {
@@ -77,7 +78,7 @@ const LoginSignup = ({ onLogin }) => {
       try {
         // Slanje zahtjeva na backend za registraciju
         const response = await fetch(
-          "https://skydancers-back.onrender.com/users/registerdirector",
+          `${backendUrl}/users/registerdirector`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -106,7 +107,7 @@ const LoginSignup = ({ onLogin }) => {
       try {
         // Slanje zahtjeva na backend za registraciju
         const response = await fetch(
-          "https://skydancers-back.onrender.com/users/registerdancer",
+          `${backendUrl}/users/registerdancer`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -141,7 +142,7 @@ const LoginSignup = ({ onLogin }) => {
     const data = { username, password };
 
     try {
-      const response = await fetch("https://skydancers-back.onrender.com/users/authenticate", {
+      const response = await fetch(`${backendUrl}/users/authenticate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -177,7 +178,7 @@ const LoginSignup = ({ onLogin }) => {
 
   // Funkcija za prijavu putem GitHub OAuth-a
   const handleGitHubLogin = () => {
-    window.location.href = "https://skydancers-back.onrender.com/oauth2/authorization/github"; // Preusmjeravanje na GitHub OAuth
+    window.location.href = `${backendUrl}/oauth2/authorization/github`; // Preusmjeravanje na GitHub OAuth
   };
 
   useEffect(() => {

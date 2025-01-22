@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import "./UserProfile.css";
 import { jwtDecode } from "jwt-decode";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pregled profila drugih korisnika
 const danceStylesList = [
@@ -59,7 +60,7 @@ const UserProfile = ({ onLogout }) => {
           Authorization: `Bearer ${token}`,
         };
         const profileResponse = await fetch(
-          `https://skydancers-back.onrender.com/users/get/${username}`,
+          `${backendUrl}/users/get/${username}`,
           { headers }
         );
 
@@ -81,7 +82,7 @@ const UserProfile = ({ onLogout }) => {
         setSelectedDanceStyles(matchingDanceStyles || []);
 
         const portfolioResponse = await fetch(
-          `https://skydancers-back.onrender.com/portfolio/get/${username}`,
+          `${backendUrl}/portfolio/get/${username}`,
           { headers }
         );
 
@@ -106,7 +107,7 @@ const UserProfile = ({ onLogout }) => {
           Authorization: `Bearer ${token}`,
         };
         const profileResponse = await fetch(
-          `https://skydancers-back.onrender.com/users/getmytype`,
+          `${backendUrl}/users/getmytype`,
           { headers }
         );
 
@@ -137,7 +138,7 @@ const UserProfile = ({ onLogout }) => {
         message: offerMessage,
       };
 
-      const response = await fetch("https://skydancers-back.onrender.com/offer/make", {
+      const response = await fetch(`${backendUrl}/offer/make`, {
         method: "POST",
         headers,
         body: JSON.stringify(body),
@@ -162,7 +163,7 @@ const UserProfile = ({ onLogout }) => {
         Authorization: `Bearer ${token}`,
       };
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/delete/${username}`,
+        `${backendUrl}/users/delete/${username}`,
         {
           headers,
         }
@@ -224,7 +225,7 @@ const UserProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/update-profile/${username}`,
+        `${backendUrl}/users/update-profile/${username}`,
         {
           method: "PUT",
           headers: {
@@ -253,7 +254,7 @@ const UserProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/updatedescription/${username}`,
+        `${backendUrl}/portfolio/updatedescription/${username}`,
         {
           method: "POST",
           headers: {
@@ -280,7 +281,7 @@ const UserProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/deletephoto/${username}?photoname=${name}`,
+        `${backendUrl}/portfolio/deletephoto/${username}?photoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -306,7 +307,7 @@ const UserProfile = ({ onLogout }) => {
     const token = localStorage.getItem("jwtToken"); // Dohvati token iz localStorage
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/portfolio/deletevideo/${username}?videoname=${name}`,
+        `${backendUrl}/portfolio/deletevideo/${username}?videoname=${name}`,
         {
           method: "DELETE",
           headers: {
@@ -334,7 +335,7 @@ const UserProfile = ({ onLogout }) => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/update-dance-styles/${username}`,
+        `${backendUrl}/users/update-dance-styles/${username}`,
         {
           method: "PUT",
           headers: {
@@ -657,12 +658,12 @@ const UserProfile = ({ onLogout }) => {
                   {portfolioData.photos.map((photo, index) => (
                     <div key={index} className="portfolio-item">
                       <a
-                        href={`https://skydancers-back.onrender.com${photo}`}
+                        href={`${backendUrl}${photo}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <img
-                          src={`https://skydancers-back.onrender.com${photo}`}
+                          src={`${backendUrl}${photo}`}
                           alt={`Portfolio photo ${index + 1}`}
                         />
                       </a>
@@ -688,7 +689,7 @@ const UserProfile = ({ onLogout }) => {
                       <div key={index} className="portfolio-item video-item">
                         <video controls>
                           <source
-                            src={`https://skydancers-back.onrender.com${video}`}
+                            src={`${backendUrl}${video}`}
                             type="video/mp4"
                           />
                           Your browser does not support the video tag.

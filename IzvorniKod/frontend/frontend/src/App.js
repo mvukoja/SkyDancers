@@ -33,6 +33,7 @@ import AuditionInfo from "./Components/AuditionInfo/AuditionInfo.jsx";
 import Applications from "./Components/Applications/Applications.jsx";
 import ChangePassword from "./Components/myprofile/ChangePassword.jsx";
 import "./global.css";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 // Definicija glavne App komponente
 function App() {
   // Stanje koje prati je li korisnik autentificiran
@@ -67,7 +68,7 @@ function App() {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            "https://skydancers-back.onrender.com/users/getmytype",
+            `${backendUrl}/users/getmytype`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
 import "./AuditionInfo.css";
 import { jwtDecode } from "jwt-decode";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pregled detaljno audicije
 const AuditionInfo = () => {
@@ -37,7 +38,7 @@ const AuditionInfo = () => {
     const fetchUser = async () => {
       const token = localStorage.getItem("jwtToken");
       try {
-        const response = await fetch("https://skydancers-back.onrender.com/users/myprofile", {
+        const response = await fetch(`${backendUrl}/users/myprofile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,7 +65,7 @@ const AuditionInfo = () => {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            `https://skydancers-back.onrender.com/audition/get/${id}`,
+            `${backendUrl}/audition/get/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -94,7 +95,7 @@ const AuditionInfo = () => {
         try {
           const token = localStorage.getItem("jwtToken");
           const response = await fetch(
-            `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
+            `${backendUrl}/audition/manage/applications/${id}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -129,7 +130,7 @@ const AuditionInfo = () => {
         auditionId: id,
       };
       const response = await fetch(
-        `https://skydancers-back.onrender.com/audition/applytoaudition`,
+        `${backendUrl}/audition/applytoaudition`,
         {
           method: "POST",
           headers: {
@@ -153,7 +154,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/audition/manage/applications/${id}`,
+        `${backendUrl}/audition/manage/applications/${id}`,
         {
           method: "GET",
           headers: {
@@ -183,7 +184,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/audition/manage/allow/${audId}`,
+        `${backendUrl}/audition/manage/allow/${audId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -219,7 +220,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/audition/manage/deny/${audId}`,
+        `${backendUrl}/audition/manage/deny/${audId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -246,7 +247,7 @@ const AuditionInfo = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        `https://skydancers-back.onrender.com/audition/archive/${id}`,
+        `${backendUrl}/audition/archive/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

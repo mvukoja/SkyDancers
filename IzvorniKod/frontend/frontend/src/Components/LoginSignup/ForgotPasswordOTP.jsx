@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./LoginSignup.css";
 import InputField from "./InputField";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za unos OTP koda kod zaboravljene lozinke
 const ForgotPasswordOTP = ({ email, onOTPVerified }) => {
@@ -12,7 +13,7 @@ const ForgotPasswordOTP = ({ email, onOTPVerified }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/forgotpassword/verifyotp/${otp}/${email}`,
+        `${backendUrl}/forgotpassword/verifyotp/${otp}/${email}`,
         {
           method: "POST",
         }

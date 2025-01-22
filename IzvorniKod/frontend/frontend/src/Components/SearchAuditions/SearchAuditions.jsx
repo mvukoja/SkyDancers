@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SearchAuditions.css";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za pretragu audicija od strane plesača
 const SearchAuditions = () => {
@@ -62,7 +63,7 @@ const SearchAuditions = () => {
       };
 
       const response = await fetch(
-        "https://skydancers-back.onrender.com/audition/searchauditions",
+        `${backendUrl}/audition/searchauditions`,
         {
           method: "POST",
           headers: {

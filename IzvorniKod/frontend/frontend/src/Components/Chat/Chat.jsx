@@ -11,6 +11,7 @@ import {
 import "./Chat.css";
 import { Link } from "react-router-dom";
 import headerlogo from "../Assets/header-logo.png";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 //Stranica za chat s drugim korisnicima
 const Chat = () => {
@@ -38,7 +39,7 @@ const Chat = () => {
 
     try {
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/searchuser/${currentUser.sub}`,
+        `${backendUrl}/users/searchuser/${currentUser.sub}`,
         {
           method: "GET",
           headers: {
@@ -101,7 +102,7 @@ const Chat = () => {
       }
 
       const response = await fetch(
-        `https://skydancers-back.onrender.com/users/searchuser/${username}`,
+        `${backendUrl}/users/searchuser/${username}`,
         {
           method: "GET",
           headers: {
