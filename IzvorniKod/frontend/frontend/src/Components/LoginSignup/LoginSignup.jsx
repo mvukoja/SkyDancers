@@ -95,7 +95,7 @@ const LoginSignup = ({ onLogin }) => {
           );
           window.location.href = "/login";
         } else {
-          alert("Korisničko ime već postoji!");
+          alert("Korisničko ime ili mail već postoji!");
         }
       } catch (error) {
         console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije
@@ -124,7 +124,7 @@ const LoginSignup = ({ onLogin }) => {
           );
           window.location.href = "/login";
         } else {
-          alert("Korisničko ime već postoji!");
+          alert("Korisničko ime ili mail već postoji!");
         }
       } catch (error) {
         console.error("Error during registration:", error); // Prikaz greške u konzoli ako registracija ne uspije

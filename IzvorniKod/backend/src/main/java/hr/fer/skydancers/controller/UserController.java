@@ -216,7 +216,7 @@ public class UserController {
 	// Registrira novog direktora
 	@PostMapping("/registerdirector")
 	public ResponseEntity<String> createDirector(@RequestBody Director user) {
-		if (userService.get(user.getUsername()).isEmpty()) {
+		if (userService.get(user.getUsername()).isEmpty() && userService.getByMail(user.getEmail()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setOauth(null);
 			userService.put(user);
@@ -240,14 +240,14 @@ public class UserController {
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
-			return ResponseEntity.ok("Korisničko ime već postoji!");
+			return ResponseEntity.ok("Korisničko ime ili mail već postoji!");
 		}
 	}
 
 	// Registrira novog plesača
 	@PostMapping("/registerdancer")
 	public ResponseEntity<String> createDancer(@RequestBody Dancer user) {
-		if (userService.get(user.getUsername()).isEmpty()) {
+		if (userService.get(user.getUsername()).isEmpty() && userService.getByMail(user.getEmail()).isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setOauth(null);
 			userService.put(user);
@@ -270,7 +270,7 @@ public class UserController {
 
 			return ResponseEntity.ok("Registration successful!");
 		} else {
-			return ResponseEntity.ok("Korisničko ime već postoji!");
+			return ResponseEntity.ok("Korisničko ime ili mail već postoji!");
 		}
 	}
 
