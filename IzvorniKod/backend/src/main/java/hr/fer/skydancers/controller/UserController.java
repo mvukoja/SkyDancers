@@ -124,6 +124,9 @@ public class UserController {
 		if (userService.get(dto.getUsername()).orElse(null) != null) {
 			return ResponseEntity.ok("Already taken");
 		}
+		if(!userService.getByMail(dto.getEmail()).isEmpty()) {
+			return ResponseEntity.ok("Already taken");
+		}
 
 		if (userService.getOauth(dto.getOauth()).isEmpty()) {
 			return ResponseEntity.badRequest().build();
