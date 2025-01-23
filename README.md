@@ -79,9 +79,9 @@ Back-end: Spring
 
 Baza podataka: PostgreSQL
 
-Autentifikacija: OAuth 2.0/Firebase Authentication
+Autentifikacija: OAuth 2.0
 
-Notifikacije i poruke: Firebase Cloud Messaging/FreeChat
+Notifikacije i poruke: Firebase Cloud Messaging
 
 Deployment: Render
 
