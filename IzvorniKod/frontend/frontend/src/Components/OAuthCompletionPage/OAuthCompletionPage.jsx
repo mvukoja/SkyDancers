@@ -79,7 +79,7 @@ const OAuthCompletionPage = ({ onLogin }) => {
         throw new Error("Failed to complete OAuth registration");
       const text = await response.text();
       if (text === "Already taken") {
-        alert("Korisničko ime je već zauzeto.");
+        alert("Korisničko ime ili mail je već zauzeto.");
         return;
       }
       if (text) {
