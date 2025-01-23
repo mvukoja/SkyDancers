@@ -8,10 +8,8 @@ SkyDancers je platforma za povezivanje plesača i direktora u plesnoj industriji
 # Deploy
 Naša aplikacija je deployana na sustavu Render. 
 Upute za korištenje:
-1. potrebno je učitati stranicu na kojoj je postavljen backend (nakon nekog vremena neaktivnosti potrebno mu je oko 2 do 3 minute da se upogoni i zatim prikazuje default stranicu login od Springa, što označava da je funkcionalan)
+1. potrebno je učitati stranicu na kojoj je postavljen backend, zatim prikazuje se 403 Forbidden error od Springa, što označava da je funkcionalan
 2. zatim učitati stranicu na kojoj je frontend i koristiti aplikaciju
-
-(s obzirom da koristimo free verziju, svaki zahtjev između frontenda i backenda može potrajati koju sekundu, hvala na razumijevanju)
 
 Linkovi:
 
@@ -20,64 +18,58 @@ Linkovi:
 -frontend: https://skydancers.onrender.com/
 
 # Funkcijski zahtjevi
-FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora
+FR-1	Aplikacija omogućuje registraciju korisnika kao plesača ili plesnih direktora.
  
-FR-2	Prilikom registracije, plesači se registriraju besplatno, a plesni direktori uz plaćanje godišnje članarine
+FR-2	Prilikom registracije, plesači se registriraju besplatno, a plesni direktori uz plaćanje godišnje članarine nakon ispunjavanja osobnih podataka.
 
-FR-3	Aplikacija omogućuje plaćanje članarine plesnim direktorima putem vanjskog servisa za plaćanje
+FR-2.1 	Aplikacija omogućuje plaćanje članarine plesnim direktorima putem vanjskog servisa za plaćanje.
 
-FR-4	Aplikacija omogućuje plesnim direktorima objavljivanje audicija, s detaljima poput vremena, lokacije, opisa posla, vrsta traženih plesača, broja otvorenih pozicija i plaće
+FR-3	Aplikacija omogućuje plesnim direktorima objavljivanje audicija, s detaljima poput vremena, lokacije, opisa posla, vrsta traženih plesača, broja otvorenih pozicija i plaće.
 
-FR-5	Plesni direktori moraju moći pretraživati plesače koristeći filtre poput dobi, spola, vrste plesa.
+FR-4	Plesni direktori moraju moći pretraživati plesače koristeći filtre poput dobi, spola, vrste plesa.
 
-FR-6	Plesači moraju moći pretraživati dostupne audicije pomoću filtara kao što su vrijeme, plaća, lokacija i vrsta plesa.
+FR-5	Plesači moraju moći pretraživati dostupne audicije pomoću filtara kao što su vrijeme, plaća, lokacija i vrsta plesa.
 
-FR-7	Plesači moraju moći prijaviti se na odabrane audicije izravno putem aplikacije.
+FR-6	Plesači moraju moći prijaviti se na odabrane audicije izravno putem aplikacije.
 
-FR-8	Plesači moraju moći kreirati javni profil s osnovnim podacima (ime, prezime, lokacija, dob, spol) te portifolio koji uključuje slike ili snimke nastupa
+FR-7	Plesači moraju moći kreirati javni profil s osnovnim podacima (ime, prezime, lokacija, dob, spol, vještine) te portfolio koji uključuje slike ili snimke nastupa.
 
-FR-9	Plesači na profilu moraju moći označiti vrste plesa u kojima su iskusni
+FR-8	Plesni direktori moraju moći kreirati javni profil s osnovnim podacima (ime, prezime, adresa, kontakt informacije) te portfolio svojih projekata i poslova.
 
-FR-10	Plesni direktori moraju moći kreirati javni profil s osnovnim podacima (ime, prezime, adresa, kontakt informacije) te portfolio svojih projekata i poslova.
+FR-9	Plesni direktori moraju imati mogućnost slanja izravnih ponuda za poslove plesačima, neovisno o audicijama.
 
-FR-11	Plesni direktori moraju imati mogućnost slanja izravnih ponuda za poslove plesačima, neovisno o audicijama.
+FR-10	 Aplikacija mora integrirati postojeći sustav za razmjenu poruka (npr. FreeChat) kako bi omogućila komunikaciju među korisnicima.
 
-FR-12	Aplikacija mora omogućiti plesačima razmjenu poruka (čavrljanje) za komunikaciju.
+FR-10.1	Aplikacija mora omogućiti plesačima razmjenu poruka (čavrljanje) za komunikaciju.
 
-FR-13	Aplikacija mora omogućiti plesačima javljanje plesnim direktorima preko poruka za više informacija o audiciji
+FR-10.2	Aplikacija mora omogućiti plesačima javljanje plesnim direktorima preko poruka za više informacija o audiciji.
 
-FR-14	Plesači moraju imati mogućnost postaviti svoj profil kao "neaktivan" na određeno razdoblje, tijekom kojeg drugi korisnici ne mogu komunicirati s njima.
+FR-11	Plesači moraju imati mogućnost postaviti svoj profil kao "neaktivan" na određeno razdoblje, tijekom kojeg drugi korisnici ne mogu komunicirati s njima.
 
-FR-15	Administratori sustava moraju imati mogućnost upravljanja korisničkim profilima plesača i plesnih direktora.
+FR-12	Administratori sustava moraju imati mogućnost upravljanja korisničkim profilima plesača i plesnih direktora.
 
-FR-16	Administratori moraju moći postaviti iznos godišnje članarine za plesne direktore.
+FR-13	Administratori moraju moći postaviti iznos godišnje članarine za plesne direktore.
 
-FR-17	Aplikacija mora integrirati postojeći sustav za razmjenu poruka (npr. FreeChat) kako bi omogućila komunikaciju među korisnicima.
+FR-14	Svaka audicija mora jasno prikazivati rok prijave za plesače, koji mora biti vidljiv na stranici audicije.
 
-FR-18	Svaka audicija mora jasno prikazivati rok prijave za plesače, koji mora biti vidljiv na stranici audicije.
+FR-15	Plesni direktori moraju imati mogućnost pregledavanja statistika prijava na audicije, uključujući broj prijavljenih plesača, vrste plesa i status prijava.
 
-FR-19	Plesni direktori moraju imati mogućnost pregledavanja statistika prijava na audicije, uključujući broj prijavljenih plesača, vrste plesa i status prijava.
+FR-16	Aplikacija mora omogućiti slanje notifikacija plesačima o novim audicijama na temelju njihovih preferencija (filtri poput vrste plesa, lokacije).
 
-FR-20	Aplikacija mora omogućiti slanje notifikacija plesačima o novim audicijama na temelju njihovih preferencija (filtri poput vrste plesa, lokacije).
+FR-17	Aplikacija mora omogućiti korisnicima promjenu lozinke i oporavak lozinke putem e-mail adrese.
 
-FR-21	Aplikacija mora omogućiti korisnicima promjenu lozinke i oporavak lozinke putem e-mail adrese.
+FR-18	Aplikacija mora omogućiti plesnim direktorima arhiviranje starih audicija i pregled arhiviranih podataka.
 
-FR-22	Plesni direktori moraju imati mogućnost filtriranja plesača na temelju njihovih specifičnih vještina, vrsta plesa i dostupnosti.
-
-FR-23	Aplikacija mora omogućiti plesnim direktorima arhiviranje starih audicija i pregled arhiviranih podataka
-
-FR-24	Aplikacija mora omogućiti korisnicima upravljanje svojim profilom, uključujući promjenu osnovnih podataka, dodavanje portfolia i ažuriranje statusa (aktivan/neaktivan).
-	
-	
+FR-19	Aplikacija mora omogućiti korisnicima upravljanje svojim profilom, uključujući promjenu osnovnih podataka, dodavanje portfolia i ažuriranje statusa (aktivan/neaktivan).
+		
 NR-1	Aplikacija mora osigurati da su svi podaci korisnika zaštićeni.
 
-NR-2	Aplikacija mora biti optimizirana kako bi podržala istovremeni rad velikog broja korisnika bez smanjenja performansi.
+NR-2	Aplikacija mora biti optimizirana kako bi podržala istovremeni rad par tisuća korisnika bez smanjenja performansi (čekanja na odgovor više od 1 sekunde).
 
-NR-3	Aplikacija mora biti skalabilna kako bi podržala rast baze korisnika i broj audicija bez utjecaja na stabilnost sustava.
+NR-3	Aplikacija mora biti skalabilna kako bi podržala rast baze korisnika i broj audicija bez utjecaja na stabilnost sustava (preko 1000 korisnika).
 
-NR-4	Aplikacija mora biti u potpunosti responzivna i funkcionalna na mobilnim uređajima
+NR-4	Aplikacija mora biti u potpunosti responzivna i funkcionalna na različitim uređajima
 
-NR-5	Aplikacija mora podržavati hrvatski i engleski jezik
 
 
 # Tehnologije
@@ -91,9 +83,9 @@ Autentifikacija: OAuth 2.0/Firebase Authentication
 
 Notifikacije i poruke: Firebase Cloud Messaging/FreeChat
 
-Deployment: 
+Deployment: Render
 
-Plaćanje: 
+Plaćanje: Stripe
 
 # Članovi tima 
 
