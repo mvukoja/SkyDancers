@@ -1,0 +1,53 @@
+.director-auditions {
+  margin-top: 120px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.director-auditions h2 {
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+  border-bottom: 3px solid #6925b2;
+  padding-bottom: 10px;
+}
+
+.archive {
+  grid-column: 1 / -1;
+  padding: 15px;
+  background-color: #6925b2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.archive:hover {
+  background-color: #541d8e;
+  transform: translateY(-2px);
+}
+
+.no-auditions {
+  text-align: center;
+  color: #666;
+  margin: 40px 0;
+  font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+  .audition-card {
+    grid-template-columns: 1fr;
+  }
+}

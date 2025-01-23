@@ -1,0 +1,129 @@
+.chatbutton {
+  text-align: center;
+}
+
+.chatbutton button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color var(--transition-speed);
+}
+
+.profile-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.profile-details h3,
+.dance-styles h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.dance-style-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.portfolio-description h4 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.portfolio-description p {
+  line-height: 1.6;
+  color: #666;
+}
+
+.photo-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.photo-item img:hover {
+  transform: scale(1.05);
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.send-offer-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-offer-section button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color var(--transition-speed);
+}
+
+.send-offer-section button:hover {
+  background-color: #2980b9;
+}
+
+.confirmation-message {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}

@@ -1,21 +1,11 @@
-/* Postavi osnovne stilove */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  overflow: hidden; /* Spriječava skrolanje ako nije potrebno */
-}
-
 /* Pozadinska slika */
-.background-image-container {
+.background-image-container2 {
   position: fixed;
   top: 10%;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../Assets/week2.png');
+  background-image: url("../Assets/week2.png");
   background-size: cover;
   background-position: center;
   z-index: -1; /* Postavi iza ostalih elemenata */
@@ -26,60 +16,4 @@ body, html {
   position: relative;
   z-index: 1;
   color: #4c1895;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgba(76, 0, 157, 0.8); /* Transparentna pozadina */
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-
-.logo-img {
-  width: 170px;
-  height: auto;
-}
-
-.header-links {
-  display: flex;
-  align-items: center;
-}
-
-.header-links a {
-  margin-left: 15px;
-}
-
-.login button {
-  color: white;
-  border: none;
-  background-color: #4c009d;
-  padding: 10px 20px;
-  font-size: 20px;
-  cursor: pointer;
-  align-self: center;
-  margin-bottom: 10px;
-}
-
-.login button:hover {
-  background-color: #37077a;
-}
-
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: #4c1895;
-  text-align: center;
-}
-
-h1 {
-  margin: 0;
-  font-size: 2em;
 }

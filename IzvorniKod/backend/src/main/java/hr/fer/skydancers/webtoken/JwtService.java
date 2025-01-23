@@ -15,12 +15,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+//Ova klasa predstavlja servis za JWT
 @Service
 public class JwtService {
-	
+
 	@Value("${secret.key}")
 	private String SECRET;
-	
+
 	private static final long VALIDITY = TimeUnit.MINUTES.toMillis(60);
 
 	public String generateToken(UserDetails userDetails) {

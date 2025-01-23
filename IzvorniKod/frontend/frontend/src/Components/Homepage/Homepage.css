@@ -1,82 +1,168 @@
-/* Uklonite margine i paddinge */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: white;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-/* Stilizacija headera (navigacijskog bara) */
-header {
-  display: flex;
-  justify-content: space-between; /* Poravnava logo lijevo, linkove desno */
-  align-items: center; /* Poravnava sadržaj po vertikali */
-  background-color: #4c009d; /* Boja pozadine */
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-/* Pozadinska slika */
+/* Pozadinska slika s efektom zamućenja od lijeva prema desno */
 .background-image-container {
   position: fixed;
   top: 10%;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../Assets/week2.png');
+  background-image: url("../Assets/week2.png");
   background-size: cover;
   background-position: center;
+  filter: blur(8px) brightness(50%);
   z-index: -1; /* Postavi iza ostalih elemenata */
-}
-.logo-img {
-  width: 170px;
-  height: auto;
+  transition: filter 0.5s ease-in-out;
 }
 
-.header-links {
+/* Unapređenje efekta zamućenja */
+.background-image-container:hover {
+  filter: blur(5px) brightness(60%);
+}
+
+#welcome {
+  margin-top: 150px;
+  color: #fff;
+  margin-bottom: 50px;
+  text-align: center;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+#welcome2 {
+  margin-top: -55px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.welcome-message {
+  position: fixed;
+  top: 50%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  width: 32%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+  z-index: 3;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.welcome-message p {
+  margin: 10px 0;
+}
+
+.director-notice {
+  position: relative;
+  background-color: #ffefd5;
+  top: 100px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ffcc00;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+  z-index: 10;
+}
+
+.button-group {
+  margin-top: 10px;
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  top: 55%;
+  right: 7%;
+  transform: translateY(-50%);
+  width: 25%;
+}
+
+.navigation-button {
+  flex: 0 1 auto;
+  width: 100%;
+  height: 120px;
+  font-size: 1.6rem;
+  padding: 10px 0;
+  border: 3px solid #4c009d;
+  border-radius: 8px;
+  background-color: #e6d5f2;
+  color: #4c009d;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.navigation-button:hover {
+  background-color: #d1b3f2;
+  transform: scale(1.05);
+}
+
+.price-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
-.header-links a {
-  margin-left: 15px;
+.price-popup input {
+  align-items: center;
+  padding: 8px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  border-radius: 5%;
+  background-color: #d1b3f2;
+  color: #fff;
 }
 
-.login button {
+.price-popup button {
   color: white;
   border: none;
+  background-color: #691db9;
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 20px;
   cursor: pointer;
   align-self: center;
   margin-bottom: 10px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
 }
 
-.login button:hover {
+.price-popup button:hover {
   background-color: #37077a;
 }
 
-.logout button {
-  color: white;
-  border: none;
-  background-color: #4c009d;
-  padding: 10px 20px;
-  font-size: 20px;
-  cursor: pointer;
-  align-self: center;
-  margin-bottom: 10px;
-  border-radius: 20px;
+.price-popup2 {
+  background: #e7dbf4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.logout button:hover {
-  background-color: #37077a;
-}
-
-h1 {
-  margin-top: 50%;
-  color: #4c1895;
+@media (max-width: 768px) {
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+  .navigation-button {
+    width: 120%;
+    height: 150%;
+    margin: 10px auto;
+  }
 }

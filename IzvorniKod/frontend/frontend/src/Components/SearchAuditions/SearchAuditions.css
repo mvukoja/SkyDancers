@@ -1,0 +1,49 @@
+.search-audition-container {
+  margin-top: 120px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-audition-container h2 {
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+  border-bottom: 3px solid #6925b2;
+  padding-bottom: 10px;
+}
+
+.styles-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.style-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.style-checkbox input[type="checkbox"] {
+  margin: 0;
+}
+
+.create-audition-button[type="submit"]:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .search-audition-container {
+    margin-top: 140px;
+    padding: 30px;
+  }
+}

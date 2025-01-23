@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
+//Komponenta za logout
 const Logout = ({ onLogout }) => {
   const navigate = useNavigate();
   useEffect(() => {
     onLogout();
-    navigate('/');
+    navigate("/");
   }, [onLogout, navigate]);
 
   return null;

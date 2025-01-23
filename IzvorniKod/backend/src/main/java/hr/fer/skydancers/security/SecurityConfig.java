@@ -1,9 +1,11 @@
 package hr.fer.skydancers.security;
 
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,10 +24,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import hr.fer.skydancers.model.MyUser;
+import hr.fer.skydancers.model.UserType;
 import hr.fer.skydancers.service.UserService;
 import hr.fer.skydancers.webtoken.JwtAuthenticationFilter;
-import hr.fer.skydancers.webtoken.JwtService;
+import jakarta.servlet.http.HttpServletResponse;
 
+//Ova klasa predstavlja konfiguraciju sigurnosnih postavki aplikacije
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -36,44 +40,57 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-	@Autowired
-	private JwtService jwtService;
+	@Value("${frontend.url}")
+	private String frontendUrl;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
+		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configure(http))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> {
-					authorize.requestMatchers("/home", "/users/register/**", "/users/authenticate/**").permitAll();
-					authorize.requestMatchers("/admin/**").hasRole("ADMIN");
+					authorize
+							.requestMatchers("/home", "/users/register/**", "/users/complete-oauth",
+									"/users/authenticateoauth", "/users/registerdancer", "/users/registerdirector",
+									"/users/authenticate", "/users/payment/**", "/forgotpassword/**", "/uploads/**")
+							.permitAll();
 					authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-					authorize.requestMatchers("/h2-console/**").permitAll();
 					authorize.anyRequest().authenticated();
-				}).formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
-
+				}).exceptionHandling(exceptionHandling -> exceptionHandling
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+						}).authenticationEntryPoint((request, response, authException) -> {
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+						}))
+				.formLogin(form -> form.defaultSuccessUrl("/home", true).permitAll())
 				.oauth2Login(oauth2 -> oauth2.successHandler((request, response, authentication) -> {
 					OAuth2User customOAuth2User = (OAuth2User) authentication.getPrincipal();
-					String userId = customOAuth2User.getAttribute("id").toString() + "_"
-							+ customOAuth2User.getAttribute("login") + "_oauth";
+					String userId = customOAuth2User.getAttribute("id").toString()
+							+ Base64.getEncoder()
+									.encodeToString(customOAuth2User.getAttribute("id").toString().getBytes())
+							+ "_" + customOAuth2User.getAttribute("login") + "_oauth";
 
-					Optional<MyUser> existingUser = userService.get(userId);
+					Optional<MyUser> existingUser = userService.getOauth(userId);
 					if (existingUser.isEmpty()) {
 						MyUser user = new MyUser();
 						String name = customOAuth2User.getAttribute("name");
-						user.setName(name.split(" ")[0]);
-						user.setSurname(name.split(" ")[1]);
-						user.setUsername(userId);
+						try {
+							user.setName(name.split(" ")[0]);
+							user.setSurname(name.split(" ")[1]);
+						} catch (Exception e) {
+							user.setName(name);
+						}
+						user.setUsername(passwordEncoder().encode(UUID.randomUUID().toString()));
 						user.setPassword(passwordEncoder().encode(UUID.randomUUID().toString()));
-						user.setOauth(true);
+						user.setOauth(userId);
 						user.setFinishedoauth(false);
+						user.setType(new UserType());
 						userService.put(user);
 					}
 					boolean finished = false;
-					if (!existingUser.isEmpty() && existingUser.get().isFinishedOauth()) {
+					if (!existingUser.isEmpty() && existingUser.get().isFinishedoauth()) {
 						finished = true;
 					}
-					String token = jwtService.generateToken(userService.loadUserByUsername(userId));
-					response.sendRedirect("https://skydancers.onrender.com/oauth-completion?jwt=" + token + "&&finished=" + finished);
+					response.sendRedirect(frontendUrl + "/oauth-completion?oauth=" + userId + "&finished=" + finished);
 				})).logout(logout -> logout.logoutSuccessUrl("/").permitAll())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
