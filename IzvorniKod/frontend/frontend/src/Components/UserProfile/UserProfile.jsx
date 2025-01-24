@@ -106,10 +106,9 @@ const UserProfile = ({ onLogout }) => {
         const headers = {
           Authorization: `Bearer ${token}`,
         };
-        const profileResponse = await fetch(
-          `${backendUrl}/users/getmytype`,
-          { headers }
-        );
+        const profileResponse = await fetch(`${backendUrl}/users/getmytype`, {
+          headers,
+        });
 
         if (!profileResponse.ok) {
           throw new Error("Nije moguće dohvatiti profil korisnika.");
@@ -162,12 +161,9 @@ const UserProfile = ({ onLogout }) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const response = await fetch(
-        `${backendUrl}/users/delete/${username}`,
-        {
-          headers,
-        }
-      );
+      const response = await fetch(`${backendUrl}/users/delete/${username}`, {
+        headers,
+      });
 
       if (!response.ok) {
         throw new Error("Došlo je do greške pri slanju ponude.");
@@ -191,11 +187,8 @@ const UserProfile = ({ onLogout }) => {
   }
 
   //Funkcija za započinjanje razgovora
-  const startChatWithUser = (userId, userName) => {
-    const selectedUser = {
-      type: { userid: userId },
-      name: userName,
-    };
+  const startChatWithUser = () => {
+    const selectedUser = profileData;
     localStorage.setItem("selectedUser", JSON.stringify(selectedUser));
     window.location.href = "/chat";
   };
@@ -564,13 +557,7 @@ const UserProfile = ({ onLogout }) => {
         <div className="chatbutton">
           {profileData.inactive === false ? (
             <>
-              <button
-                onClick={() =>
-                  startChatWithUser(profileData.id, profileData.username)
-                }
-              >
-                Započni chat
-              </button>
+              <button onClick={() => startChatWithUser()}>Započni chat</button>
               <br />
             </>
           ) : (
