@@ -181,22 +181,6 @@ const LoginSignup = ({ onLogin }) => {
     window.location.href = `${backendUrl}/oauth2/authorization/github`; // Preusmjeravanje na GitHub OAuth
   };
 
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.key === "Enter") {
-        if (isRegistering) {
-          handleRegister();
-        } else {
-          handleLogin();
-        }
-      }
-    };
-    window.addEventListener("keypress", handleKeyPress);
-    return () => {
-      window.removeEventListener("keypress", handleKeyPress);
-    };
-  }, [isRegistering, username, name, surname, email, password]);
-
   if (showForgotPassword) {
     return <>{showForgotPassword && <ForgotPassword />}</>;
   }
