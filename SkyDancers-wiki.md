@@ -1398,7 +1398,7 @@ Drugi dio
 
 # Dijagram pregleda promjena 
 
-![Commits over time](https://private-user-images.githubusercontent.com/185234485/406452887-d6d635b6-d8e5-427c-98ee-a40631a16f67.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzc3MzcwNDMsIm5iZiI6MTczNzczNjc0MywicGF0aCI6Ii8xODUyMzQ0ODUvNDA2NDUyODg3LWQ2ZDYzNWI2LWQ4ZTUtNDI3Yy05OGVlLWE0MDYzMWExNmY2Ny5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMTI0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDEyNFQxNjM5MDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT02OTU1ZjY3OTQxYjE1Y2NhYjQ3ZGYzYTRhNGNkY2QyNDQ2NzM2NGIxNjZlZjc1ZDY5ZWQ0NjcxZDQ2ZDMyMWY5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.LDLPdFUu6_FTqQD6_Ci6uIBRIQm1bMsSkPX1Flj1kt0)
+![Commits over time](https://github.com/mvukoja/SkyDancers/wiki/changes/Commits%20over%20time.png)
 <img src="https://github.com/mvukoja/SkyDancers/wiki/changes/mvukoja's%20Commits.png" width=100% style="margin: 5px">
 <img src="https://github.com/mvukoja/SkyDancers/wiki/changes/antoniosimic's%20Commits.png" width=100% style="margin: 5px">
 <img src="https://github.com/mvukoja/SkyDancers/wiki/changes/bglavina's%20Commits.png" width=100% style="margin: 5px">
